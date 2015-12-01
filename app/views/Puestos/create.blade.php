@@ -1,0 +1,1 @@
+/Applications/MAMP/htdocs/larus_laravel/app/views/Puestos/create.blade.php
