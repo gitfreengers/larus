@@ -1,11 +1,13 @@
 <?php namespace Illuminate\Support;
 
 use Countable;
-use Illuminate\Support\Contracts\JsonableInterface;
-use Illuminate\Support\Contracts\ArrayableInterface;
-use Illuminate\Support\Contracts\MessageProviderInterface;
+use JsonSerializable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\MessageProvider;
+use Illuminate\Contracts\Support\MessageBag as MessageBagContract;
 
-class MessageBag implements ArrayableInterface, Countable, JsonableInterface, MessageProviderInterface {
+class MessageBag implements Arrayable, Countable, Jsonable, JsonSerializable, MessageBagContract, MessageProvider  {
 
 	/**
 	 * All of the registered messages.
@@ -36,11 +38,21 @@ class MessageBag implements ArrayableInterface, Countable, JsonableInterface, Me
 	}
 
 	/**
+	 * Get the keys present in the message bag.
+	 *
+	 * @return array
+	 */
+	public function keys()
+	{
+		return array_keys($this->messages);
+	}
+
+	/**
 	 * Add a message to the bag.
 	 *
 	 * @param  string  $key
 	 * @param  string  $message
-	 * @return \Illuminate\Support\MessageBag
+	 * @return $this
 	 */
 	public function add($key, $message)
 	{
@@ -55,11 +67,16 @@ class MessageBag implements ArrayableInterface, Countable, JsonableInterface, Me
 	/**
 	 * Merge a new array of messages into the bag.
 	 *
-	 * @param  array  $messages
-	 * @return \Illuminate\Support\MessageBag
+	 * @param  \Illuminate\Contracts\Support\MessageProvider|array  $messages
+	 * @return $this
 	 */
-	public function merge(array $messages)
+	public function merge($messages)
 	{
+		if ($messages instanceof MessageProvider)
+		{
+			$messages = $messages->getMessageBag()->getMessages();
+		}
+
 		$this->messages = array_merge_recursive($this->messages, $messages);
 
 		return $this;
@@ -101,7 +118,7 @@ class MessageBag implements ArrayableInterface, Countable, JsonableInterface, Me
 	{
 		$messages = is_null($key) ? $this->all($format) : $this->get($key, $format);
 
-		return (count($messages) > 0) ? $messages[0] : '';
+		return count($messages) > 0 ? $messages[0] : '';
 	}
 
 	/**
@@ -113,14 +130,12 @@ class MessageBag implements ArrayableInterface, Countable, JsonableInterface, Me
 	 */
 	public function get($key, $format = null)
 	{
-		$format = $this->checkFormat($format);
-
 		// If the message exists in the container, we will transform it and return
 		// the message. Otherwise, we'll return an empty array since the entire
 		// methods is to return back an array of messages in the first place.
 		if (array_key_exists($key, $this->messages))
 		{
-			return $this->transform($this->messages[$key], $format, $key);
+			return $this->transform($this->messages[$key], $this->checkFormat($format), $key);
 		}
 
 		return array();
@@ -161,10 +176,10 @@ class MessageBag implements ArrayableInterface, Countable, JsonableInterface, Me
 		// We will simply spin through the given messages and transform each one
 		// replacing the :message place holder with the real message allowing
 		// the messages to be easily formatted to each developer's desires.
-		foreach ($messages as $key => &$message)
-		{
-			$replace = array(':message', ':key');
+		$replace = array(':message', ':key');
 
+		foreach ($messages as &$message)
+		{
 			$message = str_replace($replace, array($message, $messageKey), $format);
 		}
 
@@ -179,7 +194,7 @@ class MessageBag implements ArrayableInterface, Countable, JsonableInterface, Me
 	 */
 	protected function checkFormat($format)
 	{
-		return ($format === null) ? $this->format : $format;
+		return $format ?: $this->format;
 	}
 
 	/**
@@ -252,7 +267,7 @@ class MessageBag implements ArrayableInterface, Countable, JsonableInterface, Me
 	 */
 	public function count()
 	{
-		return count($this->messages);
+		return count($this->messages, COUNT_RECURSIVE) - count($this->messages);
 	}
 
 	/**
@@ -263,6 +278,16 @@ class MessageBag implements ArrayableInterface, Countable, JsonableInterface, Me
 	public function toArray()
 	{
 		return $this->getMessages();
+	}
+
+	/**
+	 * Convert the object into something JSON serializable.
+	 *
+	 * @return array
+	 */
+	public function jsonSerialize()
+	{
+		return $this->toArray();
 	}
 
 	/**

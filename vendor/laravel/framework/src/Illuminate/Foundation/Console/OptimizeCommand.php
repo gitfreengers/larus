@@ -80,11 +80,9 @@ class OptimizeCommand extends Command {
 	{
 		$this->registerClassPreloaderCommand();
 
-		$outputPath = $this->laravel['path.base'].'/bootstrap/compiled.php';
-
 		$this->callSilent('compile', array(
 			'--config' => implode(',', $this->getClassFiles()),
-			'--output' => $outputPath,
+			'--output' => $this->laravel->getCachedCompilePath(),
 			'--strip_comments' => 1,
 		));
 	}
@@ -100,7 +98,14 @@ class OptimizeCommand extends Command {
 
 		$core = require __DIR__.'/Optimize/config.php';
 
-		return array_merge($core, $this->laravel['config']['compile']);
+		$files = array_merge($core, $this->laravel['config']->get('compile.files', []));
+
+		foreach ($this->laravel['config']->get('compile.providers', []) as $provider)
+		{
+			$files = array_merge($files, forward_static_call([$provider, 'compiles']));
+		}
+
+		return $files;
 	}
 
 	/**

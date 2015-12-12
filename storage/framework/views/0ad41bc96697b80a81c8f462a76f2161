@@ -1,0 +1,97 @@
+<?php $__env->startSection('content'); ?>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements disabled -->
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <?php echo Form::open(['route' => 'notifications.store',
+                                            'files'=>'true',
+                                            'method'=>'POST',
+                                            'id'=>'form_notifications',
+                                            'class'=> 'form-horizontal',
+                                            'parsley-validate novalidate' ]  ); ?>
+
+
+                                <div class="form-group  <?php if($errors->has('optionsRadios')): ?> has-error <?php endif; ?>">
+                                    <div class="col-xs-8 col-xs-offset-2">
+                                        <?php if($errors->has('optionsRadios')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+                                            <?php echo e($errors->first('optionsRadios')); ?></label>
+                                        <?php endif; ?>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios"  value="roles" >
+                                                Seleccionar por roles
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios"  value="users" >
+                                                Seleccionar por usuarios
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group <?php if($errors->has('roles')): ?> has-error <?php endif; ?>" id="divRol" style="display: none">
+                                    <?php echo Form::label('roles','Rol',['class' =>'col-xs-2 control-label']); ?>
+
+                                    <div class="col-xs-8">
+                                        <?php if($errors->has('roles')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+                                            <?php echo e($errors->first('roles')); ?></label>
+                                        <?php endif; ?>
+                                            <select class="form-control" name="role_id" id="selectRol">
+                                            <option value="" disabled="disabled">- Seleccione un rol -</option>
+                                            <?php foreach($roles as $rol): ?>
+                                                <option value="<?php echo e($rol->id); ?>" ><?php echo e($rol->name); ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group <?php if($errors->has('users')): ?> has-error <?php endif; ?>" id="divUser" style="display: none;">
+                                    <?php echo Form::label('usuarios','Usuarios',['class' =>'col-xs-2 control-label']); ?>
+
+                                    <div class="col-xs-8">
+                                        <?php if($errors->has('users')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+                                            <?php echo e($errors->first('users')); ?></label>
+                                        <?php endif; ?>
+                                            <select class="form-control" name="user_id" id="selectUser">
+                                            <option value="" disabled="disabled">- Seleccione un usuario -</option>
+                                            <?php foreach($users as $user): ?>
+                                                <option value="<?php echo e($user->id); ?>"><?php echo e($user->full_name); ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-8 col-xs-offset-2">
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="email"  value="1" >
+                                            Enviar vía e-mail
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php echo $__env->make('notifications::notifications.partials.fields', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+                            <div class="form-group">
+                                <div class="col-sm-offset-10 col-sm-2">
+                                    <button type="submit" class="btn btn-primary" id="enviar">Guardar</button>
+                                    <a href="<?php echo e(route('notifications.index')); ?>" class="btn btn-default" >Cancelar</a>
+
+                                </div>
+                            </div>
+                            <?php echo Form::close(); ?>
+
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div>
+            </div>   <!-- /.row -->
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
+    <script src="<?php echo e(asset('modules/notifications/js/notification-option.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

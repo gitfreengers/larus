@@ -1,5 +1,7 @@
 <?php namespace Illuminate\Database;
 
+use Illuminate\Database\Query\Expression;
+
 abstract class Grammar {
 
 	/**
@@ -30,16 +32,17 @@ abstract class Grammar {
 	{
 		if ($this->isExpression($table)) return $this->getValue($table);
 
-		return $this->wrap($this->tablePrefix.$table);
+		return $this->wrap($this->tablePrefix.$table, true);
 	}
 
 	/**
 	 * Wrap a value in keyword identifiers.
 	 *
 	 * @param  string  $value
+	 * @param  bool    $prefixAlias
 	 * @return string
 	 */
-	public function wrap($value)
+	public function wrap($value, $prefixAlias = false)
 	{
 		if ($this->isExpression($value)) return $this->getValue($value);
 
@@ -50,7 +53,9 @@ abstract class Grammar {
 		{
 			$segments = explode(' ', $value);
 
-			return $this->wrap($segments[0]).' as '.$this->wrap($segments[2]);
+			if ($prefixAlias) $segments[2] = $this->tablePrefix.$segments[2];
+
+			return $this->wrap($segments[0]).' as '.$this->wrapValue($segments[2]);
 		}
 
 		$wrapped = array();
@@ -83,7 +88,9 @@ abstract class Grammar {
 	 */
 	protected function wrapValue($value)
 	{
-		return $value !== '*' ? sprintf($this->wrapper, $value) : $value;
+		if ($value === '*') return $value;
+
+		return '"'.str_replace('"', '""', $value).'"';
 	}
 
 	/**
@@ -138,7 +145,7 @@ abstract class Grammar {
 	 */
 	public function isExpression($value)
 	{
-		return $value instanceof Query\Expression;
+		return $value instanceof Expression;
 	}
 
 	/**
@@ -165,7 +172,7 @@ abstract class Grammar {
 	 * Set the grammar's table prefix.
 	 *
 	 * @param  string  $prefix
-	 * @return \Illuminate\Database\Grammar
+	 * @return $this
 	 */
 	public function setTablePrefix($prefix)
 	{

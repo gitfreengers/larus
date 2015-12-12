@@ -5,13 +5,6 @@ use Illuminate\Database\Query\Builder;
 class MySqlGrammar extends Grammar {
 
 	/**
-	 * The keyword identifier wrapper format.
-	 *
-	 * @var string
-	 */
-	protected $wrapper = '`%s`';
-
-	/**
 	 * The components that make up a select clause.
 	 *
 	 * @var array
@@ -97,6 +90,55 @@ class MySqlGrammar extends Grammar {
 		}
 
 		return rtrim($sql);
+	}
+
+	/**
+	 * Compile a delete statement into SQL.
+	 *
+	 * @param  \Illuminate\Database\Query\Builder  $query
+	 * @return string
+	 */
+	public function compileDelete(Builder $query)
+	{
+		$table = $this->wrapTable($query->from);
+
+		$where = is_array($query->wheres) ? $this->compileWheres($query) : '';
+
+		if (isset($query->joins))
+		{
+			$joins = ' '.$this->compileJoins($query, $query->joins);
+
+			$sql = trim("delete $table from {$table}{$joins} $where");
+		}
+		else
+		{
+			$sql = trim("delete from $table $where");
+		}
+
+		if (isset($query->orders))
+		{
+			$sql .= ' '.$this->compileOrders($query, $query->orders);
+		}
+
+		if (isset($query->limit))
+		{
+			$sql .= ' '.$this->compileLimit($query, $query->limit);
+		}
+
+		return $sql;
+	}
+
+	/**
+	 * Wrap a single string in keyword identifiers.
+	 *
+	 * @param  string  $value
+	 * @return string
+	 */
+	protected function wrapValue($value)
+	{
+		if ($value === '*') return $value;
+
+		return '`'.str_replace('`', '``', $value).'`';
 	}
 
 }

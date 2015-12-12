@@ -1,1 +1,0 @@
-/Applications/MAMP/htdocs/larus_laravel/app/views/Puestos/edit.blade.php

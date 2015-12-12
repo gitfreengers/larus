@@ -1,0 +1,65 @@
+<?php $__env->startSection('css'); ?>
+    <link href="<?php echo e(asset("bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.css")); ?>" rel="stylesheet" type="text/css" />
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
+    <h1>Roles</h1>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <div class="btn-group pull-right">
+                        <a href="<?php echo e(route('roles.create')); ?>" class="btn btn-success btn-flat"><i class="fa fa fa-plus"></i> Añadir Rol</a>
+                    </div>
+                    <div class="col-lg-10">
+                        <?php echo $__env->make('flash::message', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <table id="datatable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <td>#</td>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach($roles as $rol): ?>
+                            <tr>
+                                <td><?php echo e($rol->id); ?></td>
+                                <td><?php echo e($rol->name); ?></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a  href="<?php echo e(route('roles.edit',$rol->id)); ?>" class="btn btn-info btn-flat" title="Editar rol"><i class="fa fa-edit"></i> Editar</a>
+                                        <a href="<?php echo e(route('permissions.edit',$rol->id)); ?>" class="btn btn-default btn-flat" ><i class="fa fa-pencil"></i> Asignar permisos</a>
+
+                                        <button class="btn btn-danger "
+                                                data-toggle="confirmation"
+                                                data-singleton="true"
+                                                data-btn-type="delete"
+                                                data-url="<?php echo e(route('roles.destroy',$rol->id)); ?>">
+                                            <i class="fa fa-trash"></i> Eliminar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
+        <!-- DATA TABES SCRIPT -->
+    <script src="<?php echo e(asset('bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js')); ?>" type="text/javascript"></script>
+    <script src="<?php echo e(asset('bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.min.js')); ?>" type="text/javascript"></script>
+    <!-- confirmation -->
+    <script src="<?php echo e(asset('js/ajax.js')); ?>"></script>
+    <script src="<?php echo e(asset('bower_components/admin-lte/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js')); ?>" type="text/javascript"></script>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

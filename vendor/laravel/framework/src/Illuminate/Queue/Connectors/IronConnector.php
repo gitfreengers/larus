@@ -3,7 +3,7 @@
 use IronMQ;
 use Illuminate\Http\Request;
 use Illuminate\Queue\IronQueue;
-use Illuminate\Encryption\Encrypter;
+use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class IronConnector implements ConnectorInterface {
 
@@ -17,18 +17,18 @@ class IronConnector implements ConnectorInterface {
 	/**
 	 * The current request instance.
 	 *
-	 * @var \Illuminate\Http\Request;
+	 * @var \Illuminate\Http\Request
 	 */
 	protected $request;
 
 	/**
 	 * Create a new Iron connector instance.
 	 *
-	 * @param  \Illuminate\Encryption\Encrypter  $crypt
+	 * @param  \Illuminate\Contracts\Encryption\Encrypter  $crypt
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return void
 	 */
-	public function __construct(Encrypter $crypt, Request $request)
+	public function __construct(EncrypterContract $crypt, Request $request)
 	{
 		$this->crypt = $crypt;
 		$this->request = $request;
@@ -38,7 +38,7 @@ class IronConnector implements ConnectorInterface {
 	 * Establish a queue connection.
 	 *
 	 * @param  array  $config
-	 * @return \Illuminate\Queue\QueueInterface
+	 * @return \Illuminate\Contracts\Queue\Queue
 	 */
 	public function connect(array $config)
 	{
@@ -46,7 +46,14 @@ class IronConnector implements ConnectorInterface {
 
 		if (isset($config['host'])) $ironConfig['host'] = $config['host'];
 
-		return new IronQueue(new IronMQ($ironConfig), $this->crypt, $this->request, $config['queue']);
+		$iron = new IronMQ($ironConfig);
+
+		if (isset($config['ssl_verifypeer']))
+		{
+			$iron->ssl_verifypeer = $config['ssl_verifypeer'];
+		}
+
+		return new IronQueue($iron, $this->request, $config['queue'], $config['encrypt']);
 	}
 
 }

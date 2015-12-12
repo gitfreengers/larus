@@ -1,0 +1,42 @@
+<?php $__env->startSection('content-header'); ?>
+    <h1>Rol
+        <small><?php echo e(isset($roles)? "Editar Rol" : "Crear Rol"); ?></small>
+    </h1>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="row">
+    <div class="col-md-12">
+        <!-- general form elements disabled -->
+        <div class="box box-default">
+            <div class="box-body">
+                <?php if(isset($roles)): ?>
+                    <?php echo Form::model($roles,
+                    ['route' => ['roles.update', $roles->id],
+                    'method'=>'PUT',
+                    'class'=> 'form-horizontal',
+                    'id'=>'form_roles']  ); ?>
+
+                <?php else: ?>
+                    <?php echo Form::open(['route' => 'roles.store',
+                    'files'=>'true',
+                    'method'=>'POST',
+                    'class'=> 'form-horizontal',
+                    'id'=>'form_roles']  ); ?>
+
+                    <?php endif; ?>
+                <?php echo $__env->make('roles::partials.fields', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+                <div class="form-group">
+                    <div class="col-sm-offset-10 col-sm-2">
+                        <button type="submit" class="btn btn-primary" id="enviar">Guardar</button>
+                        <a href="<?php echo e(url('roles')); ?>" class="btn btn-default" >Cancelar</a>
+                    </div>
+                </div>
+                <?php echo Form::close(); ?>
+
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>   <!-- /.row -->
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

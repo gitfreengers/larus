@@ -6,13 +6,6 @@ use Illuminate\Database\Schema\Blueprint;
 class PostgresGrammar extends Grammar {
 
 	/**
-	 * The keyword identifier wrapper format.
-	 *
-	 * @var string
-	 */
-	protected $wrapper = '"%s"';
-
-	/**
 	 * The possible column modifiers.
 	 *
 	 * @var array
@@ -24,7 +17,7 @@ class PostgresGrammar extends Grammar {
 	 *
 	 * @var array
 	 */
-	protected $serials = array('bigInteger', 'integer');
+	protected $serials = array('bigInteger', 'integer', 'mediumInteger', 'smallInteger', 'tinyInteger');
 
 	/**
 	 * Compile the query to determine if a table exists.
@@ -314,7 +307,7 @@ class PostgresGrammar extends Grammar {
 	 */
 	protected function typeMediumInteger(Fluent $column)
 	{
-		return 'integer';
+		return $column->autoIncrement ? 'serial' : 'integer';
 	}
 
 	/**
@@ -325,7 +318,7 @@ class PostgresGrammar extends Grammar {
 	 */
 	protected function typeTinyInteger(Fluent $column)
 	{
-		return 'smallint';
+		return $column->autoIncrement ? 'smallserial' : 'smallint';
 	}
 
 	/**
@@ -336,7 +329,7 @@ class PostgresGrammar extends Grammar {
 	 */
 	protected function typeSmallInteger(Fluent $column)
 	{
-		return 'smallint';
+		return $column->autoIncrement ? 'smallserial' : 'smallint';
 	}
 
 	/**
@@ -347,7 +340,7 @@ class PostgresGrammar extends Grammar {
 	 */
 	protected function typeFloat(Fluent $column)
 	{
-		return 'real';
+		return $this->typeDouble($column);
 	}
 
 	/**
@@ -397,6 +390,28 @@ class PostgresGrammar extends Grammar {
 	}
 
 	/**
+	 * Create the column definition for a json type.
+	 *
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string
+	 */
+	protected function typeJson(Fluent $column)
+	{
+		return "json";
+	}
+
+	/**
+	 * Create the column definition for a jsonb type.
+	 *
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string
+	 */
+	protected function typeJsonb(Fluent $column)
+	{
+		return "jsonb";
+	}
+
+	/**
 	 * Create the column definition for a date type.
 	 *
 	 * @param  \Illuminate\Support\Fluent  $column
@@ -415,7 +430,18 @@ class PostgresGrammar extends Grammar {
 	 */
 	protected function typeDateTime(Fluent $column)
 	{
-		return 'timestamp';
+		return 'timestamp(0) without time zone';
+	}
+
+	/**
+	 * Create the column definition for a date-time type.
+	 *
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string
+	 */
+	protected function typeDateTimeTz(Fluent $column)
+	{
+		return 'timestamp(0) with time zone';
 	}
 
 	/**
@@ -426,7 +452,18 @@ class PostgresGrammar extends Grammar {
 	 */
 	protected function typeTime(Fluent $column)
 	{
-		return 'time';
+		return 'time(0) without time zone';
+	}
+
+	/**
+	 * Create the column definition for a time type.
+	 *
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string
+	 */
+	protected function typeTimeTz(Fluent $column)
+	{
+		return 'time(0) with time zone';
 	}
 
 	/**
@@ -437,7 +474,18 @@ class PostgresGrammar extends Grammar {
 	 */
 	protected function typeTimestamp(Fluent $column)
 	{
-		return 'timestamp';
+		return 'timestamp(0) without time zone';
+	}
+
+	/**
+	 * Create the column definition for a timestamp type.
+	 *
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string
+	 */
+	protected function typeTimestampTz(Fluent $column)
+	{
+		return 'timestamp(0) with time zone';
 	}
 
 	/**

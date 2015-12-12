@@ -1,9 +1,11 @@
 <?php namespace Illuminate\Http;
 
-use Symfony\Component\HttpFoundation\Cookie;
-use Illuminate\Support\Contracts\JsonableInterface;
+use Illuminate\Contracts\Support\Jsonable;
+use Symfony\Component\HttpFoundation\JsonResponse as BaseJsonResponse;
 
-class JsonResponse extends \Symfony\Component\HttpFoundation\JsonResponse {
+class JsonResponse extends BaseJsonResponse {
+
+	use ResponseTrait;
 
 	/**
 	 * The json encoding options.
@@ -28,18 +30,15 @@ class JsonResponse extends \Symfony\Component\HttpFoundation\JsonResponse {
 	}
 
 	/**
-	 * Get the json_decoded data from the response
+	 * Get the json_decoded data from the response.
 	 *
-	 * @param  bool $assoc
-	 * @param  int  $depth
-	 * @param  int  $options
+	 * @param  bool  $assoc
+	 * @param  int   $depth
 	 * @return mixed
 	 */
-	public function getData($assoc = false, $depth = 512, $options = null)
+	public function getData($assoc = false, $depth = 512)
 	{
-		$options = $options ?: $this->jsonOptions;
-
-		return json_decode($this->data, $assoc, $depth, $options);
+		return json_decode($this->data, $assoc, $depth);
 	}
 
 	/**
@@ -47,39 +46,34 @@ class JsonResponse extends \Symfony\Component\HttpFoundation\JsonResponse {
 	 */
 	public function setData($data = array())
 	{
-		$this->data = $data instanceof JsonableInterface
-                                   ? $data->toJson($this->jsonOptions)
-                                   : json_encode($data, $this->jsonOptions);
+		$this->data = $data instanceof Jsonable
+								   ? $data->toJson($this->jsonOptions)
+								   : json_encode($data, $this->jsonOptions);
 
 		return $this->update();
 	}
 
 	/**
-	 * Set a header on the Response.
+	 * Get the JSON encoding options.
 	 *
-	 * @param  string  $key
-	 * @param  string  $value
-	 * @param  bool    $replace
-	 * @return \Illuminate\Http\Response
+	 * @return int
 	 */
-	public function header($key, $value, $replace = true)
+	public function getJsonOptions()
 	{
-		$this->headers->set($key, $value, $replace);
-
-		return $this;
+		return $this->jsonOptions;
 	}
 
 	/**
-	 * Add a cookie to the response.
+	 * Set the JSON encoding options.
 	 *
-	 * @param  \Symfony\Component\HttpFoundation\Cookie  $cookie
-	 * @return \Illuminate\Http\Response
+	 * @param  int  $options
+	 * @return mixed
 	 */
-	public function withCookie(Cookie $cookie)
+	public function setJsonOptions($options)
 	{
-		$this->headers->setCookie($cookie);
+		$this->jsonOptions = $options;
 
-		return $this;
+		return $this->setData($this->getData());
 	}
 
 }

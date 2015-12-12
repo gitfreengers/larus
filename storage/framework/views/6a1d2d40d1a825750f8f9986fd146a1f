@@ -1,0 +1,20 @@
+<?php $__env->startSection('content'); ?>
+<div class="col-xs-2 success"  style="display: none; z-index:999; right: 0; position: fixed">
+    <div class="alert alert-success alert-dismissable" style="opacity: 0.8">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="icon fa fa-check"></i> <b>Actualización exitosa</b>
+    </div>
+</div>
+<div class="row">
+    <?php echo Form::model($roles, ['route' => ['permissions.update', $roles->id], 'method'=>'PUT','id'=>'form_permission']  ); ?>
+
+    <?php echo $__env->make('permissions::partials.table', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    <?php echo Form::close(); ?>
+
+</div><!-- /.row -->
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
+    <!-- permissions script -->
+    <script src="<?php echo e(asset('modules/permissions/js/permissions.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

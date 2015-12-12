@@ -1,0 +1,16 @@
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box <?php echo e($bgcolor); ?>">
+        <span class="info-box-icon"><i class="fa <?php echo e($faicon); ?>"></i></span>
+        <div class="info-box-content">
+            <span class="info-box-text"><?php echo e($text); ?></span>
+            <span class="info-box-number"><?php echo e($number); ?></span>
+            <div class="progress">
+                <div class="progress-bar" style="width: 80%"></div>
+            </div>
+              <span class="progress-description">
+                <?php echo e($progress); ?>% <?php echo e($description); ?>
+
+              </span>
+        </div><!-- /.info-box-content -->
+    </div><!-- /.info-box -->
+</div>

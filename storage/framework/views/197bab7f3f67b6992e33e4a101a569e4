@@ -1,0 +1,81 @@
+<?php $__env->startSection('css'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
+    <h1>Mis tareas</h1>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#my_tasks" data-toggle="tab">Mis tareas</a></li>
+                    <li><a href="#completed_tasks" data-toggle="tab">Tareas Completadas</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="my_tasks">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-hover task-table">
+                                        <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Fecha de inicio</th>
+                                            <th>Fecha de vencimiento</th>
+                                            <th>Etatus</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php foreach($mytasks as $mytask): ?>
+                                        <tr data-toggle="modal"  data-id="<?php echo e($mytask->id); ?>" data-url="<?php echo e(route('tasks.showtask',$mytask->id)); ?>" style="text-decoration: <?php echo e((is_null($mytask->user_complete_id))?'': 'line-through'); ?>">
+                                            <td><?php echo e($mytask->name); ?></td>
+                                            <td><?php echo e($mytask->start_date); ?></td>
+                                            <td><?php echo e($mytask->due_date); ?></td>
+                                            <td><?php echo e(trans('tasks::translations.'.$mytask->status)); ?></td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="completed_tasks">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-hover task-table">
+                                        <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Fecha de inicio</th>
+                                            <th>Fecha de vencimiento</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php foreach($completedtasks as $completedtask): ?>
+                                            <tr data-toggle="modal"  data-id="<?php echo e($completedtask->id); ?>" data-url="<?php echo e(route('tasks.showtask',$completedtask->id)); ?>">
+                                                <td><?php echo e($completedtask->name); ?></td>
+                                                <td><?php echo e($completedtask->start_date); ?></td>
+                                                <td><?php echo e($completedtask->due_date); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.tab-content -->
+            </div>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+    <?php echo $__env->make('tasks::layouts.modal-my-task', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('scripts'); ?>
+        <script src="<?php echo e(asset('modules/tasks/js/mytask.js')); ?>"></script>
+    <?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

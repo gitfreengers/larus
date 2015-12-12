@@ -1,0 +1,39 @@
+<div class="form-group <?php if($errors->has('name')): ?> has-error <?php endif; ?>">
+    <?php echo Form::label('titulo','Título',['class' =>'col-xs-2 control-label']); ?>
+
+    <div class="col-xs-8">
+        <?php if($errors->has('name')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+            <?php echo e($errors->first('name')); ?></label>
+        <?php endif; ?>
+        <?php echo Form::text('name',null,['class' => 'form-control','placeholder' => 'Ingrese un título']); ?>
+
+    </div>
+</div>
+<div class="form-group <?php if($errors->has('description')): ?> has-error <?php endif; ?>">
+    <?php echo Form::label('descripcion','Descripción',['class' =>'col-xs-2 control-label']); ?>
+
+    <div class="col-xs-8">
+        <?php if($errors->has('description')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+            <?php echo e($errors->first('description')); ?></label>
+        <?php endif; ?>
+
+                <?php echo Form::textarea('description', null, ['class'=> 'textarea','style'=>'width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;']); ?>
+
+
+    </div>
+</div>
+
+
+<div class="form-group <?php if($errors->has('url')): ?> has-error <?php endif; ?>">
+    <?php echo Form::label('url','URL',['class' =>'col-xs-2 control-label']); ?>
+
+    <div class="col-xs-8">
+        <?php if($errors->has('url')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+            <?php echo e($errors->first('url')); ?></label>
+        <?php endif; ?>
+        <?php echo Form::text('url',null,['class' => 'form-control','placeholder' => 'www.ejemplo.com']); ?>
+
+    </div>
+</div>
+
+

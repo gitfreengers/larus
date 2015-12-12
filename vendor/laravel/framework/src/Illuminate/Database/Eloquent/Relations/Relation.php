@@ -72,7 +72,7 @@ abstract class Relation {
 	 *
 	 * @param  array   $models
 	 * @param  string  $relation
-	 * @return void
+	 * @return array
 	 */
 	abstract public function initRelation(array $models, $relation);
 
@@ -94,6 +94,16 @@ abstract class Relation {
 	abstract public function getResults();
 
 	/**
+	 * Get the relationship for eager loading.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection
+	 */
+	public function getEager()
+	{
+		return $this->get();
+	}
+
+	/**
 	 * Touch all of the related models for the relationship.
 	 *
 	 * @return void
@@ -103,16 +113,6 @@ abstract class Relation {
 		$column = $this->getRelated()->getUpdatedAtColumn();
 
 		$this->rawUpdate(array($column => $this->getRelated()->freshTimestampString()));
-	}
-
-	/**
-	 * Restore all of the soft deleted related models.
-	 *
-	 * @return int
-	 */
-	public function restore()
-	{
-		return $this->query->withTrashed()->restore();
 	}
 
 	/**
@@ -143,13 +143,15 @@ abstract class Relation {
 	}
 
 	/**
-	 * Run a callback with constrains disabled on the relation.
+	 * Run a callback with constraints disabled on the relation.
 	 *
 	 * @param  \Closure  $callback
 	 * @return mixed
 	 */
 	public static function noConstraints(Closure $callback)
 	{
+		$previous = static::$constraints;
+
 		static::$constraints = false;
 
 		// When resetting the relation where clause, we want to shift the first element
@@ -157,7 +159,7 @@ abstract class Relation {
 		// as "extra" on the relationships, and not original relation constraints.
 		$results = call_user_func($callback);
 
-		static::$constraints = true;
+		static::$constraints = $previous;
 
 		return $results;
 	}
@@ -171,11 +173,11 @@ abstract class Relation {
 	 */
 	protected function getKeys(array $models, $key = null)
 	{
-		return array_values(array_map(function($value) use ($key)
+		return array_unique(array_values(array_map(function($value) use ($key)
 		{
 			return $key ? $value->getAttribute($key) : $value->getKey();
 
-		}, $models));
+		}, $models)));
 	}
 
 	/**
@@ -209,11 +211,11 @@ abstract class Relation {
 	}
 
 	/**
-	 * Get the fully qualified parent key naem.
+	 * Get the fully qualified parent key name.
 	 *
 	 * @return string
 	 */
-	protected function getQualifiedParentKeyName()
+	public function getQualifiedParentKeyName()
 	{
 		return $this->parent->getQualifiedKeyName();
 	}
@@ -266,7 +268,7 @@ abstract class Relation {
 	 */
 	public function wrap($value)
 	{
-		return $this->parent->getQuery()->getGrammar()->wrap($value);
+		return $this->parent->newQueryWithoutScopes()->getQuery()->getGrammar()->wrap($value);
 	}
 
 	/**

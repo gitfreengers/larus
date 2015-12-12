@@ -1,7 +1,7 @@
 <?php namespace Illuminate\Support\Facades;
 
 /**
- * @see \Illuminate\View\Environment
+ * @see \Illuminate\View\Factory
  */
 class View extends Facade {
 
@@ -10,6 +10,9 @@ class View extends Facade {
 	 *
 	 * @return string
 	 */
-	protected static function getFacadeAccessor() { return 'view'; }
+	protected static function getFacadeAccessor()
+	{
+		return 'view';
+	}
 
 }
