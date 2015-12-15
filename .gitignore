@@ -5,6 +5,7 @@
 
 /vendor
 /storage
+.idea
 .idea/workspace.xml
 /.settings
 .project
