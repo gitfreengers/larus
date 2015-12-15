@@ -2,3 +2,10 @@
 .env.*.php
 .env.php
 .env
+
+/vendor
+/storage
+.idea/workspace.xml
+/.settings
+.project
+.buildpath
