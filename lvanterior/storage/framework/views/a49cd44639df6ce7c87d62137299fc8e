@@ -1,0 +1,142 @@
+<?php $__env->startSection('css'); ?>
+    <!-- daterange picker -->
+    <?php echo Html::style('plugins/daterangepicker/daterangepicker-bs3.css'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Tarea
+                <small>Actualizar tarea</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-cog"></i> Administración</a></li>
+                <li><a href="#">Tareas</a></li>
+                <li class="active">Actualizar Tarea</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements disabled -->
+                    <div class="box box-primary">
+
+                            <?php echo Form::model($task,
+                            ['route' => ['tasks.update', $task->id],
+                            'method'=>'PUT',
+                            'class'=> 'form-horizontal',
+                            'files'=>'true',
+                            'id'=>'form_tasks']  ); ?>
+
+                        <div class="box-body">
+                            <div class="form-group  <?php if($errors->has('optionsRadios')): ?> has-error <?php endif; ?>">
+                                <div class="col-xs-8 col-xs-offset-2">
+                                    <?php if($errors->has('optionsRadios')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+                                        <?php echo e($errors->first('optionsRadios')); ?></label>
+                                    <?php endif; ?>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="optionsRadios"  value="roles" <?php echo e((is_null($task->role_id))? '' : 'checked'); ?>>
+                                            Seleccionar por roles
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="optionsRadios"  value="users" <?php echo e((is_null($task->user_id))? '' : 'checked'); ?>>
+                                            Seleccionar por usuarios
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group <?php if($errors->has('roles')): ?> has-error <?php endif; ?>" id="divRol">
+                                <?php echo Form::label('roles','Rol',['class' =>'col-xs-2 control-label']); ?>
+
+                                <div class="col-xs-8">
+                                    <?php if($errors->has('roles')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+                                        <?php echo e($errors->first('roles')); ?></label>
+                                    <?php endif; ?>
+                                    <select class="form-control" name="role_id" id="selectRol">
+                                        <option disabled value="" <?php echo e((is_null($task->role_id))? 'selected': ''); ?>>- Seleccione un rol -</option>
+                                        <?php foreach($roles as $rol): ?>
+                                            <option value="<?php echo e($rol->id); ?>" <?php echo e(($rol->id == $task->role_id )? 'selected': ''); ?>><?php echo e($rol->name); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group <?php if($errors->has('users')): ?> has-error <?php endif; ?>" id="divUser">
+                                <?php echo Form::label('usuarios','Usuarios',['class' =>'col-xs-2 control-label']); ?>
+
+                                <div class="col-xs-8">
+                                    <?php if($errors->has('users')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+                                        <?php echo e($errors->first('users')); ?></label>
+                                    <?php endif; ?>
+                                    <select class="form-control" name="user_id" id="selectUser">
+                                        <option disabled value="" <?php echo e((is_null($task->user_id))? 'selected': ''); ?> >- Seleccione un usuario -</option>
+                                        <?php foreach($users as $user): ?>
+                                            <option value="<?php echo e($user->id); ?>" <?php echo e(($user->id == $task->user_id)? 'selected': ''); ?>><?php echo e($user->full_name); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <?php echo $__env->make('notifications.tasks.partials.fields', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+                            <div class="form-group">
+                                <div class="col-sm-offset-10 col-sm-2">
+                                    <button type="submit" class="btn btn-primary" id="enviar">Actualizar</button>
+                                    <a href="<?php echo e(route('tasks.index')); ?>" class="btn btn-default" >Cancelar</a>
+                                </div>
+                            </div>
+                            <?php echo Form::close(); ?>
+
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div>
+            </div>   <!-- /.row -->
+        </section><!-- /.content -->
+    </div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
+    <?php echo Html::script('plugins/daterangepicker/moment.js'); ?>
+
+    <?php echo Html::script('plugins/daterangepicker/locale/es.js'); ?>
+
+    <?php echo Html::script('plugins/daterangepicker/daterangepicker.js'); ?>
+
+    <?php echo Html::script('js/config-daterange.js'); ?>
+
+    <?php echo Html::script('js/notification-option.js'); ?>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            moment.locale('es');
+            //Date range picker with time picker
+            $('#reservationtime').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 1,
+                timePicker12Hour: false,
+                format: 'YYYY/MM/DD H:mm',
+                startDate: "<?php echo e($task->start_time); ?>",
+                endDate: "<?php echo e($task->expire_time); ?>",
+                "locale": {
+                    "applyLabel": "Aplicar",
+                    "cancelLabel": "Cancelar",
+                    "fromLabel": "Desde",
+                    "toLabel": "Hasta"
+                }
+            });
+            if($("input:checked").val() == 'roles'){
+                $('#divUser').css('display', 'none');
+                $('#divRol').css('display', 'block');
+            }else{
+                $('#divUser').css('display', 'block');
+                $('#divRol').css('display', 'none');
+            }
+        });
+    </script>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
