@@ -98,9 +98,13 @@ class EjemploServiceProvider extends ServiceProvider {
 	{
 	
 		$menu = Menu::instance('sidebar-menu');
-		$menu->dropdown('Modulo de ejemplo', function ($sub) {
-			$sub->route('ejemplo.index', 'Ejemplo',[],1,['icon' => 'fa fa-circle-o']);
-		}, 2, ['icon' => 'fa fa-users']);
+		$menu->dropdown('Contabilidad', function ($sub) {
+			$sub->route('sales.index', 'Ventas',[],1,['icon' => 'fa fa-circle-o']);
+			$sub->route('oldBalance.index', 'Antigüedad de saldos',[],1,['icon' => 'fa fa-circle-o']);
+			$sub->route('policies.index', 'Polizas',[],1,['icon' => 'fa fa-circle-o']);
+			$sub->route('earrings.index', 'Pendientes de conciliar',[],1,['icon' => 'fa fa-circle-o']);
+			$sub->route('deposits.index', 'Depositos',[],1,['icon' => 'fa fa-circle-o']);
+		}, 2, ['icon' => 'fa fa-balance-scale']);
 	
 	}
 
