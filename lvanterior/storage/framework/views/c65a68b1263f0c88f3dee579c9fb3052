@@ -1,0 +1,16 @@
+<div class="form-group <?php if($errors->has('name')): ?> has-error <?php endif; ?>">
+    <?php echo Form::label('name','Nombre',['class' =>'col-xs-2 control-label']); ?>
+
+    <div class="col-xs-8">
+        <?php if($errors->has('name')): ?> <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+            <?php echo e($errors->first('name')); ?></label>
+        <?php endif; ?>
+        <?php echo Form::text('name',null,['class' => 'form-control','placeholder' => 'Ingrese un nombre']); ?>
+
+    </div>
+</div>
+
+
+
+
+

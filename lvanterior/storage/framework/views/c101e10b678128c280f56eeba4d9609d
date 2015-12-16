@@ -1,0 +1,48 @@
+<?php $__env->startSection('content'); ?>
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Usuarios
+                <small>Actualizar usuario</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-cog"></i> Administración</a></li>
+                <li><a href="<?php echo e(url('admin/users')); ?>">Usuarios</a></li>
+                <li class="active">Actualizar usuario</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements disabled -->
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <?php echo Form::model($users,
+                                            ['route' => ['users.update', $users->id],
+                                             'method'=>'PUT',
+                                            'class'=> 'form-horizontal',
+                                             'files'=>'true',
+                                             'id'=>'form_user']  ); ?>
+
+                            <?php echo $__env->make('users.partials.form', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+                            <div class="form-group">
+                                <div class="col-sm-offset-10 col-sm-2">
+                                    <button type="submit" class="btn btn-primary" id="enviar">Actualizar</button>
+                                    <a href="<?php echo e(url('users')); ?>" class="btn btn-default" >Cancelar</a>
+
+                                </div>
+                            </div>
+                            <?php echo Form::close(); ?>
+
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div>
+            </div>   <!-- /.row -->
+        </section><!-- /.content -->
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

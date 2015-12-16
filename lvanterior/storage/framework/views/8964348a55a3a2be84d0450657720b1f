@@ -1,0 +1,54 @@
+<?php $__env->startSection('content'); ?>
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Roles
+                <small>Nuevo test</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li><a href="<?php echo e(url('test')); ?>">test</a></li>
+                <li class="active">Nuevo test</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements disabled -->
+                    <div class="box box-default">
+                        <div class="box-body">
+                            <?php if(isset($test)): ?>
+                                <?php echo Form::model($test,
+                                ['route' => ['test.update', $test->id],
+                                'method'=>'PUT',
+                                'class'=> 'form-horizontal',
+                                'id'=>'form_test']  ); ?>
+
+                            <?php else: ?>
+                                <?php echo Form::open(['route' => 'test.store',
+                                'method'=>'POST',
+                                'class'=> 'form-horizontal',
+                                'id'=>'form_test']  ); ?>
+
+                                <?php endif; ?>
+                            <?php echo $__env->make('PackageTest::test.partials.fields', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+                            <div class="form-group">
+                                <div class="col-sm-offset-10 col-sm-2">
+                                    <button type="submit" class="btn btn-primary" id="enviar">Guardar</button>
+                                    <a href="<?php echo e(url('test')); ?>" class="btn btn-default" >Cancelar</a>
+                                </div>
+                            </div>
+                            <?php echo Form::close(); ?>
+
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div>
+            </div>   <!-- /.row -->
+        </section><!-- /.content -->
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
