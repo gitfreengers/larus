@@ -22,10 +22,10 @@ class Kernel extends ConsoleKernel {
 	 * @return void
 	 */
 	protected function schedule(Schedule $schedule) {
-		$schedule->command ( 'inspire' )->hourly ();
+		//$schedule->command ( 'inspire' )->hourly ();
 		
 		//@todo solo cambio para pruebas debe de quedarse en hourly()
-		$schedule->command('larus:salesRead')->everyMinute();
+		$schedule->command('larus:salesRead')->cron('*/1 * * * *');
 	}
 
 }
