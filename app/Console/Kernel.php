@@ -1,7 +1,4 @@
-<?php
-
-
-namespace App\Console;
+<?php namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -14,8 +11,8 @@ class Kernel extends ConsoleKernel {
 	 * @var array
 	 */
 	protected $commands = [ 
-			'App\Console\Commands\Inspire',
-			'Modules\Contabilidad\Console\SalesReadCommand' 
+		'App\Console\Commands\Inspire',
+		'Modules\Contabilidad\Console\SalesReadCommand' 
 	];
 
 	/**
@@ -25,9 +22,10 @@ class Kernel extends ConsoleKernel {
 	 * @return void
 	 */
 	protected function schedule(Schedule $schedule) {
-		//$schedule->command ( 'inspire' )->hourly ();
+		$schedule->command ( 'inspire' )->hourly ();
 		
-		$schedule->command('larus:salesRead')->hourly();
+		//@todo solo cambio para pruebas debe de quedarse en hourly()
+		$schedule->command('larus:salesRead')->everyMinute();
 	}
 
 }
