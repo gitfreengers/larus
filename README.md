@@ -73,6 +73,56 @@ php artisan serve
 ```
 > Usuario; test@test.com /
 > Password: test
+
+** **
+** **
+# Configuración de modulo Contabilidad
+
+### 1) Instalar migraciones del modulo
+
+```php
+php artisan module:migrate Contabilidad
+```
+
+### 2) Agregar parametros a .env
+
+```txt
+DIRECTORY_SALES=directorio
+```
+### 3) Agregar nuevo disco a /config/filesystems.php
+
+```txt
+	'disks' => [
+	...
+        'sales' => [
+			'driver' => 'local',
+			'root'   => env("DIRECTORY_SALES"),
+		],
+		...
+	]
+```
+
+### 4) Agregar comando a /app/Console/Kernel.php
+
+```php
+protected $commands = [ 
+    ...
+    'Modules\Contabilidad\Console\SalesReadCommand' 
+    ...
+];
+
+protected function schedule(Schedule $schedule) {
+...
+	$schedule->command('larus:salesRead')->hourly();
+...
+}
+```
+### 5) Para poder probar directamente el comando, puede realizarlo desde una terminal con el siguiente comando:
+```command
+php artisan larus:salesRead
+```
+
+
 ### Todos
 
  - Write Tests
