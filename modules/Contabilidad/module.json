@@ -1,0 +1,15 @@
+{
+    "name": "Contabilidad",
+    "alias": "contabilidad",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Contabilidad\\Providers\\ContabilidadServiceProvider"
+    ],
+    "aliases":{},
+    "files": [
+        "start.php"
+    ]
+}

@@ -73,4 +73,9 @@ class SidebarMenuPresenter extends Presenter
               </li>' . PHP_EOL;
         ;
     }
+    
+    public function getMultiLevelDropdownWrapper($item)
+    {
+    	return $this->getMenuWithDropDownWrapper($item);
+    }
 }

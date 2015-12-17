@@ -3,3 +3,10 @@
 .env.php
 .env
 /storage/*
+/vendor
+/storage
+.idea
+.idea/workspace.xml
+/.settings
+.project
+.buildpath
