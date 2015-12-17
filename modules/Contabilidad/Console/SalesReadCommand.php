@@ -43,12 +43,14 @@ class SalesReadCommand extends Command {
 	 */
 	public function handle()
 	{
+		Log::info('Iniciando proceso de lectura de ventas');
 		$disk = Storage::disk("sales");
 		$files = $disk->allfiles();
-		Log::info(count($files));
 		foreach ($files as $file){
+			Log::info('Lectura de archivos para procesar');
 			$sales_log = SalesLog::where("file_name", $file)->first();
     		if (!isset($sales_log)){
+    			Log::info('Procesando archivo '. $file);
 				$contents = $disk->get($file);
 				$count = 0;
 				$rows = str_getcsv($contents, "\n"); //parse the rows
@@ -83,8 +85,10 @@ class SalesReadCommand extends Command {
     				'process' => $count
     			]);
     			$sales_log_->save();
+    			Log::info('Archivo procesado '. $file .' renglones procesados ' .$count);
     		}
 		}
+		Log::info('Finalizando proceso de lectura de ventas');
 	}
 
 }
