@@ -50,32 +50,37 @@ class SalesReadCommand extends Command {
 			$sales_log = SalesLog::where("file_name", $file)->first();
     		if (!isset($sales_log)){
 				$contents = $disk->get($file);
+				$count = 0;
 				$rows = str_getcsv($contents, "\n"); //parse the rows
 				foreach ($rows as $row){
 					$datas = str_getcsv($row, '|');
-					$sales = new Sales([
-						'transaction_id'=>$datas[0],
-						'reference'=>$datas[1],
-						'ra_start_date'=>$datas[2],
-						'ra_end_date'=>$datas[3],
-						'factura_uuid'=>$datas[4],
-						'ammount'=>$datas[5],
-						'credit_debit'=>$datas[6],
-						'payment_method'=>$datas[7],
-						'ra_total'=>$datas[8],
-						'customer_number'=>$datas[9],
-						'op_location'=>$datas[10],
-						'cl_location'=>$datas[11],
-						'gl_account'=>$datas[12],
-						'concept'=>$datas[13],
-						'description'=>$datas[14],
-						'date'=>$datas[15],
-						'factura_number'=>$datas[16]
-					]);
-					$sales->save();
+					if (count($datas) == 17){
+						$sales = new Sales([
+							'transaction_id'=>$datas[0],
+							'reference'=>$datas[1],
+							'ra_start_date'=>$datas[2],
+							'ra_end_date'=>$datas[3],
+							'factura_uuid'=>$datas[4],
+							'ammount'=>$datas[5],
+							'credit_debit'=>$datas[6],
+							'payment_method'=>$datas[7],
+							'ra_total'=>$datas[8],
+							'customer_number'=>$datas[9],
+							'op_location'=>$datas[10],
+							'cl_location'=>$datas[11],
+							'gl_account'=>$datas[12],
+							'concept'=>$datas[13],
+							'description'=>$datas[14],
+							'date'=>$datas[15],
+							'factura_number'=>$datas[16]
+						]);
+						$sales->save();
+						$count++;
+					}
 				}
     			$sales_log_ = new SalesLog([
-    				'file_name' => $file
+    				'file_name' => $file,
+    				'process' => $count
     			]);
     			$sales_log_->save();
     		}

@@ -9,7 +9,8 @@ class SalesLog extends Model {
 	protected $table = "sales_log";
 	
     protected $fillable = [
-    	'file_name'
+    	'file_name',
+    	'process'
     ];
     
 }
