@@ -11,7 +11,7 @@
             <!-- general form elements disabled -->
             <div class="box">
                 <div class="box-body">
-                    {!! Form::open(['route' => 'users.store',
+                    {!! Form::open(['route' => 'contabilidad.oldBalance.store',
                                     'files'=>'true',
                                     'method'=>'POST',
                                     'id'=>'form_users',
@@ -24,7 +24,7 @@
 						        @if ($errors->has('date'))
 						            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('date') }}</label>
 						        @endif
-						        {!! Form::text('date',null,['class' => 'form-control','placeholder' => 'Ingrese la fecha', 'id'=>'fecha']) !!}
+						        {!! Form::text('date', $fechaActual,['class' => 'form-control','placeholder' => 'Ingrese la fecha', 'id'=>'fecha']) !!}
 						    </div>
 						</div>
 						<div class="form-group @if ($errors->has('client')) has-error @endif col-xs-3">
@@ -63,7 +63,7 @@
 						        @if ($errors->has('plaza')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('plaza') }}</label>
 						        @endif
-						        {!! Form::select('plaza',array('1'=>'Plaza 1', 2=>'Plaza 2'), null,['class' => 'form-control','placeholder' => 'Ingrese la plaza']) !!}
+						        {!! Form::select('plaza', $plazas, null,['class' => 'form-control','placeholder' => 'Ingrese la plaza', 'id' =>'plaza']) !!}
 						    </div>
 						</div>
 						 <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
@@ -72,7 +72,7 @@
 						        @if ($errors->has('account_user')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('account_user') }}</label>
 						        @endif
-						        {!! Form::select('account_user',array('1'=>'Plaza 1', 2=>'Plaza 2'), null,['class' => 'form-control','placeholder' => 'Seleccione el propietario de cuen']) !!}
+						        {!! Form::select('account_user', [], null,['class' => 'form-control','placeholder' => 'Seleccione el propietario de cuenta', 'id'=>'locaciones']) !!}
 						    </div>
 						</div>
 						<div class="row">
@@ -107,9 +107,24 @@
 	
 	<script>
 	$(document).ready(function(){
+		urlLocaciones = '{{route("locacionesPlaza")}}?numero_plaza='; 
 		$("#fecha").datepicker({
-			language: 'es'
+			language: 'es',
+			format: 'yyyy/mm/dd'
 		});
+
+		$('#plaza').on('change', function(){
+			$.get(urlLocaciones, {plaza: $("#plaza").val()}, function(response){
+				$("#locaciones").html("<option value=''>Seleccione...</option>");
+				$.each(response, function(i,v){
+					$("#locaciones").append("<option value='"+v.id_usuario+"'>"+v.nombre+"</option>");
+				});
+			});
+		});
+
+		
 	});
+
+	
 	</script>
 @endsection

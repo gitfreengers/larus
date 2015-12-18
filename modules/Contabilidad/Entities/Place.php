@@ -4,8 +4,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Place extends Model {
 	
-	protected $table = "tb_plazas";
+	protected $table = "Tb_plazas";
 
-    protected $fillable = [];
+    protected $fillable = [
+	    'clave',
+    	'nombre',
+    	'oficinas'	
+    ];
 
 }
