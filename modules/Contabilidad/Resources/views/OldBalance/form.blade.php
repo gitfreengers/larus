@@ -1,4 +1,7 @@
 @extends('layout.master')
+@section('css')
+	<link href="{{ asset("bower_components/admin-lte/plugins/datepicker/datepicker3.css")}}" rel="stylesheet" type="text/css" />
+@endsection
 @section('content-header')
     <h1>Antigüedad de saldos <small>Generar</small></h1>
 @endsection
@@ -21,7 +24,7 @@
 						        @if ($errors->has('date'))
 						            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('date') }}</label>
 						        @endif
-						        {!! Form::text('date',null,['class' => 'form-control','placeholder' => 'Ingrese la fecha']) !!}
+						        {!! Form::text('date',null,['class' => 'form-control','placeholder' => 'Ingrese la fecha', 'id'=>'fecha']) !!}
 						    </div>
 						</div>
 						<div class="form-group @if ($errors->has('client')) has-error @endif col-xs-3">
@@ -59,3 +62,15 @@
 @endsection
 
 
+@section('scripts')
+	<script src="{{ asset ("bower_components/admin-lte/plugins/datepicker/bootstrap-datepicker.js") }}" type="text/javascript"></script>
+	<script src="{{ asset ("/bower_components/admin-lte/plugins/datepicker/locales/bootstrap-datepicker.es.js") }}" type="text/javascript"></script>
+	
+	<script>
+	$(document).ready(function(){
+		$("#fecha").datepicker({
+			language: 'es'
+		});
+	});
+	</script>
+@endsection
