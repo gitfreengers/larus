@@ -24,7 +24,7 @@
 						        @if ($errors->has('date'))
 						            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('date') }}</label>
 						        @endif
-						        {!! Form::text('date',null,['class' => 'form-control','placeholder' => 'Ingrese la fecha', 'id'=>'fecha']) !!}
+						        {!! Form::text('date',$fechaAyer,['class' => 'form-control','placeholder' => 'Ingrese la fecha', 'id'=>'fecha']) !!}
 						    </div>
 						</div>
 						<div class="form-group @if ($errors->has('type')) has-error @endif col-xs-3">
@@ -37,13 +37,13 @@
 						    </div>
 						
 						</div>
- 						<div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
+ 						  <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
 						    {!! Form::label('place','Plaza',['class' =>'col-xs-6 control-label']) !!}
 						    <div class="col-xs-6">
 						        @if ($errors->has('plaza')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('plaza') }}</label>
 						        @endif
-						        {!! Form::select('plaza',array('1'=>'Plaza 1', 2=>'Plaza 2'), null,['class' => 'form-control','placeholder' => 'Ingrese la plaza']) !!}
+						        {!! Form::select('plaza', $plazas, null,['class' => 'form-control','placeholder' => 'Ingrese la plaza', 'id' =>'plaza']) !!}
 						    </div>
 						</div>
 						                        
@@ -67,7 +67,8 @@
 	<script>
 	$(document).ready(function(){
 		$("#fecha").datepicker({
-			language: 'es'
+			language: 'es',
+			format: 'yyyy/mm/dd'
 		});
 	});
 	</script>
