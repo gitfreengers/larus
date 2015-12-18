@@ -72,7 +72,7 @@
 						        @if ($errors->has('account_user')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('account_user') }}</label>
 						        @endif
-						        {!! Form::select('account_user',array('1'=>'Plaza 1', 2=>'Plaza 2'), null,['class' => 'form-control','placeholder' => 'Seleccione el propietario de cuenta']) !!}
+						        {!! Form::select('account_user',array('1'=>'Plaza 1', 2=>'Plaza 2'), null,['class' => 'form-control','placeholder' => 'Seleccione el propietario de cuen']) !!}
 						    </div>
 						</div>
 						<div class="row">
