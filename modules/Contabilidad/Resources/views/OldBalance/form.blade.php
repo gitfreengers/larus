@@ -66,8 +66,8 @@
 						        {!! Form::select('plaza', $plazas, null,['class' => 'form-control','placeholder' => 'Ingrese la plaza', 'id' =>'plaza']) !!}
 						    </div>
 						</div>
-						 <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
-						    {!! Form::label('account_user','Propietario de cuenta',['class' =>'col-xs-4 control-label']) !!}
+						 <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-6">
+						    {!! Form::label('account_user','Propietario de cuenta',['class' =>'col-xs-3 control-label']) !!}
 						    <div class="col-xs-8">
 						        @if ($errors->has('account_user')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('account_user') }}</label>

@@ -14,8 +14,8 @@ class OldBalancesController extends Controller {
 		$payment_methods = PaymentMethod::all();
 		$items = Place::all(['clave','nombre']);
 		$fechaActual = Carbon::now()->format('Y/m/d');
-		$plazas = array();
 		
+		$plazas = array();
 		
 		$plazas[''] = "Seleccione...";
 		foreach ($items as $data)
