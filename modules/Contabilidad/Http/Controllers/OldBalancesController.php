@@ -2,13 +2,16 @@
 
 use Pingpong\Modules\Routing\Controller;
 use Modules\Contabilidad\Entities\PaymentMethod;
+use Modules\Contabilidad\Entities\Place;
 
 class OldBalancesController extends Controller {
 	
 	public function index()
 	{
 		$payment_methods = PaymentMethod::all();
-		return view('contabilidad::OldBalance.form', compact("payment_methods"));
+		$plazas = '';// Place::all();
+		//dd($plazas);
+		return view('contabilidad::OldBalance.form', compact("payment_methods", "plazas"));
 	}
 	
 }

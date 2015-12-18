@@ -56,6 +56,16 @@
 						        {!! Form::text('days', 30, ['class' => 'form-control','placeholder' => 'Ingrese los días']) !!}
 						    </div>
 						</div>
+						
+				.       <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
+						    {!! Form::label('place','Plaza',['class' =>'col-xs-4 control-label']) !!}
+						    <div class="col-xs-8">
+						        @if ($errors->has('plaza')) 
+						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('plaza') }}</label>
+						        @endif
+						        {!! Form::select('plaza',array('1'=>'Plaza 1', 2=>'Plaza 2'), null,['class' => 'form-control','placeholder' => 'Ingrese la plaza']) !!}
+						    </div>
+						</div>
 						<div class="row">
 							<div class="col-xs-12">
 								<h4>Metodos de pago</h4>
