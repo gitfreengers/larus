@@ -66,6 +66,15 @@
 						        {!! Form::select('plaza',array('1'=>'Plaza 1', 2=>'Plaza 2'), null,['class' => 'form-control','placeholder' => 'Ingrese la plaza']) !!}
 						    </div>
 						</div>
+						 <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
+						    {!! Form::label('account_user','Propietario de cuenta',['class' =>'col-xs-4 control-label']) !!}
+						    <div class="col-xs-8">
+						        @if ($errors->has('account_user')) 
+						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('account_user') }}</label>
+						        @endif
+						        {!! Form::select('account_user',array('1'=>'Plaza 1', 2=>'Plaza 2'), null,['class' => 'form-control','placeholder' => 'Seleccione el propietario de cuenta']) !!}
+						    </div>
+						</div>
 						<div class="row">
 							<div class="col-xs-12">
 								<h4>Metodos de pago</h4>
