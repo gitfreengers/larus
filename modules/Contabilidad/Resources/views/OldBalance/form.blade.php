@@ -55,8 +55,18 @@
 						        @endif
 						        {!! Form::text('days', 30, ['class' => 'form-control','placeholder' => 'Ingrese los días']) !!}
 						    </div>
-						
 						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<h4>Metodos de pago</h4>
+							</div>
+							@foreach($payment_methods as $pm)
+								<div class="form-group @if ($errors->has('client')) has-error @endif col-xs-4">
+							        <input type="checkbox"> {{ $pm->payment_method }}
+								</div>
+							@endforeach
+						</div>
+						
 						                        
 	                    <div class="form-group col-xs-3">
 	                        <div class="col-sm-offset-2 col-sm-2">
