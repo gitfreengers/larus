@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Contabilidad\Entities\Sales;
 use Modules\Contabilidad\Entities\SalesLog;
+use Modules\Contabilidad\Entities\PaymentMethod;
 use Carbon\Carbon;
 
 class SalesReadCommand extends Command {
@@ -78,6 +79,15 @@ class SalesReadCommand extends Command {
 						]);
 						$sales->save();
 						$count++;
+						
+						$payment_method = PaymentMethod::where("payment_method", $datas[7])->first();
+						if (!isset($payment_method)){
+							Log::info('Agregando nuevo metodo de pago '. $datas[7]);
+							$payment_method_ = new PaymentMethod([
+								'payment_method' => $datas[7]
+							]);
+							$payment_method_->save();
+						}
 					}
 				}
     			$sales_log_ = new SalesLog([
