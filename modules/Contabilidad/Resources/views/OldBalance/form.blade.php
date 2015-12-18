@@ -43,7 +43,7 @@
 						        @if ($errors->has('view')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('view') }}</label>
 						        @endif
-						        {!! Form::select('view',array('1'=>'PDF', 2=>'Excel'), null,['class' => 'form-control','placeholder' => 'Ingrese la vista']) !!}
+						        {!! Form::select('view',array('1'=>'PDF', 2=>'Excel'), null,['class' => 'input-large form-control','placeholder' => 'Ingrese la vista']) !!}
 						    </div>
 						</div>
 						
@@ -66,14 +66,17 @@
 						        {!! Form::select('plaza', $plazas, null,['class' => 'form-control','placeholder' => 'Ingrese la plaza', 'id' =>'plaza']) !!}
 						    </div>
 						</div>
-						 <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-6">
-						    {!! Form::label('account_user','Propietario de cuenta',['class' =>'col-xs-3 control-label']) !!}
-						    <div class="col-xs-8">
-						        @if ($errors->has('account_user')) 
-						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('account_user') }}</label>
-						        @endif
-						        {!! Form::select('account_user', [], null,['class' => 'form-control','placeholder' => 'Seleccione el propietario de cuenta', 'id'=>'locaciones']) !!}
-						    </div>
+						<div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3 ">
+							<div class="col-xs-4"></div>
+						    {!! Form::label('account_user','Propietario de cuenta',['class' =>'col-xs-8 control-label']) !!}
+						    @if ($errors->has('account_user')) 
+						    <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('account_user') }}</label>
+						    @endif
+						</div>
+						<div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
+							<div class="col-xs-12">
+								{!! Form::select('account_user', [], null,['class' => 'form-control input-large','placeholder' => 'Seleccione el propietario de cuenta', 'id'=>'locaciones']) !!}
+							</div>
 						</div>
 						<div class="row">
 							<div class="col-xs-12">
