@@ -54,6 +54,8 @@ class SalesReadCommand extends Command {
     			Log::info('Procesando archivo '. $file);
 				$contents = $disk->get($file);
 				$count = 0;
+				$description = '';
+				
 				$rows = str_getcsv($contents, "\n"); //parse the rows
 				foreach ($rows as $row){
 					$datas = str_getcsv($row, '|');
@@ -79,7 +81,7 @@ class SalesReadCommand extends Command {
 						]);
 						$sales->save();
 						$count++;
-						
+						$description = $datas[14];
 						$payment_method = PaymentMethod::where("payment_method", $datas[7])->first();
 						if (!isset($payment_method)){
 							Log::info('Agregando nuevo metodo de pago '. $datas[7]);
@@ -92,7 +94,8 @@ class SalesReadCommand extends Command {
 				}
     			$sales_log_ = new SalesLog([
     				'file_name' => $file,
-    				'process' => $count
+    				'process' => $count,
+    				'description' => $description
     			]);
     			$sales_log_->save();
     			Log::info('Archivo procesado '. $file .' renglones procesados ' .$count);

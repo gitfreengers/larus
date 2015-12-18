@@ -10,7 +10,8 @@ class SalesLog extends Model {
 	
     protected $fillable = [
     	'file_name',
-    	'process'
+    	'process',
+    	'description'
     ];
     
 }
