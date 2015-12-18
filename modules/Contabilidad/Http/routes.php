@@ -8,5 +8,6 @@ Route::group(['prefix' => 'contabilidad', 'namespace' => 'Modules\Contabilidad\H
 	Route::resource('oldBalance', 'OldBalancesController');
 	Route::resource('policies', 'PoliciesController');
 	Route::resource('earrings', 'EarringsController');
-	Route::resource('deposits', 'DepositsController');
+	Route::resource('deposits', 'DepositsController'); 
+	Route::resource('cancel', 'CancelController'); 
 });

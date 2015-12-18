@@ -102,6 +102,7 @@ class ContabilidadServiceProvider extends ServiceProvider {
 			$sub->route('contabilidad.sales.index', 'Ventas',[],1,['icon' => 'fa fa-circle-o']);
 			$sub->route('contabilidad.earrings.index', 'Pendientes',[],1,['icon' => 'fa fa-circle-o']);
 			$sub->route('contabilidad.deposits.index', 'Depósitos',[],1,['icon' => 'fa fa-circle-o']);
+			$sub->route('contabilidad.cancel.index', 'Cancelaciones',[],1,['icon' => 'fa fa-circle-o']);
 			$sub->route('contabilidad.policies.index', 'Pólizas',[],1,['icon' => 'fa fa-circle-o']);
 			$sub->dropdown('Reportes', 2, function ($sub2) {
 				$sub2->route('contabilidad.oldBalance.index', 'Antigüedad de saldos',[],1,['icon' => 'fa fa-circle-o']);
