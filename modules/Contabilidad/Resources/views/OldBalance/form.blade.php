@@ -77,13 +77,15 @@
 						</div>
 						<div class="row">
 							<div class="col-xs-12">
-								<h4>Metodos de pago</h4>
-							</div>
-							@foreach($payment_methods as $pm)
-								<div class="form-group @if ($errors->has('client')) has-error @endif col-xs-4">
-							        <input type="checkbox"> {{ $pm->payment_method }}
+								<div class="form-group col-xs-3">
+									<h4 >Metodos de pago</h4>
 								</div>
-							@endforeach
+								@foreach($payment_methods as $pm)
+									<div class="form-group @if ($errors->has('client')) has-error @endif col-xs-3">
+							        	{{ $pm->payment_method }} <input type="checkbox"> 
+									</div>
+								@endforeach
+							</div>
 						</div>
 						
 						                        
