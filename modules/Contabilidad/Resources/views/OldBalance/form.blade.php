@@ -45,6 +45,16 @@
 						        @endif
 						        {!! Form::select('view',array('1'=>'PDF', 2=>'Excel'), null,['class' => 'form-control','placeholder' => 'Ingrese la vista']) !!}
 						    </div>
+						</div>
+						
+						<div class="form-group @if ($errors->has('client')) has-error @endif col-xs-3">
+						    {!! Form::label('days','Días',['class' =>'col-xs-4 control-label']) !!}
+						    <div class="col-xs-8">
+						        @if ($errors->has('days')) 
+						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('days') }}</label>
+						        @endif
+						        {!! Form::text('days', 30, ['class' => 'form-control','placeholder' => 'Ingrese los días']) !!}
+						    </div>
 						
 						</div>
 						                        
