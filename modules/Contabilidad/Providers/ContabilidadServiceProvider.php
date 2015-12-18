@@ -99,18 +99,18 @@ class ContabilidadServiceProvider extends ServiceProvider {
 	
 		$menu = Menu::instance('sidebar-menu');
 		$menu->dropdown('Contabilidad', function ($sub) {
-			$sub->route('sales.index', 'Ventas',[],1,['icon' => 'fa fa-circle-o']);
-			$sub->route('earrings.index', 'Pendientes',[],1,['icon' => 'fa fa-circle-o']);
-			$sub->route('deposits.index', 'Depósitos',[],1,['icon' => 'fa fa-circle-o']);
-			$sub->route('policies.index', 'Pólizas',[],1,['icon' => 'fa fa-circle-o']);
+			$sub->route('contabilidad.sales.index', 'Ventas',[],1,['icon' => 'fa fa-circle-o']);
+			$sub->route('contabilidad.earrings.index', 'Pendientes',[],1,['icon' => 'fa fa-circle-o']);
+			$sub->route('contabilidad.deposits.index', 'Depósitos',[],1,['icon' => 'fa fa-circle-o']);
+			$sub->route('contabilidad.policies.index', 'Pólizas',[],1,['icon' => 'fa fa-circle-o']);
 			$sub->dropdown('Reportes', 2, function ($sub2) {
-				$sub2->route('oldBalance.index', 'Antigüedad de saldos',[],1,['icon' => 'fa fa-circle-o']);
-				$sub2->route('oldBalance.index', 'Auxiliar de movimientos',[],1,['icon' => 'fa fa-circle-o']);
+				$sub2->route('contabilidad.oldBalance.index', 'Antigüedad de saldos',[],1,['icon' => 'fa fa-circle-o']);
+				$sub2->route('contabilidad.oldBalance.index', 'Auxiliar de movimientos',[],1,['icon' => 'fa fa-circle-o']);
 	
 			}, ['icon' => 'fa fa-bar-chart']);
 					
 				$sub->dropdown('Importar', 2, function ($sub2) {
-					$sub2->route('oldBalance.index', 'Estado de cuenta',[],1,['icon' => 'fa fa-circle-o']);
+					$sub2->route('contabilidad.oldBalance.index', 'Estado de cuenta',[],1,['icon' => 'fa fa-circle-o']);
 				}, ['icon' => 'fa fa-cloud-upload']);
 						
 		}, 2, ['icon' => 'fa fa-balance-scale']);

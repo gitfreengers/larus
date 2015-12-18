@@ -1,6 +1,6 @@
 <?php
 
-Route::group([ 'namespace' => 'Modules\Contabilidad\Http\Controllers'], function()
+Route::group(['prefix' => 'contabilidad', 'namespace' => 'Modules\Contabilidad\Http\Controllers'], function()
 {
 	//Route::get('/', 'ContabilidadController@index');
 	
