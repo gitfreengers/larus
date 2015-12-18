@@ -20,20 +20,18 @@
                     <tr>
                         <th>#</th>
                         <th>Fecha</th>
-                        <th>Orden</th>
-                        <th>Cliente</th>
-                        <th>Monto</th>
+                        <th>Archivo procesado</th>
+                        <th>Cantidad de registros</th>
                         <th>Detalles</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($sales as $sale)
+                    @foreach($salesLogs as $sale)
                         <tr>
 	                        <td>{{$sale->id}}</td>
-	                        <td>{{$sale->date}}</td>
-	                        <td>{{$sale->concept}}</td>
-	                        <td>{{$sale->customer_number}}</td>
-	                        <td>{{$sale->ammount}}</td>
+	                        <td>{{$sale->created_at}}</td>
+	                        <td>{{$sale->file_name}}</td>
+	                        <td>{{$sale->process}}</td>
 	                        <td>{{$sale->description}}</td>   
                         </tr>
                     @endforeach
