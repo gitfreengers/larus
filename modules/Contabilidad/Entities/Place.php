@@ -4,12 +4,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Place extends Model {
 	
-	protected $table = "Tb_plazas";
+    protected $table = "Tb_Plazas";
 
     protected $fillable = [
-	    'clave',
-    	'nombre',
-    	'oficinas'	
+	'Clave',
+    	'Nombre'	
     ];
 
 }

@@ -12,7 +12,7 @@ class OldBalancesController extends Controller {
 	public function index()
 	{
 		$payment_methods = PaymentMethod::all();
-		$items = Place::all(['clave','nombre']);
+		$items = Place::all(['Clave','Nombre']);
 		$fechaActual = Carbon::now()->format('Y/m/d');
 		
 		$plazas = array();
@@ -20,7 +20,7 @@ class OldBalancesController extends Controller {
 		$plazas[''] = "Seleccione...";
 		foreach ($items as $data)
 		{
-			$plazas[$data->clave] = $data->nombre;
+			$plazas[$data->Clave] = $data->Nombre;
 		}
 		
 		return view('contabilidad::OldBalance.form', compact("payment_methods", "plazas", "fechaActual"));

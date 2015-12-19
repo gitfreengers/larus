@@ -7,7 +7,7 @@ class LocalizationExecutive extends Model {
     protected $table = "locaciones_ejecutivas";
 
     protected $fillable = [
-	    'id_usuario',
+	'id_usuario',
     	'nombre',
     	'tipo',
     	'codigoSegmento',	
