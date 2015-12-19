@@ -14,13 +14,13 @@
         		
            	</div><!-- /.box-header -->
             <div class="box-body">
-            	<div class="form-group @if ($errors->has('currency')) has-error @endif col-xs-3">
+            	 <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
 				    {!! Form::label('place','Plaza',['class' =>'col-xs-4 control-label']) !!}
 				    <div class="col-xs-8">
-				        @if ($errors->has('place')) 
-				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('place') }}</label>
+				        @if ($errors->has('plaza')) 
+				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('plaza') }}</label>
 				        @endif
-				        {!! Form::select('place', array('1'=>'plaza 1', 2=>'plaza 2'), null,['class' => 'form-control','placeholder' => 'Seleccione la plaza']) !!}
+				        {!! Form::select('plaza', $plazas, null,['class' => 'form-control','placeholder' => 'Ingrese la plaza', 'id' =>'plaza']) !!}
 				    </div>
 				</div>
         	
