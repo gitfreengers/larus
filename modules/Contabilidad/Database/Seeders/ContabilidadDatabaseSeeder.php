@@ -16,10 +16,10 @@ class ContabilidadDatabaseSeeder extends Seeder {
 		Model::unguard();
 		
 		// Creando modulo de contabilidad
-// 		DB::table('modules')->insert([
-// 			['module_name' => 'Contabilidad']
-// 		]);
-		$idContabilidad = 5;//DB::getPdo()->lastInsertId();
+ 		DB::table('modules')->insert([
+ 			['module_name' => 'Contabilidad']
+ 		]);
+		$idContabilidad = DB::getPdo()->lastInsertId();
 	
 		DB::table('modules_permissions')->insert([
 			[
