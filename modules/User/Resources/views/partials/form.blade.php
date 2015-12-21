@@ -93,4 +93,27 @@
 
 </div>
 
+<div class="form-group @if ($errors->has('plazas')) has-error @endif">
+	{!! Form::label('plazas','Plazas',['class' =>'col-xs-2 control-label']) !!}
+</div>	
+<div class="form-group @if ($errors->has('plazas')) has-error @endif">
+@foreach($place_user as $plaza)
+    <div class="col-xs-2">
+        @if ($errors->has('plazas')) 
+        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+			{{ $errors->first('plazas') }}</label>
+        @endif
+        {!! Form::checkbox('plazas[]', $plaza->Clave, true) !!} {!! $plaza->Nombre!!}
+    </div>
+@endforeach
 
+@foreach($plazas as $plaza)
+    <div class="col-xs-2">
+        @if ($errors->has('plazas')) 
+        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+			{{ $errors->first('plazas') }}</label>
+        @endif
+        {!! Form::checkbox('plazas[]', $plaza->Clave) !!} {!! $plaza->Nombre!!}
+    </div>
+@endforeach
+</div>

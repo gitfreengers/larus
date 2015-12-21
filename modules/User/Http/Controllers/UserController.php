@@ -9,6 +9,7 @@ use Modules\User\Http\Requests\UserUpdateRequest;
 use App\Http\Requests;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Modules\Contabilidad\Entities\Place;
 
 
 class UserController extends Controller {
@@ -37,11 +38,13 @@ class UserController extends Controller {
 	{
 		if(Sentinel::hasAccess('user.create')){
 			$roles = Rol::all()->lists('name','slug');
-			return view('user::create', compact('roles'));
+			$plazas = Place::all();
+			$place_user = array();
+			return view('user::create', compact('roles', 'plazas', 'place_user'));
 		}
-			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
+		alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
 
-			return back();
+		return back();
 
 
 	}
@@ -72,6 +75,17 @@ class UserController extends Controller {
 		$user = Sentinel::registerAndActivate($input);
 		$user->roles()->attach($role);
 
+		//agregacion de permisos para plazas por usuario
+		$plazas = $request->plazas;
+		if (count($plazas) > 0){
+			$user_ = User::find($user->id);
+			$user_->plazas()->detach();
+			foreach ($plazas as $plaza){
+				$plaza_e = Place::where('Clave', $plaza)->first();
+				$user_->plazas()->attach($plaza_e);
+			}
+		}
+		
 		flash()->success('El usuario ha sido añadido.');
 		return redirect()->to('users');
 	}
@@ -89,8 +103,13 @@ class UserController extends Controller {
 			$users = Sentinel::findById($id);
 			$rolUser = $users->roles()->get();
 			$roles = Rol::all()->lists('name','slug');
-
-			return view('user::edit',compact('users','roles','rolUser'));
+			
+			$plazas = Place::all();
+			$user = User::find($id);
+			$place_user = $user->plazas()->get();
+			$plazas = $plazas->diff($place_user);
+			
+			return view('user::edit',compact('users','roles','rolUser','plazas', 'place_user'));
 		}
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
 			return back();
@@ -111,6 +130,17 @@ class UserController extends Controller {
 		$image_old = $user->image;
 		$time = Str::slug(\Carbon\Carbon::now());
 
+		//agregacion de permisos para plazas por usuario
+		$plazas = $request->plazas;
+		if (count($plazas) > 0){
+			$user_ = User::find($id);
+			$user_->plazas()->detach();
+			foreach ($plazas as $plaza){
+				$plaza_e = Place::where('Clave', $plaza)->first();
+				$user_->plazas()->attach($plaza_e);
+			}
+		}
+		
 		if(isset($image)){
 			$ext = $image->getClientOriginalExtension();
 			$name = 'user_'.$time. '.' .$ext;

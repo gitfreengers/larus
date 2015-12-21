@@ -3,22 +3,22 @@
 use Pingpong\Modules\Routing\Controller;
 use Modules\Contabilidad\Entities\Place;
 use Carbon\Carbon;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 class PoliciesController extends Controller {
 	
 	public function index()
 	{
-		$items = Place::all(['clave','nombre']);
-		$plazas = array();
-		$fechaAyer = Carbon::now()->subDay()->format('Y/m/d');
 		
-		
-		$plazas[''] = "Seleccione...";
-		foreach ($items as $data)
-		{
-			$plazas[$data->clave] = $data->nombre;
+		if(Sentinel::hasAccess('polizas.view')){
+			$fechaAyer = Carbon::now()->subDay()->format('Y/m/d');
+			$plazas = Place::plazasArray();
+			return view('contabilidad::Policies.form', compact('plazas', 'fechaAyer'));
+		}else{
+			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
+			return back();
 		}
-		return view('contabilidad::Policies.form', compact('plazas', 'fechaAyer'));
+		
 	}
 	
 }

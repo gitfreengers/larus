@@ -6,24 +6,21 @@ use Modules\Contabilidad\Entities\Place;
 use Carbon\Carbon;
 use Modules\Contabilidad\Entities\LocalizationExecutive;
 use Modules\Contabilidad\Http\Requests\LocationsExecutiveRequest;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 class OldBalancesController extends Controller {
 	
 	public function index()
 	{
-		$payment_methods = PaymentMethod::all();
-		$items = Place::all(['Clave','Nombre']);
-		$fechaActual = Carbon::now()->format('Y/m/d');
-		
-		$plazas = array();
-		
-		$plazas[''] = "Seleccione...";
-		foreach ($items as $data)
-		{
-			$plazas[$data->Clave] = $data->Nombre;
+		if(Sentinel::hasAccess('antiguedad.view')){
+			$fechaActual = Carbon::now()->format('Y/m/d');
+			$payment_methods = PaymentMethod::all();
+			$plazas = $plazas = Place::plazasArray();
+			return view('contabilidad::OldBalance.form', compact("payment_methods", "plazas", "fechaActual"));
+		}else{
+			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
+			return back();
 		}
-		
-		return view('contabilidad::OldBalance.form', compact("payment_methods", "plazas", "fechaActual"));
 	}
 	
 	

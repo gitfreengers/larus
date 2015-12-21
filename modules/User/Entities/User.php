@@ -15,6 +15,8 @@ class User extends Model {
     protected static $alertModel = 'Modules\Tasks\Entities\Alert';
     protected static $notificationModel = 'Modules\Notifications\Entities\Notification';
 
+    protected static $placeModel = 'Modules\Contabilidad\Entities\Place';
+
     protected $fillable = [
         'email',
         'password',
@@ -73,8 +75,14 @@ class User extends Model {
     }
 
 
-
-
+    /**
+     * Many users can have many plazas
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function plazas(){
+    	return $this->belongsToMany(static::$placeModel, 'place_user', 'user_id', 'tb_plazas_clave');
+    }
 
 
 }
