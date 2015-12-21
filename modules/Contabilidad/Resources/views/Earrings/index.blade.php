@@ -12,7 +12,7 @@
         
         	<div class="box-header">
             	<div class="btn-group pull-right">
-                	<a href="{{route('contabilidad.earrings.create')}}" class="btn btn-success btn-flat"><i class="fa fa-money"></i> Depositos</a>
+                	<a href="{{route('contabilidad.pendientes.create')}}" class="btn btn-success btn-flat"><i class="fa fa-money"></i> Depositos</a>
 				</div>
                 <div class="col-lg-10">
                 	@include('flash::message')

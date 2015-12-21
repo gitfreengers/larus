@@ -79,7 +79,7 @@
 				<div class="row ">
 					<div class="col-lg-12">
 		            	<div class="btn-group pull-right ">
-		                	<a href="{{route('contabilidad.deposits.create')}}" class="btn btn-success btn-flat"><i class="fa fa-money"></i> Agregar referencia de venta</a>
+		                	<a href="{{route('contabilidad.depositos.create')}}" class="btn btn-success btn-flat"><i class="fa fa-money"></i> Agregar referencia de venta</a>
 						</div>
 					</div>
 				</div>
@@ -137,7 +137,7 @@
                 <div class="row ">
 					<div class="col-lg-12">
 		            	<div class="btn-group pull-right ">
-		                	<a href="{{route('contabilidad.deposits.create')}}" class="btn btn-success btn-flat"><i class="fa fa-save"></i> Guardar</a>
+		                	<a href="{{route('contabilidad.depositos.create')}}" class="btn btn-success btn-flat"><i class="fa fa-save"></i> Guardar</a>
 						</div>
 					</div>
 				</div>

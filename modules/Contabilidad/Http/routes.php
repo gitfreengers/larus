@@ -4,12 +4,12 @@ Route::group(['prefix' => 'contabilidad', 'namespace' => 'Modules\Contabilidad\H
 {
 	//Route::get('/', 'ContabilidadController@index');
 	
-	Route::resource('sales', 'SalesController');
-	Route::resource('oldBalance', 'OldBalancesController');
-	Route::resource('policies', 'PoliciesController');
-	Route::resource('earrings', 'EarringsController');
-	Route::resource('deposits', 'DepositsController'); 
-	Route::resource('cancel', 'CancelController'); 
+	Route::resource('ventas', 'SalesController');
+	Route::resource('antiguedad', 'OldBalancesController');
+	Route::resource('polizas', 'PoliciesController');
+	Route::resource('pendientes', 'EarringsController');
+	Route::resource('depositos', 'DepositsController'); 
+	Route::resource('cancelaciones', 'CancelController'); 
 	Route::get('obtenerPorPlaza',['as'=>'locacionesPlaza', 'uses'=>'OldBalancesController@getByPlaza']);
 	
 });

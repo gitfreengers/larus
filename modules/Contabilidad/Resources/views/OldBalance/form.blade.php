@@ -11,7 +11,7 @@
             <!-- general form elements disabled -->
             <div class="box">
                 <div class="box-body">
-                    {!! Form::open(['route' => 'contabilidad.oldBalance.store',
+                    {!! Form::open(['route' => 'contabilidad.polizas.store',
                                     'files'=>'true',
                                     'method'=>'POST',
                                     'id'=>'form_users',

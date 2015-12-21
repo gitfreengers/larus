@@ -1,7 +1,6 @@
 @extends('layout.master')
 @section('css')
     <link href="{{ asset("bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset("bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content-header')
     <h1>Cancelaciones</h1>
@@ -57,7 +56,7 @@
                 <div class="row ">
 					<div class="col-lg-12">
 		            	<div class="btn-group pull-right ">
-		                	<a href="{{route('contabilidad.deposits.create')}}" class="btn btn-success btn-flat"><i class="fa fa-search"></i> Buscar</a>
+		                	<a href="{{route('contabilidad.cancelaciones.create')}}" class="btn btn-success btn-flat"><i class="fa fa-search"></i> Buscar</a>
 						</div>
 					</div>
 				</div>
