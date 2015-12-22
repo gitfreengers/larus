@@ -2,6 +2,7 @@
 
 use Pingpong\Modules\Routing\Controller;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Illuminate\Support\Facades\DB;
 
 use Modules\User\Entities\User;
 
@@ -10,6 +11,7 @@ use Modules\Contabilidad\Http\Requests\DepositoRequest;
 use Modules\Contabilidad\Entities\Deposito;
 use Modules\Contabilidad\Entities\DepositoAplicacion;
 use Modules\Contabilidad\Entities\Sales;
+use Modules\Contabilidad\Http\Requests\DepositoConsultaRequest;
 
 class DepositsController extends Controller {
 	
@@ -94,4 +96,32 @@ class DepositsController extends Controller {
 	
 		return view('contabilidad::Deposits.index', compact('deposito'));
 	}
+	
+	public function obtenerDepositos(DepositoConsultaRequest $request)
+	{
+		if ($request->plaza == '' 
+			&& $request->fecha == '' 
+			&& $request->monto == '' 
+			&& $request->referencia == ''){
+			$depositos = Deposito::all();			
+		}else{
+			$query = DB::table('depositos');
+			if ($request->plaza){
+				$query->leftJoin('place_user', 'place_user.user_id', '=', 'depositos.usuario_id')->where('tb_plazas_clave', $request->plaza);
+			}
+			if ($request->fecha){
+				$query->orWhere('fecha', $request->fecha);
+			}
+			if ($request->monto){
+				$query->orWhere('monto', $request->monto);
+			}
+			if ($request->referencia){
+				$query->orWhere('referencia', $request->referencia);
+			}
+			$depositos = $query->get();
+		}
+		
+		return response()->json($depositos);
+	}
+	
 }

@@ -12,5 +12,7 @@ Route::group(['prefix' => 'contabilidad', 'namespace' => 'Modules\Contabilidad\H
 	
 	Route::resource('depositos', 'DepositsController'); 
 	Route::get('obtenerVentas',['as'=>'contabilidad.depositos.obtenerVentas', 'uses'=>'SalesController@obtenerVentasPendientes']);
+
 	Route::post('guardarReferencias',['as'=>'contabilidad.depositos.guardarReferencias', 'uses'=>'DepositsController@guardarReferencias']);
+	Route::get('obtenerDepositos',['as'=>'contabilidad.depositos.obtenerDepositos', 'uses'=>'DepositsController@obtenerDepositos']);
 });
