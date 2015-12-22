@@ -98,6 +98,10 @@ class ContabilidadServiceProvider extends ServiceProvider {
 
 	public function registerMenu()
 	{
+		
+		if (!Sentinel::check()) {
+			return redirect('login');
+		}
 	
 		$menu = Menu::instance('sidebar-menu');
 		if(	Sentinel::hasAccess('ventas.view') ||
