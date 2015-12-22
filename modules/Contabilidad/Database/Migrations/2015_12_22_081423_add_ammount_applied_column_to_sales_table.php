@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Modules\Contabilidad\Entities\Sales;
 
 class AddAmmountAppliedColumnToSalesTable extends Migration {
 
@@ -15,14 +14,8 @@ class AddAmmountAppliedColumnToSalesTable extends Migration {
     {
         Schema::table('sales', function(Blueprint $table)
         {
-			$table->double('ammount_applied')->after('ammount');
+			$table->double('ammount_applied')->after('ammount')->default(0);
         }); 
-        
-        $sales = Sales::all();
-        foreach ($sales as $sale){
-        	$sale->ammount_applied = $sale->ammount;
-        	$sale->update();
-        }
         
     }
 

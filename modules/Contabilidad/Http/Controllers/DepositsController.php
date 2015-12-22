@@ -84,7 +84,8 @@ class DepositsController extends Controller {
 					'usuario_id' => $this->user_auth->id,
 					'cantidad' => $value->monto,
 				]);
-				$depositoAplicacion->save();				
+				$depositoAplicacion->save();	
+				$ventas->ammount_applied = $ventas->ammount_applied + $value->monto; 
 			}
 		}
 		

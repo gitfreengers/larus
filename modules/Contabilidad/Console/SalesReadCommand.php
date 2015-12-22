@@ -67,7 +67,7 @@ class SalesReadCommand extends Command {
 							'ra_end_date'=>$datas[3],
 							'factura_uuid'=>$datas[4],
 							'ammount'=>$datas[5],
-							'ammount_applied'=>$datas[5],
+							'ammount_applied'=>0,
 							'credit_debit'=>$datas[6],
 							'payment_method'=>$datas[7],
 							'ra_total'=>$datas[8],
