@@ -25,7 +25,12 @@ class Sales extends Model {
     	'concept',
 	    'description',
     	'date',
-    	'factura_number'
+    	'factura_number',
+    	'ammount_applied',
     ];
-    
+
+    public function depositosAplicados()
+    {
+    	return $this->hasMany('Modules\Contabilidad\Entities\DepositoAplicacion');
+    }
 }

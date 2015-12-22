@@ -2,7 +2,7 @@
    
 use Illuminate\Database\Eloquent\Model;
 
-class Deposito extends Model {
+class DepositoAplicacion extends Model {
 
     protected $table = "deposito_aplicacion";
 	
@@ -13,4 +13,13 @@ class Deposito extends Model {
     	'cantidad'
     ];
 
+    public function deposito()
+    {
+    	return $this->belongsTo('Modules\Contabilidad\Entities\Deposito');
+    }
+    
+    public function venta()
+    {
+    	return $this->belongsTo('Modules\Contabilidad\Entities\Sales');
+    }
 }
