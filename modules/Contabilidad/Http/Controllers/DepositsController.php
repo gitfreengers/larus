@@ -22,9 +22,8 @@ class DepositsController extends Controller {
 	public function index()
 	{
 		if(Sentinel::hasAccess('depositos.view')){
-			//$deposito = new Deposito();
-			$deposito = Deposito::find(1);
-			$deposito->load('depositosaplicados', 'depositosaplicados.venta');
+			$deposito = new Deposito();
+			
 			return view('contabilidad::Deposits.index', compact('deposito'));
 		}else{
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
@@ -42,6 +41,7 @@ class DepositsController extends Controller {
 	{
 		if(Sentinel::hasAccess('depositos.view')){
 			$deposito = new Deposito();
+			
 			return view('contabilidad::Deposits.index', compact('deposito'));
 		}else{
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
@@ -61,6 +61,7 @@ class DepositsController extends Controller {
 		$user = User::find($this->user_auth->id);
 		$deposito->usuario_id = $user->id;
 		$deposito->save();
+		$deposito->load('depositosaplicados', 'depositosaplicados.venta');
 		flash()->success('El deposito ha sido creado, ingrese referencias de venta.');
 		
 		return view('contabilidad::Deposits.index', compact('deposito'));
