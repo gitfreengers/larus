@@ -2,6 +2,8 @@
 
 use Illuminate\Support\ServiceProvider;
 use Menu;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+
 
 class ContabilidadServiceProvider extends ServiceProvider {
 
@@ -98,23 +100,51 @@ class ContabilidadServiceProvider extends ServiceProvider {
 	{
 	
 		$menu = Menu::instance('sidebar-menu');
-		$menu->dropdown('Contabilidad', function ($sub) {
-			$sub->route('contabilidad.ventas.index', 'Ventas',[],1,['icon' => 'fa fa-circle-o']);
-			$sub->route('contabilidad.pendientes.index', 'Pendientes',[],1,['icon' => 'fa fa-circle-o']);
-			$sub->route('contabilidad.depositos.index', 'Depósitos',[],1,['icon' => 'fa fa-circle-o']);
-			$sub->route('contabilidad.cancelaciones.index', 'Cancelaciones',[],1,['icon' => 'fa fa-circle-o']);
-			$sub->route('contabilidad.polizas.index', 'Pólizas',[],1,['icon' => 'fa fa-circle-o']);
-			$sub->dropdown('Reportes', 2, function ($sub2) {
-				$sub2->route('contabilidad.antiguedad.index', 'Antigüedad de saldos',[],1,['icon' => 'fa fa-circle-o']);
-				$sub2->route('contabilidad.antiguedad.index', 'Auxiliar de movimientos',[],1,['icon' => 'fa fa-circle-o']);
-	
-			}, ['icon' => 'fa fa-bar-chart']);
-					
-				$sub->dropdown('Importar', 2, function ($sub2) {
-					$sub2->route('contabilidad.antiguedad.index', 'Estado de cuenta',[],1,['icon' => 'fa fa-circle-o']);
-				}, ['icon' => 'fa fa-cloud-upload']);
+		if(	Sentinel::hasAccess('ventas.view') ||
+		 	Sentinel::hasAccess('pendientes.view') ||
+			Sentinel::hasAccess('depositos.view') ||
+			Sentinel::hasAccess('cancelaciones.view') ||
+			Sentinel::hasAccess('polizas.view') ||
+			Sentinel::hasAccess('antiguedad.view') || 
+			Sentinel::hasAccess('auxmovimientos.view') ||
+		  	Sentinel::hasAccess('estadocuenta.view') ) {
+			
+			$menu->dropdown('Contabilidad', function ($sub) {
+				if(Sentinel::hasAccess('ventas.view')) {
+					$sub->route('contabilidad.ventas.index', 'Ventas',[],1,['icon' => 'fa fa-circle-o']);
+				}
+				if(Sentinel::hasAccess('pendientes.view')) {
+					$sub->route('contabilidad.pendientes.index', 'Pendientes',[],1,['icon' => 'fa fa-circle-o']);
+				}
+				if(Sentinel::hasAccess('depositos.view')) {
+					$sub->route('contabilidad.depositos.index', 'Depósitos',[],1,['icon' => 'fa fa-circle-o']);				
+				}
+				if(Sentinel::hasAccess('cancelaciones.view')) {
+					$sub->route('contabilidad.cancelaciones.index', 'Cancelaciones',[],1,['icon' => 'fa fa-circle-o']);				
+				}
+				if(Sentinel::hasAccess('polizas.view')) {
+					$sub->route('contabilidad.polizas.index', 'Pólizas',[],1,['icon' => 'fa fa-circle-o']);				
+				}
+				if(Sentinel::hasAccess('antiguedad.view') || Sentinel::hasAccess('auxmovimientos.view')) {
+					$sub->dropdown('Reportes', 2, function ($sub2) {
+						if(Sentinel::hasAccess('antiguedad.view')) {
+							$sub2->route('contabilidad.antiguedad.index', 'Antigüedad de saldos',[],1,['icon' => 'fa fa-circle-o']);					
+						}
+						if(Sentinel::hasAccess('auxmovimientos.view')) {
+							$sub2->route('contabilidad.antiguedad.index', 'Auxiliar de movimientos',[],1,['icon' => 'fa fa-circle-o']);
+						}
+			
+					}, ['icon' => 'fa fa-bar-chart']);
+				}
 						
-		}, 2, ['icon' => 'fa fa-balance-scale']);
+				if(Sentinel::hasAccess('estadocuenta.view')) {
+					$sub->dropdown('Importar', 2, function ($sub2) {
+							$sub2->route('contabilidad.antiguedad.index', 'Estado de cuenta',[],1,['icon' => 'fa fa-circle-o']);
+					}, ['icon' => 'fa fa-cloud-upload']);
+				}
+						
+			}, 2, ['icon' => 'fa fa-balance-scale']);
+		}
 	
 	}
 }
