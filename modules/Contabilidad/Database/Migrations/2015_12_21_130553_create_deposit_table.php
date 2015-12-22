@@ -22,7 +22,9 @@ class CreateDepositTable extends Migration {
 			$table->smallInteger('moneda');
 			$table->string('cuenta_contable');
 			$table->string('complementaria');
-
+			$table->integer('usuario_id')->unsigned();
+			$table->foreign('usuario_id')->references('id')->on('users')->onDelete('cascade');
+			
             $table->timestamps();
         });
     }

@@ -11,5 +11,6 @@ Route::group(['prefix' => 'contabilidad', 'namespace' => 'Modules\Contabilidad\H
 	Route::resource('depositos', 'DepositsController'); 
 	Route::resource('cancelaciones', 'CancelController'); 
 	Route::get('obtenerPorPlaza',['as'=>'locacionesPlaza', 'uses'=>'OldBalancesController@getByPlaza']);
+	Route::get('obtenerVentas',['as'=>'contabilidad.obtenerVentas', 'uses'=>'SalesController@obtenerVentasPendientes']);
 	
 });

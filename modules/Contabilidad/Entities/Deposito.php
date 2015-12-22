@@ -7,14 +7,14 @@ class Deposito extends Model {
     protected $table = "depositos";
 	
     protected $fillable = [
-		'id',
 	    'banco', 
     	'fecha', 
     	'referencia', 
     	'monto', 
     	'moneda', 
     	'cuenta_contable',
-    	'complementaria'
+    	'complementaria',
+    	'usuario_id'	
     ];
 
 }

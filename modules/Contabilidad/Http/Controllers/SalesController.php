@@ -19,4 +19,11 @@ class SalesController extends Controller {
 		
 	}
 	
+	public function obtenerVentasPendientes(){
+		$ventasPendientes = Sales::all();//('saldo', $request->get('plaza'))->get();
+		$items['items'] = $ventasPendientes; 
+		return response()->json($items);
+
+	}
+	
 }
