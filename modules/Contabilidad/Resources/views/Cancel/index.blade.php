@@ -13,9 +13,9 @@
         		
            	</div><!-- /.box-header -->
             <div class="box-body">
-            	 <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
+            	 <div class="form-group @if ($errors->has('view')) has-error @endif col-md-3 col-xs-12">
 				    {!! Form::label('place','Plaza',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
+				    <div class="col-xs-12">
 				        @if ($errors->has('plaza')) 
 				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('plaza') }}</label>
 				        @endif
@@ -23,9 +23,9 @@
 				    </div>
 				</div>
         	
-        	 	<div class="form-group @if ($errors->has('bank')) has-error @endif col-xs-3" >
+        	 	<div class="form-group @if ($errors->has('bank')) has-error @endif col-md-3 col-xs-12" >
 				    {!! Form::label('ammount', 'Importe', ['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
+				    <div class="col-xs-12">
 				        @if ($errors->has('ammount'))
 				            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('ammount') }}</label>
 				        @endif
@@ -33,9 +33,9 @@
 				    </div>
 				</div>
 				
-        	 	<div class="form-group @if ($errors->has('date')) has-error @endif col-xs-3" >
+        	 	<div class="form-group @if ($errors->has('date')) has-error @endif col-md-3 col-xs-12" >
 				    {!! Form::label('date','Fecha',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
+				    <div class="col-xs-12">
 				        @if ($errors->has('date'))
 				            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('date') }}</label>
 				        @endif
@@ -43,9 +43,9 @@
 				    </div>
 				</div>
 				
-				<div class="form-group @if ($errors->has('reference')) has-error @endif col-xs-3">
+				<div class="form-group @if ($errors->has('reference')) has-error @endif col-md-3 col-xs-12">
 				    {!! Form::label('reference','Referencia',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
+				    <div class="col-xs-12">
 				        @if ($errors->has('reference')) 
 				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('reference') }}</label>
 				        @endif
