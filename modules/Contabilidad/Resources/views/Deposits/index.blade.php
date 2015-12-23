@@ -2,6 +2,7 @@
 @section('css')
     <link href="{{ asset("bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset("bower_components/admin-lte/plugins/select2/select2.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("bower_components/admin-lte/plugins/datepicker/datepicker3.css")}}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content-header')
     <h1>Depositos</h1>
@@ -205,7 +206,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Cerrar</button>
-				<button type="button" id="addBtn" class="btn btn-default btn-success">Agregar</button>
+				<button type="button" id="addBtn" class="btn btn-success">Agregar</button>
 			</div>
 		</div>
 	</div>
@@ -232,7 +233,8 @@
 		$('#guardarReferencias').hide();
 	 	$("#fecha").datepicker({
 			language: 'es',
-			format:'yyyy-mm-dd'
+			format:'yyyy-mm-dd',
+			todayHighlight: true
 		});
 		// data tables
 	    tabla = $("#depositosTable").DataTable({
