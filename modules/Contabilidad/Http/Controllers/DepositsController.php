@@ -1,17 +1,15 @@
 <?php namespace Modules\Contabilidad\Http\Controllers;
 
-use Pingpong\Modules\Routing\Controller;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
-use Illuminate\Support\Facades\DB;
+use Pingpong\Modules\Routing\Controller;
 
 use Modules\User\Entities\User;
 
-use Modules\Contabilidad\Http\Requests\DepositoReferenciasRequest;
-use Modules\Contabilidad\Http\Requests\DepositoRequest;
 use Modules\Contabilidad\Entities\Deposito;
 use Modules\Contabilidad\Entities\DepositoAplicacion;
 use Modules\Contabilidad\Entities\Sales;
-use Modules\Contabilidad\Http\Requests\DepositoConsultaRequest;
+use Modules\Contabilidad\Http\Requests\DepositoReferenciasRequest;
+use Modules\Contabilidad\Http\Requests\DepositoRequest;
 
 class DepositsController extends Controller {
 	

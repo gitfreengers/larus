@@ -14,7 +14,10 @@ class Deposito extends Model {
     	'moneda', 
     	'cuenta_contable',
     	'complementaria',
-    	'usuario_id'	
+    	'usuario_id',
+    	'estatus',
+    	'usuario_cancelacion_id',
+    	'fecha_cancelacion_id'    		
     ];
 
     public function depositosAplicados()

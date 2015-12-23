@@ -1,16 +1,21 @@
-<?php
+<?php namespace Modules\Contabilidad\Http\Controllers;
 
-
-namespace Modules\Contabilidad\Http\Controllers;
-
-use Pingpong\Modules\Routing\Controller;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
-use Modules\Contabilidad\Entities\Place;
+use Pingpong\Modules\Routing\Controller;
+
 use Modules\Contabilidad\Entities\Deposito;
+use Modules\Contabilidad\Entities\Place;
 use Modules\Contabilidad\Http\Requests\DepositoConsultaRequest;
-use Modules\Contabilidad\Entities\DepositoAplicacion;
+use Carbon\Carbon;
 
 class CancelController extends Controller {
+	
+	protected $user_auth;
+	
+	public function __construct(){
+		$this->user_auth = Sentinel::getUser();
+	}
+	
 	public function index() {
 		if (Sentinel::hasAccess ( 'cancelaciones.view' )) {
 			$plazas = Place::plazasArray ();
@@ -56,6 +61,8 @@ class CancelController extends Controller {
 		if($depositos = Deposito::find($id)) {
 			flash()->success('El deposito se ha cancelado.');
 			$depositos->estatus = 1;
+			$depositos->usuario_cancelacion_id = $this->user_auth->id;
+			$depositos->fecha_cancelacion = Carbon::now();
 			$depositos->update();
 			$depositosAplicados = $depositos->depositosAplicados;
 			foreach ($depositosAplicados as $depositoAplicado){
