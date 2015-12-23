@@ -11,7 +11,8 @@ class Place extends Model {
     
     protected $fillable = [
 		'Clave',
-    	'Nombre'	
+    	'Nombre',
+    	'Oficina'	
     ];
 
     public function users(){

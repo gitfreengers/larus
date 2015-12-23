@@ -20,10 +20,11 @@
                         @include('user::partials.form')
                         </div>
                     <div class="form-group">
-                        <div class="col-sm-offset-10 col-sm-2">
-                            <button type="submit" class="btn btn-primary" id="enviar">Guardar</button>
-                            <a href="{{url('users')}}" class="btn btn-default" >Cancelar</a>
-
+                        <div class="col-sm-offset-9 col-sm-3">
+	                    	<div class="btn-group">
+	                            <button type="submit" class="btn btn-primary" id="enviar">Guardar</button>
+	                            <a href="{{url('users')}}" class="btn btn-default" >Cancelar</a>
+							</div>
                         </div>
                     </div>
                     {!! Form::close() !!}

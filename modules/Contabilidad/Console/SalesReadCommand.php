@@ -55,6 +55,8 @@ class SalesReadCommand extends Command {
 				$contents = $disk->get($file);
 				$count = 0;
 				$description = '';
+				$op_location = '';
+				$cl_location = '';
 				
 				$rows = str_getcsv($contents, "\n"); //parse the rows
 				foreach ($rows as $row){
@@ -82,6 +84,8 @@ class SalesReadCommand extends Command {
 						]);
 						$sales->save();
 						$count++;
+						$op_location = $datas[10];
+						$cl_location = $datas[11];
 						$description = $datas[14];
 						$payment_method = PaymentMethod::where("payment_method", $datas[7])->first();
 						if (!isset($payment_method)){
@@ -96,7 +100,9 @@ class SalesReadCommand extends Command {
     			$sales_log_ = new SalesLog([
     				'file_name' => $file,
     				'process' => $count,
-    				'description' => $description
+    				'description' => $description,
+    				'op_location' => $op_location,
+    				'cl_location' => $cl_location,
     			]);
     			$sales_log_->save();
     			Log::info('Archivo procesado '. $file .' renglones procesados ' .$count);

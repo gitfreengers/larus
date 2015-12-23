@@ -23,6 +23,8 @@
                         <th>Archivo procesado</th>
                         <th>Cantidad de registros</th>
                         <th>Detalles</th>
+                        <th>Oficina de apertura</th>
+                        <th>Oficina de cierre</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -32,7 +34,9 @@
 	                        <td>{{$sale->created_at}}</td>
 	                        <td>{{$sale->file_name}}</td>
 	                        <td>{{$sale->process}}</td>
-	                        <td>{{$sale->description}}</td>   
+	                        <td>{{$sale->description}}</td>
+	                        <td>{{$sale->op_location}}</td>
+	                        <td>{{$sale->cl_location}}</td>   
                         </tr>
                     @endforeach
                     </tbody>
