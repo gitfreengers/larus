@@ -1,7 +1,7 @@
 <div class="form-group @if ($errors->has('image')) has-error @endif">
     {!! Form::label('image','Avatar',['class' =>'col-xs-2 control-label']) !!}
 
-    <div class="col-xs-8">
+    <div class="col-xs-12 col-md-8">
         @if ($errors->has('image'))
             <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('image') }}</label>
         @endif
@@ -18,7 +18,7 @@
 <div class="form-group @if ($errors->has('first_name')) has-error @endif">
 
     {!! Form::label('first_name','Nombre',['class' =>'col-xs-2 control-label']) !!}
-    <div class="col-xs-8">
+    <div class="col-xs-12 col-md-8">
         @if ($errors->has('first_name'))
             <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('first_name') }}</label>
         @endif
@@ -27,7 +27,7 @@
 </div>
 <div class="form-group @if ($errors->has('last_name')) has-error @endif">
     {!! Form::label('last_name','Apellido',['class' =>'col-xs-2 control-label']) !!}
-    <div class="col-xs-8">
+    <div class="col-xs-12 col-md-8">
         @if ($errors->has('last_name')) <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
             {{ $errors->first('last_name') }}</label>
         @endif
@@ -37,7 +37,7 @@
 </div>
 <div class="form-group @if ($errors->has('position')) has-error @endif">
     {!! Form::label('position','Puesto',['class' =>'col-xs-2 control-label']) !!}
-    <div class="col-xs-8">
+    <div class="col-xs-12 col-md-8">
         @if ($errors->has('position')) <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
             {{ $errors->first('position') }}</label>
         @endif
@@ -47,7 +47,7 @@
 </div>
 <div class="form-group @if ($errors->has('email')) has-error @endif">
     {!! Form::label('email','Correo eléctronico',['class' =>'col-xs-2 control-label']) !!}
-    <div class="col-xs-8">
+    <div class="col-xs-12 col-md-8">
         @if ($errors->has('email')) <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
             {{ $errors->first('email') }}</label>
         @endif
@@ -58,7 +58,7 @@
 @if(!isset($users->id))
     <div class="form-group @if ($errors->has('password')) has-error @endif">
         {!! Form::label('password','Contraseña',['class' =>'col-xs-2 control-label']) !!}
-        <div class="col-xs-8">
+        <div class="col-xs-12 col-md-8">
             @if ($errors->has('password')) <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
                 {{ $errors->first('password') }}</label>
             @endif
@@ -69,7 +69,7 @@
 
     <div class="form-group @if ($errors->has('retype_password')) has-error @endif">
         {!! Form::label('password','Repetir contraseña',['class' =>'col-xs-2 control-label']) !!}
-        <div class="col-xs-8">
+        <div class="col-xs-12 col-md-8">
             @if ($errors->has('retype_password')) <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
                 {{ $errors->first('retype_password') }}</label>
             @endif
@@ -80,7 +80,7 @@
 @endif
 <div class="form-group @if ($errors->has('roles')) has-error @endif">
     {!! Form::label('roles','Rol',['class' =>'col-xs-2 control-label']) !!}
-    <div class="col-xs-8">
+    <div class="col-xs-12 col-md-8">
         @if ($errors->has('roles')) <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
             {{ $errors->first('roles') }}</label>
         @endif
@@ -95,25 +95,25 @@
 
 <div class="form-group @if ($errors->has('plazas')) has-error @endif">
 	{!! Form::label('plazas','Plazas',['class' =>'col-xs-2 control-label']) !!}
-</div>	
-<div class="form-group @if ($errors->has('plazas')) has-error @endif">
-@foreach($place_user as $plaza)
-    <div class="col-xs-2">
-        @if ($errors->has('plazas')) 
-        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
-			{{ $errors->first('plazas') }}</label>
-        @endif
-        {!! Form::checkbox('plazas[]', $plaza->Clave, true) !!} {!! $plaza->Nombre!!}
-    </div>
-@endforeach
-
-@foreach($plazas as $plaza)
-    <div class="col-xs-2">
-        @if ($errors->has('plazas')) 
-        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
-			{{ $errors->first('plazas') }}</label>
-        @endif
-        {!! Form::checkbox('plazas[]', $plaza->Clave) !!} {!! $plaza->Nombre!!}
-    </div>
-@endforeach
+	<div class="col-xs-12 col-md-8">
+		@foreach($place_user as $plaza)
+		    <div class="col-xs-12 col-md-4">
+		        @if ($errors->has('plazas')) 
+		        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+					{{ $errors->first('plazas') }}</label>
+		        @endif
+		        {!! Form::checkbox('plazas[]', $plaza->Clave, true) !!} {!! $plaza->Nombre!!}
+		    </div>
+		@endforeach
+		
+		@foreach($plazas as $plaza)
+		    <div class="col-xs-12 col-md-4">
+		        @if ($errors->has('plazas')) 
+		        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+					{{ $errors->first('plazas') }}</label>
+		        @endif
+		        {!! Form::checkbox('plazas[]', $plaza->Clave) !!} {!! $plaza->Nombre!!}
+		    </div>
+		@endforeach
+	</div>
 </div>
