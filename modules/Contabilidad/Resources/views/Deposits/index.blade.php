@@ -290,11 +290,10 @@
 	    	$("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);		    
 		}
 	    
-	   
-
-		$("#agregarReferencia").on('click', function(){
+	   $("#agregarReferencia").on('click', function(){
 			$("#ventasModal").modal();
 			$("#ventasModal #error").hide();
+			$("#ventasModal #cantidad").val('');
 
 			$.get('{{route("contabilidad.ventas.obtenerVentas")}}', function(res){
 				$("#selectVenta").html("<option value=''>Seleccione...</option>");
@@ -302,6 +301,10 @@
 					$("#selectVenta").append("<option value='"+v.id+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
 				});
 				$(".select2").select2();
+			});
+
+			$("#selectVenta").on("change", function(){
+				$("#ventasModal #cantidad").val($("#selectVenta :selected").data('cantidad'));
 			});
 
 			$("#ventasModal #addBtn").off();
