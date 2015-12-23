@@ -12,95 +12,94 @@
         <div class="box">
         	<div class="box-header">
             	{!! Form::open(['route' => 'contabilidad.depositos.store','method'=>'POST','id'=>'DepositosForm','parsley-validate novalidate' ]) !!}
-        	    <div class="form-group @if ($errors->has('banco')) has-error @endif col-xs-3" >
+        	    <div class="form-group col-md-3 col-xs-12" >
 				    {!! Form::label('banco','Banco: ',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
-				        @if ($errors->has('banco'))
-				            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('banco') }}</label>
-				        @endif
+				    <div class="col-xs-12 @if ($errors->has('banco')) has-error @endif ">
 				        @if (!isset($deposito->id))
 				        	{!! Form::text('banco', $deposito->banco,['class' => 'form-control','placeholder' => 'Ingrese el banco']) !!}
 				        @else	
 				        	{!! Form::label('banco', $deposito->banco,['class' => 'control-label','placeholder']) !!}
 				        @endif
+				        @if ($errors->has('banco'))
+				            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('banco') }}</label>
+				        @endif
 				    </div>
 				</div>
-        	 	<div class="form-group @if ($errors->has('fecha')) has-error @endif col-xs-3" >
+        	 	<div class="form-group col-md-3 col-xs-12" >
 				    {!! Form::label('fecha','Fecha: ',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
-				        @if ($errors->has('fecha'))
-				            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('fecha') }}</label>
-				        @endif
+				    <div class="col-xs-12 @if ($errors->has('fecha')) has-error @endif">
 				        @if (!isset($deposito->id))
 					        {!! Form::text('fecha', $deposito->fecha,['class' => 'form-control','placeholder' => 'Ingrese la fecha', 'id'=>'fecha']) !!}
 				        @else	
 				        	{!! Form::label('fecha', $deposito->fecha,['class' => 'control-label','placeholder']) !!}
 				        @endif
+				        @if ($errors->has('fecha'))
+				            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('fecha') }}</label>
+				        @endif
 				    </div>
 				</div>
-				<div class="form-group @if ($errors->has('referencia')) has-error @endif col-xs-3">
+				<div class="form-group col-md-3 col-xs-12" >
 				    {!! Form::label('referencia','Referencia: ',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
-				        @if ($errors->has('referencia')) 
-				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('referencia') }}</label>
-				        @endif
-				        
+				    <div class="col-xs-12 @if ($errors->has('referencia')) has-error @endif ">
 				        @if (!isset($deposito->id))
 					        {!! Form::text('referencia', $deposito->referencia,['class' => 'form-control','placeholder' => 'Ingrese un referenciae']) !!}
 				        @else	
 				        	{!! Form::label('referencia', $deposito->referencia,['class' => 'control-label','placeholder']) !!}
+				        @endif				        
+				        @if ($errors->has('referencia')) 
+				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('referencia') }}</label>
 				        @endif
 				    </div>
 				</div>
-				<div class="form-group @if ($errors->has('cantidad')) has-error @endif col-xs-3">
+				<div class="form-group col-md-3 col-xs-12" >
 				    {!! Form::label('monto','Monto: ',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
-				        @if ($errors->has('monto')) 
-				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('monto') }}</label>
-				        @endif
+				    <div class="col-xs-12 @if ($errors->has('monto')) has-error @endif ">
 				        @if (!isset($deposito->id))
 					        {!! Form::text('monto', $deposito->monto,['class' => 'form-control','placeholder' => 'Ingrese una cantidad']) !!}
 				        @else	
 				        	{!! Form::label('monto', $deposito->monto,['class' => 'control-label','placeholder']) !!}
 				        @endif
+				        @if ($errors->has('monto')) 
+				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('monto') }}</label>
+				        @endif
 				    </div>
 				</div>
-				<div class="form-group @if ($errors->has('moneda')) has-error @endif col-xs-3">
+				<div class="form-group col-md-3 col-xs-12" >
 				    {!! Form::label('moneda','Moneda: ',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
-				        @if ($errors->has('moneda')) 
-				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('moneda') }}</label>
-				        @endif
+				    <div class="col-xs-12 @if ($errors->has('moneda')) has-error @endif ">
 				        @if (!isset($deposito->id))
 					        {!! Form::select('moneda', array('1'=>'DOLAR', 2=>'MXN'), $deposito->moneda,['class' => 'form-control','placeholder' => 'Ingrese una moneda']) !!}
 				        @else	
 				        	{!! Form::label('moneda', $deposito->moneda,['class' => 'control-label','placeholder']) !!}
 				        @endif
+				        @if ($errors->has('moneda')) 
+				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('moneda') }}</label>
+				        @endif
 				    </div>
 				</div>
-        		<div class="form-group @if ($errors->has('cuenta_contable')) has-error @endif col-xs-3">
-				    {!! Form::label('cuenta_contable','Cuenta contable: ',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-8">
-				        @if ($errors->has('cuenta_contable')) 
-				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('cuenta_contable') }}</label>
-				        @endif
+				<div class="form-group col-md-3 col-xs-12" >
+        		    {!! Form::label('cuenta_contable','Cuenta contable: ',['class' =>'col-xs-12 control-label']) !!}
+				    <div class="col-xs-12 @if ($errors->has('cuenta_contable')) has-error @endif ">
 				        @if (!isset($deposito->id))
 				        	{!! Form::text('cuenta_contable', $deposito->cuenta_contable,['class' => 'form-control','placeholder' => 'Ingrese la cuenta contable']) !!}
 				        @else	
 				        	{!! Form::label('cuenta_contable', $deposito->cuenta_contable,['class' => 'control-label','placeholder']) !!}
 				        @endif	
+				        @if ($errors->has('cuenta_contable')) 
+				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('cuenta_contable') }}</label>
+				        @endif
 				    </div>
 				</div>
-        		<div class="form-group @if ($errors->has('complementaria')) has-error @endif col-xs-3">
+				<div class="form-group col-md-3 col-xs-12" >
 				    {!! Form::label('complementaria','Complementaria: ',['class' =>'col-xs-6 control-label']) !!}
-				    <div class="col-xs-6">
-				        @if ($errors->has('complementaria')) 
-				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('complementaria') }}</label>
-				        @endif
+				    <div class="col-xs-12 @if ($errors->has('complementaria')) has-error @endif ">
 				        @if (!isset($deposito->id))
 				        	{!! Form::text('complementaria', $deposito->complementaria,['class' => 'form-control','placeholder' => 'Ingrese complemantaria']) !!}
 				        @else	
 				        	{!! Form::label('complementaria', $deposito->complementaria,['class' => 'control-label','placeholder']) !!}
+				        @endif
+				        @if ($errors->has('complementaria')) 
+				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('complementaria') }}</label>
 				        @endif
 				    </div>
 				</div>
