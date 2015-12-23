@@ -22,7 +22,6 @@ class SalesController extends Controller {
 			foreach ($usuario->plazas as $plazas){
 				array_push($oficinas, $plazas->Oficina);
 			}
-			
 			$salesLogs = SalesLog::whereIn('op_location', $oficinas)->orWhere(function ($query) use ($oficinas) {
 				$query->whereIn('cl_location', $oficinas);
 			})->get();

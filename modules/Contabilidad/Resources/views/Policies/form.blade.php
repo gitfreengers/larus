@@ -17,19 +17,19 @@
                                     'id'=>'form_users',
                                     'class'=> 'form-horizontal',
                                     'parsley-validate novalidate' ]  ) !!}
-                    <div class="box-body">
-                      	<div class="form-group @if ($errors->has('date')) has-error @endif col-xs-3" >
-						    {!! Form::label('date','Fecha polizas',['class' =>'col-xs-6 control-label']) !!}
-						    <div class="col-xs-6">
+                    <div class="box-header">
+                      	<div class="form-group @if ($errors->has('date')) has-error @endif col-md-3 col-xs-12 " >
+						    {!! Form::label('date','Fecha polizas',['class' =>'col-md-6 col-xs-12 control-label']) !!}
+						    <div class="col-md-12 col-xs-12">
 						        @if ($errors->has('date'))
 						            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('date') }}</label>
 						        @endif
 						        {!! Form::text('date',$fechaAyer,['class' => 'form-control','placeholder' => 'Ingrese la fecha', 'id'=>'fecha']) !!}
 						    </div>
 						</div>
-						<div class="form-group @if ($errors->has('type')) has-error @endif col-xs-3">
-						    {!! Form::label('type','Tipo de poliza',['class' =>'col-xs-6 control-label']) !!}
-						    <div class="col-xs-6">
+						<div class="form-group @if ($errors->has('type')) has-error @endif col-md-3 col-xs-12 ">
+						    {!! Form::label('type','Tipo de poliza',['class' =>'col-md-6 col-xs-12 control-label']) !!}
+						    <div class="col-md-12 col-xs-12">
 						        @if ($errors->has('type')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('type') }}</label>
 						        @endif
@@ -37,21 +37,27 @@
 						    </div>
 						
 						</div>
- 						  <div class="form-group @if ($errors->has('view')) has-error @endif col-xs-3">
-						    {!! Form::label('place','Plaza',['class' =>'col-xs-6 control-label']) !!}
-						    <div class="col-xs-6">
+ 						<div class="form-group @if ($errors->has('view')) has-error @endif col-md-3 col-xs-12 ">
+						    {!! Form::label('place','Plaza',['class' =>'col-md-1 col-xs-12 control-label']) !!}
+						    <div class="col-md-12 col-xs-12">
 						        @if ($errors->has('plaza')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('plaza') }}</label>
 						        @endif
 						        {!! Form::select('plaza', $plazas, null,['class' => 'form-control','placeholder' => 'Ingrese la plaza', 'id' =>'plaza']) !!}
 						    </div>
 						</div>
-						                        
-	                    <div class="form-group col-xs-3">
-	                        <div class="col-sm-offset-2 col-sm-2">
-	                            <button type="submit" class="btn btn-primary" id="enviar">Generar</button>
-	                        </div>
-	                    </div>
+						
+						<div class="row ">
+							<div class="col-lg-12">
+				            	<div class="btn-group pull-right ">
+		                            <button type="submit" class="btn btn-primary" id="enviar">Generar</button>
+								</div>
+							</div>
+						</div>
+					</div>                       
+					
+					<div class="box-body">
+					
                     </div>
                     {!! Form::close() !!}
                 </div><!-- /.box-body -->

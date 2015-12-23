@@ -18,7 +18,7 @@ class CancelController extends Controller {
 	
 	public function index() {
 		if (Sentinel::hasAccess ( 'cancelaciones.view' )) {
-			$plazas = Place::plazasArray ();
+			$plazas = Place::plazasArray($this->user_auth->id);
 			return view ( 'contabilidad::Cancel.index', compact ( "plazas" ) );
 		} else {
 			alert ()->error ( 'No tiene permisos para acceder a esta area.', 'Oops!' )->persistent ( 'Cerrar' );

@@ -1,6 +1,7 @@
 <?php namespace Modules\Contabilidad\Entities;
    
 use Illuminate\Database\Eloquent\Model;
+use Modules\User\Entities\User;
 
 class Place extends Model {
 	
@@ -23,13 +24,20 @@ class Place extends Model {
     	$this->users()->sync([$id]);
     }
     
-    public static function plazasArray() {
+    public static function plazasArray($usuario_id) {
+    	
+    	$usuario = User::find($usuario_id);
+    	$oficinas = array();
+    	foreach ($usuario->plazas as $plazas){
+    		array_push($oficinas, $plazas->Oficina);
+    	}
     	$plazas = array();
-    	$items = Place::all(['clave','nombre']);
+    	$items = Place::whereIn('oficina', $oficinas)->get()->lists('Nombre', 'Clave');
     	$plazas[''] = "Seleccione...";
-    	foreach ($items as $data)
+    	
+    	foreach ($items as $key=>$value)
     	{
-    		$plazas[$data->clave] = $data->nombre;
+    		$plazas[$key] = $value;
     	}
     	
     	return $plazas;
