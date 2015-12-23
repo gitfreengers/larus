@@ -70,6 +70,7 @@
 	                        <th>Moneda</th>
 	                        <th>Cuenta contable</th>
 	                        <th>Complementaria</th>
+	                        <th></th>
 	                    </tr>
                     </thead>
                     <tbody></tbody>
@@ -113,7 +114,21 @@
 	        	{"data": "moneda"},
 	        	{"data": "cuenta_contable"},
 	        	{"data": "complementaria"},
+	        	{"data": "cancelado"}
 	        ],
+	        'columnDefs': [
+				{	
+                	'targets': 7,
+                	'searchable':false,
+                    'orderable':false,
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full, meta){
+                        if (!full.isCancel){
+	                    	return 	'<a  href="#" class="btn btn-danger btn-flat" title="Cancelar"><i class="fa fa-trash "></i> Cancelar</a></div>';
+                        }
+       				}
+				},   	
+			],
 	    });
 
 		$("#buscarBtn").on("click", function(){
