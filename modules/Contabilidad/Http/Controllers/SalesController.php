@@ -21,7 +21,7 @@ class SalesController extends Controller {
 	
 	public function obtenerVentasPendientes() 
 	{
-		$ventasPendientes = Sales::where('ammount_applied', 0);//('saldo', $request->get('plaza'))->get();
+		$ventasPendientes = Sales::whereRaw('ammount_applied < ammount')->get();
 		$items['items'] = $ventasPendientes; 
 		return response()->json($items);
 	}

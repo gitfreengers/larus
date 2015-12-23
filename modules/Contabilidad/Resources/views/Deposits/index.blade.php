@@ -231,6 +231,10 @@
 	<script>
 	$(document).ready(function(){
 		$('#guardarReferencias').hide();
+	 	$("#fecha").datepicker({
+			language: 'es',
+			format:'yyyy-mm-dd'
+		});
 		// data tables
 	    tabla = $("#depositosTable").DataTable({
 	        "language": {
@@ -285,16 +289,13 @@
 	    	$("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);		    
 		}
 	    
-	    $("#fecha").datepicker({
-			language: 'es',
-			format:'yyyy-mm-dd'
-		});
+	   
 
 		$("#agregarReferencia").on('click', function(){
 			$("#ventasModal").modal();
 			$("#ventasModal #error").hide();
 
-			$.get('{{route("contabilidad.depositos.obtenerVentas")}}', function(res){
+			$.get('{{route("contabilidad.ventas.obtenerVentas")}}', function(res){
 				$("#selectVenta").html("<option value=''>Seleccione...</option>");
 				$.each(res.items, function(i,v){
 					$("#selectVenta").append("<option value='"+v.id+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");

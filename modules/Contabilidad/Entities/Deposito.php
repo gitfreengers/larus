@@ -19,6 +19,6 @@ class Deposito extends Model {
 
     public function depositosAplicados()
     {
-    	return $this->hasMany('Modules\Contabilidad\Entities\DepositoAplicacion');
+    	return $this->hasMany('Modules\Contabilidad\Entities\DepositoAplicacion', 'deposito_id', 'id');
     }
 }

@@ -60,21 +60,28 @@
 				</form>	
            	</div><!-- /.box-header -->
             <div class="box-body">
-        		<table id="depositosTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                    <thead>
-	                    <tr>
-	                    	<th>Id</th>
-	                        <th>Banco</th>
-	                        <th>Referencia</th>
-	                        <th>Monto</th>
-	                        <th>Moneda</th>
-	                        <th>Cuenta contable</th>
-	                        <th>Complementaria</th>
-	                        <th></th>
-	                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+            	<div class='row'>
+					<div class="col-lg-12">
+			    		@include('flash::message')
+					</div>
+            	</div>
+            	<div class='row'>
+	        		<table id="depositosTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+	                    <thead>
+		                    <tr>
+		                    	<th>Id</th>
+		                        <th>Banco</th>
+		                        <th>Referencia</th>
+		                        <th>Monto</th>
+		                        <th>Moneda</th>
+		                        <th>Cuenta contable</th>
+		                        <th>Complementaria</th>
+		                        <th></th>
+		                    </tr>
+	                    </thead>
+	                    <tbody></tbody>
+	                </table>
+				</div> 
             </div><!-- /.box-body -->
         </div><!-- /.box -->
     </div><!-- /.col -->
@@ -85,7 +92,7 @@
     <script src="{{asset('bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
     <script src="{{asset('bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{asset('bower_components/admin-lte/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js') }}" type="text/javascript"></script>
-    
+    <script src="{{asset('js/ajax.js')}}"></script>
     <script src="{{ asset ("bower_components/admin-lte/plugins/datepicker/bootstrap-datepicker.js") }}" type="text/javascript"></script>
 	<script src="{{ asset ("/bower_components/admin-lte/plugins/datepicker/locales/bootstrap-datepicker.es.js") }}" type="text/javascript"></script>
 	
@@ -114,26 +121,28 @@
 	        	{"data": "moneda"},
 	        	{"data": "cuenta_contable"},
 	        	{"data": "complementaria"},
-	        	{"data": "cancelado"}
+	        	{"data": "estatus"}
 	        ],
 	        'columnDefs': [
 				{	
                 	'targets': 7,
                 	'searchable':false,
                     'orderable':false,
-                    'className': 'dt-body-center',
                     'render': function (data, type, full, meta){
-                        if (!full.isCancel){
-	                    	return 	'<a  href="#" class="btn btn-danger btn-flat" title="Cancelar"><i class="fa fa-trash "></i> Cancelar</a></div>';
+                        if (full.estatus==0){
+                            url = "{{route('contabilidad.cancelaciones.destroy', 0)}}";
+                            return "<button class='btn btn-danger' data-toggle='confirmation' data-singleton='true' data-btn-type='delete' data-url='" + url.replace('/0', '/'+full.id) + "'> <i class='fa fa-trash'></i> Eliminar</button>";
+                        }else{
+                            return '<div class="form-group has-error"><label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> Cancelado</label></div>';
                         }
        				}
 				},   	
 			],
 	    });
 
-		$("#buscarBtn").on("click", function(){
+	    $("#buscarBtn").on("click", function(){
 			tabla.rows().remove().draw();
-			$.get('{{route("contabilidad.depositos.obtenerDepositos")}}', $("#depositosForm").serializeArray(), function(res){
+			$.get('{{route("contabilidad.cancelaciones.obtenerDepositos")}}', $("#depositosForm").serializeArray(), function(res){
 				$.each(res, function(i,v){
 					tabla.row.add({
 						id: v.id, 
@@ -143,12 +152,13 @@
 						moneda: v.moneda,
 						cuenta_contable: v.cuenta_contable,
 						complementaria: v.complementaria,
+						estatus: v.estatus
 					}).draw();
 					tabla.columns.adjust().draw();
 				});
-			});
-		})
-    
+				apps.setup();
+			});		    
+		});
 	});
 	</script>
 @endsection

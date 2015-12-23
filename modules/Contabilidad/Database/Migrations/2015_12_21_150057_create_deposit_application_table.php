@@ -39,7 +39,7 @@ class CreateDepositApplicationTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('deposit_application');
+        Schema::drop('deposito_aplicacion');
     }
 
 }

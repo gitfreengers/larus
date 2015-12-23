@@ -25,7 +25,6 @@ class DepositsController extends Controller {
 	{
 		if(Sentinel::hasAccess('depositos.view')){
 			$deposito = new Deposito();
-			
 			return view('contabilidad::Deposits.index', compact('deposito'));
 		}else{
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
@@ -88,40 +87,14 @@ class DepositsController extends Controller {
 					'cantidad' => $value->monto,
 				]);
 				$depositoAplicacion->save();	
-				$ventas->ammount_applied = $ventas->ammount_applied + $value->monto; 
+				$ventas->ammount_applied = $ventas->ammount_applied + $value->monto;
+				$ventas->update();
 			}
 		}
 		
 		flash()->success('Las referencias de venta se han almacenado correctamente.');
 	
 		return view('contabilidad::Deposits.index', compact('deposito'));
-	}
-	
-	public function obtenerDepositos(DepositoConsultaRequest $request)
-	{
-		if ($request->plaza == '' 
-			&& $request->fecha == '' 
-			&& $request->monto == '' 
-			&& $request->referencia == ''){
-			$depositos = Deposito::all();			
-		}else{
-			$query = DB::table('depositos');
-			if ($request->plaza){
-				$query->leftJoin('place_user', 'place_user.user_id', '=', 'depositos.usuario_id')->where('tb_plazas_clave', $request->plaza);
-			}
-			if ($request->fecha){
-				$query->orWhere('fecha', $request->fecha);
-			}
-			if ($request->monto){
-				$query->orWhere('monto', $request->monto);
-			}
-			if ($request->referencia){
-				$query->orWhere('referencia', $request->referencia);
-			}
-			$depositos = $query->get();
-		}
-		
-		return response()->json($depositos);
 	}
 	
 }
