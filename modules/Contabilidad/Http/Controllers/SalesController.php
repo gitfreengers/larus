@@ -3,8 +3,9 @@
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Modules\Contabilidad\Entities\Sales;
 use Modules\Contabilidad\Entities\SalesLog;
-use Pingpong\Modules\Routing\Controller;
 use Modules\User\Entities\User;
+use Pingpong\Modules\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller {
 	
@@ -35,7 +36,11 @@ class SalesController extends Controller {
 	
 	public function obtenerVentasPendientes() 
 	{
-		$ventasPendientes = Sales::whereRaw('ammount_applied < ammount')->get();
+		$ventasPendientes = DB::table('sales')
+							->select('*',  DB::raw('SUM(ammount) as ammount'))
+							->whereRaw('ammount_applied < ammount and credit_debit =?', ['credit'])
+							->groupBy('reference')
+							->get();
 		$items['items'] = $ventasPendientes; 
 		return response()->json($items);
 	}

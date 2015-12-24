@@ -59,6 +59,7 @@
 					        {!! Form::text('monto', $deposito->monto,['class' => 'form-control','placeholder' => 'Ingrese una cantidad']) !!}
 				        @else	
 				        	{!! Form::label('monto', $deposito->monto,['class' => 'control-label','placeholder']) !!}
+				        	{!! Form::hidden('monto', $deposito->monto,['class' => 'form-control','placeholder' => 'Ingrese una cantidad']) !!}
 				        @endif
 				        @if ($errors->has('monto')) 
 				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('monto') }}</label>
@@ -227,8 +228,7 @@
 	<script src="{{ asset ("bower_components/admin-lte/plugins/jquery-number/jquery.number.min.js") }}" type="text/javascript" ></script>
 	<script src="{{ asset ("bower_components/admin-lte/plugins/moment/moment-with-locales.js") }}" type="text/javascript" ></script>
 	
-	<script>
-
+<script>
 	var reDrawTable = function(api){
 
 		$( '[data-toggle="confirmation"]').confirmation({
@@ -313,7 +313,7 @@
 	    if(referenciasVal){
 		    $.each(referenciasVal, function(k1, v1){
 			    tabla.row.add({
-					id: v1.venta_id, 
+					id: v1.venta.reference, 
 					fecha: v1.created_at, 
 					orden: "Referencia: "+v1.venta.reference + " Factura: " + v1.venta.factura_number + " Fecha: " + v1.venta.date + " $" + $.number(v1.venta.ammount, 2, ".", ","),
 					monto: v1.cantidad,
@@ -334,7 +334,7 @@
 			$.get('{{route("contabilidad.ventas.obtenerVentas")}}', function(res){
 				$("#selectVenta").html("<option value=''>Seleccione...</option>");
 				$.each(res.items, function(i,v){
-					$("#selectVenta").append("<option value='"+v.id+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
+					$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
 				});
 				$(".select2").select2();
 			});
@@ -374,7 +374,7 @@
 						$('#guardarReferencias').show();
 					}  
 				}
-		        $("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);
+		        //$("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);
 	        });
 
 			$("#referenciasForm").submit( function(e){
