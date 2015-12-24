@@ -218,7 +218,6 @@
     <script src="{{asset('bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
     <script src="{{asset('bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
     <!-- confirmation -->
-    <script src="{{asset('js/ajax.js')}}"></script>
     <script src="{{asset('bower_components/admin-lte/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js') }}" type="text/javascript"></script>
     <script src="{{asset('bower_components/admin-lte/plugins/select2/select2.full.js') }}" type="text/javascript"></script>
     
@@ -229,7 +228,36 @@
 	<script src="{{ asset ("bower_components/admin-lte/plugins/moment/moment-with-locales.js") }}" type="text/javascript" ></script>
 	
 	<script>
+
+	var reDrawTable = function(api){
+
+		$( '[data-toggle="confirmation"]').confirmation({
+            title:'¿Esta seguro que desea eliminar este registro.?',
+            popout:true,
+            singleton:true,
+            btnOkClass: 'btn-xs btn-success ',
+            btnOkIcon: 'fa fa-check',
+            btnOkLabel: 'Si',
+            btnCancelClass: 'btn-xs btn-danger',
+            btnCancelIcon: 'fa fa-times',
+            btnCancelLabel: 'No',
+            onConfirm: function () {
+                if( $(this).data('btn-type') && $(this).data('btn-type') === 'delete' ) {
+                    tabla.row( $(this).parents('tr') ).remove().draw();
+                }
+            }
+        });
+		suma = 0;
+		tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+		    var data = this.data();
+			suma += parseFloat(data.monto);
+		} );
+		
+		$("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);
+	}
+	
 	$(document).ready(function(){
+
 		$('#guardarReferencias').hide();
 	 	$("#fecha").datepicker({
 			language: 'es',
@@ -266,17 +294,25 @@
                     'orderable':false,
                     'className': 'dt-body-center',
                     'render': function (data, type, full, meta){
-                    	return 	'<div class="pull-right btn-group"><a  href="#" class="btn btn-info btn-flat" title="Editar"><i class="fa fa-check-square-o "></i> Editar</a>'+
- 								'<a  href="#" class="btn btn-danger btn-flat" title="Borrar"><i class="fa fa-trash "></i> Borrar</a></div>';
+                            return 	'<div class="pull-right btn-group">'+
+                            			'<a  href="#" class="btn btn-info btn-flat" title="Editar"><i class="fa fa-check-square-o "></i> Editar</a>'+
+                            			"<button class='btn btn-danger' data-toggle='confirmation' data-singleton='true' data-btn-type='delete' data-url='" + full.id + "'> <i class='fa fa-trash'></i> Eliminar</button>"
+									'</div>';
+                        
 					}
             	},   	
           	],
+          	
 	    });
+
+	    tabla.on( 'draw.dt', function () {
+	    	reDrawTable(tabla);
+	    } );
+	    	    
 		referenciasVal = $("#referencias").val() == "" ? null : JSON.parse($("#referencias").val());
-		suma = $("th#total").data('suma');
 	    if(referenciasVal){
 		    $.each(referenciasVal, function(k1, v1){
-	    		tabla.row.add({
+			    tabla.row.add({
 					id: v1.venta_id, 
 					fecha: v1.created_at, 
 					orden: "Referencia: "+v1.venta.reference + " Factura: " + v1.venta.factura_number + " Fecha: " + v1.venta.date + " $" + $.number(v1.venta.ammount, 2, ".", ","),
@@ -284,10 +320,10 @@
 					montoF: "$ " + $.number(v1.cantidad, 2, ".", ","),
 					isNew: false
 				}).draw();
-				suma += v1.cantidad;
+				
 				tabla.columns.adjust().draw();
 	    	});
-	    	$("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);		    
+          	
 		}
 	    
 	   $("#agregarReferencia").on('click', function(){
@@ -337,7 +373,8 @@
 
 						$('#guardarReferencias').show();
 					}  
-				}  	
+				}
+		        $("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);
 	        });
 
 			$("#referenciasForm").submit( function(e){
