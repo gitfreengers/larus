@@ -23,6 +23,7 @@ class DepositsController extends Controller {
 	{
 		if(Sentinel::hasAccess('depositos.view')){
 			$deposito = new Deposito();
+			
 			return view('contabilidad::Deposits.index', compact('deposito'));
 		}else{
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
@@ -76,20 +77,43 @@ class DepositsController extends Controller {
 		$deposito = Deposito::find($request->deposito_id);
 		$referencias = json_decode($request->referencias);
 		foreach($referencias as $key=>$value) {
-			$ventas = Sales::find($value->id);
 			if ($value->isNew){
-				$depositoAplicacion = new DepositoAplicacion([
-					'venta_id' => $ventas->id,
-					'deposito_id' => $deposito->id,
-					'usuario_id' => $this->user_auth->id,
-					'cantidad' => $value->monto,
-				]);
-				$depositoAplicacion->save();	
-				$ventas->ammount_applied = $ventas->ammount_applied + $value->monto;
-				$ventas->update();
+				$ventas = Sales::where('reference', $value->id)->where('credit_debit','credit')->get();
+				$montoAplicar = $value->monto;
+				
+				foreach ($ventas as $venta){
+					
+					//si el monto de la venta es mayor al monto aplicado 
+					//entonces aplicamos
+					if ($venta->ammount > $venta->ammount_applied){
+						
+						$montoRestante = ($venta->ammount - $venta->ammount_applied);
+						
+						// si el monto a aplicar es mayor al monto aplicado descontamos del monto a aplicar
+						if ($montoAplicar > $montoRestante ){
+							$monto = $montoRestante;
+							$montoAplicar = $montoAplicar - $montoRestante;
+						} else {
+							$monto = $montoAplicar;
+							$montoAplicar = 0;
+						}
+						
+						if ($monto > 0){
+							$depositoAplicacion = new DepositoAplicacion([
+								'venta_id' => $venta->id,
+								'deposito_id' => $deposito->id,
+								'usuario_id' => $this->user_auth->id,
+								'cantidad' => $monto,
+							]);
+							$venta->ammount_applied = $venta->ammount_applied + $monto;
+							
+							$depositoAplicacion->save();
+						}
+						$venta->update();
+					}					
+				}
 			}
 		}
-		
 		flash()->success('Las referencias de venta se han almacenado correctamente.');
 	
 		return view('contabilidad::Deposits.index', compact('deposito'));

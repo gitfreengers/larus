@@ -430,7 +430,7 @@
 			    tabla.row.add({
 					id: v1.venta.reference, 
 					fecha: v1.created_at, 
-					orden: "Referencia: "+v1.venta.reference + " Factura: " + v1.venta.factura_number + " Fecha: " + v1.venta.date + " $" + $.number(v1.venta.ammount, 2, ".", ","),
+					orden: "Referencia: "+v1.venta.reference + " Plaza Origen: " + v1.venta.op_location+ " Plaza destino: " + v1.venta.cl_location + "  Factura: " + v1.venta.factura_number + " Fecha: " + v1.venta.date + " $" + $.number(v1.venta.ammount, 2, ".", ","),
 					monto: v1.cantidad,
 					montoF: "$ " + $.number(v1.cantidad, 2, ".", ","),
 					isNew: false
