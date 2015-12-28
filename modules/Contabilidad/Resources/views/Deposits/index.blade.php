@@ -207,7 +207,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Cerrar</button>
-				<button type="button" id="addBtn" class="btn btn-success">Agregar</button>
+				<button type="button" id="addBtn" class="btn btn-success">Guardar</button>
 			</div>
 		</div>
 	</div>
@@ -227,7 +227,7 @@
 	
 	<script src="{{ asset ("bower_components/admin-lte/plugins/jquery-number/jquery.number.min.js") }}" type="text/javascript" ></script>
 	<script src="{{ asset ("bower_components/admin-lte/plugins/moment/moment-with-locales.js") }}" type="text/javascript" ></script>
-	
+		
 <script>
 	var reDrawTable = function(api){
 
@@ -254,7 +254,116 @@
 		} );
 		
 		$("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);
+
+		if (suma == $("#monto").val()){
+			$('#guardarReferencias').show();
+		} else {
+			$('#guardarReferencias').hide();
+		}
+	};
+
+	var abreModal = function(isNew, rowEdicion) {
+		var objEdicion = null;
+		if (!isNew){
+			objEdicion = rowEdicion.data();
+		}
+		
+		$("#ventasModal").modal();
+		$("#ventasModal #error").hide();
+		$("#ventasModal #cantidad").val('');
+
+		$("#selectVenta").on("change", function(){
+			$("#ventasModal #cantidad").val($("#selectVenta :selected").data('cantidad'));
+		});
+
+		$.get('{{route("contabilidad.ventas.obtenerVentas")}}', function(res){
+			$("#selectVenta").html("<option value=''>Seleccione...</option>");
+			$.each(res.items, function(i,v){
+				$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
+			});
+			if (!isNew){
+				var objEdicion = rowEdicion.data();
+				$("#selectVenta").val(objEdicion.id);
+			}
+			$(".select2").select2();
+		});
+
+		if (!isNew){
+			$("#ventasModal #cantidad").val(objEdicion.monto);
+		}
+
+		$("#ventasModal #addBtn").off();
+		$("#ventasModal #addBtn").on("click", function() {
+			verificaReferencia(isNew, rowEdicion);
+        });
+	    
 	}
+
+	var verificaReferencia = function(isNew, rowEdicion){
+
+		var cantidadMax = $("#ventasModal #selectVenta :selected").data('cantidad');
+		var cantidad = $("#ventasModal #cantidad").val();
+		var total = $("th#total").data('suma');
+		var monto = $("#monto").val();
+		var references = [];
+		var id = -1;
+
+		if (!isNew){
+			var suma = 0;
+			tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+			    var data = this.data();
+				suma += parseFloat(data.monto);
+			} );
+			total = suma - parseFloat(rowEdicion.data().monto);
+		}
+		
+		if ($("#ventasModal #selectVenta").val() == "" || $("#ventasModal #cantidad").val() == "" ){
+        	$("#ventasModal #msg").html("Ingrese todos los datos");
+        	$("#ventasModal #error").show();
+		}else{
+			tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+			    var data = this.data();
+				references.push(data.id);
+			} );				
+			if (!$.isNumeric($("#ventasModal #cantidad").val())){
+				$("#ventasModal #msg").html("El monto solo puede ser numerico");
+	        	$("#ventasModal #error").show();
+			} else if (cantidad > cantidadMax) {
+				$("#ventasModal #msg").html("El monto a aplicar no puede exceder a la cantidad de la venta");
+	        	$("#ventasModal #error").show();
+			} else if ((parseFloat(cantidad) + parseFloat(total)) > monto) {
+				$("#ventasModal #msg").html("El monto para aplicar no puede ser mayor al deposito");
+	        	$("#ventasModal #error").show();
+			} else if (references.indexOf($("#ventasModal #selectVenta :selected").val()) > 0 && isNew) {
+				$("#ventasModal #msg").html("La referencia de venta ya fue añadida");
+	        	$("#ventasModal #error").show();
+			} else {
+				if (isNew){
+					tabla.row.add({
+						id: $("#ventasModal #selectVenta :selected").val(), 
+						fecha: moment().format('YYYY-MM-DD'), 
+						orden: $("#ventasModal #selectVenta :selected").text(),
+						monto: cantidad,
+						montoF: "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ","),
+						isNew: true
+					}).draw();
+				}else{					
+					rowEdicion.data({
+						id: $("#ventasModal #selectVenta :selected").val(), 
+						fecha: moment().format('YYYY-MM-DD'), 
+						orden: $("#ventasModal #selectVenta :selected").text(),
+						monto: cantidad,
+						montoF: "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ","),
+						isNew: true
+					}).draw();
+				}
+
+				tabla.columns.adjust().draw();
+				$("#ventasModal").modal('hide');				
+			}  
+		}
+		
+	};
 	
 	$(document).ready(function(){
 
@@ -288,6 +397,11 @@
 				{
 					'targets': [0, 3],
 					"visible": false,
+				}, {
+					'targets': 1,
+					'render': function (data, type, full, meta){
+						return moment(data, 'YYYY-MM-DD').format('l');
+					}
 				}, {	
                 	'targets': 5,
                     'searchable':false,
@@ -295,21 +409,16 @@
                     'className': 'dt-body-center',
                     'render': function (data, type, full, meta){
                             return 	'<div class="pull-right btn-group">'+
-                            			'<a  href="#" class="btn btn-info btn-flat" title="Editar"><i class="fa fa-check-square-o "></i> Editar</a>'+
+                            			'<a href="#" class="btn btn-info btn-flat" title="Editar" data-toggle="edit" data-id="'+ full.id +'"><i class="fa fa-check-square-o "></i> Editar</a>'+
                             			"<button class='btn btn-danger' data-toggle='confirmation' data-singleton='true' data-btn-type='delete' data-url='" + full.id + "'> <i class='fa fa-trash'></i> Eliminar</button>"
-									'</div>';
-                        
+									'</div>';                        
 					}
             	},   	
           	],
           	
 	    });
-
-	    tabla.on( 'draw.dt', function () {
-	    	reDrawTable(tabla);
-	    } );
-	    	    
-		referenciasVal = $("#referencias").val() == "" ? null : JSON.parse($("#referencias").val());
+	    
+		referenciasVal = $("#referencias").val() == null ? null : JSON.parse($("#referencias").val());
 	    if(referenciasVal){
 		    $.each(referenciasVal, function(k1, v1){
 			    tabla.row.add({
@@ -322,76 +431,37 @@
 				}).draw();
 				
 				tabla.columns.adjust().draw();
-	    	});
-          	
+	    	});          
 		}
-	    
-	   $("#agregarReferencia").on('click', function(){
-			$("#ventasModal").modal();
-			$("#ventasModal #error").hide();
-			$("#ventasModal #cantidad").val('');
+		
+	    tabla.on( 'draw.dt', function () {
+	    	reDrawTable(tabla);
+	    } );
 
-			$.get('{{route("contabilidad.ventas.obtenerVentas")}}', function(res){
-				$("#selectVenta").html("<option value=''>Seleccione...</option>");
-				$.each(res.items, function(i,v){
-					$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
-				});
-				$(".select2").select2();
-			});
-
-			$("#selectVenta").on("change", function(){
-				$("#ventasModal #cantidad").val($("#selectVenta :selected").data('cantidad'));
-			});
-
-			$("#ventasModal #addBtn").off();
-			$("#ventasModal #addBtn").on("click", function() {
-				var cantidad = $("#ventasModal #selectVenta :selected").data('cantidad');
-				var montoD = $("#monto").val();
-				var suma = 0;
-		        if ($("#ventasModal #selectVenta").val() == "" || $("#ventasModal #cantidad").val() == "" ){
-		        	$("#ventasModal #msg").html("Ingrese todos los datos");
-		        	$("#ventasModal #error").show();
-				}else{
-					suma += parseFloat($("#ventasModal #cantidad").val());
-					if (montoD < suma){
-						$("#ventasModal #msg").html("El monto no puede ser mayor al deposito");
-			        	$("#ventasModal #error").show();
-					} else if ($("#ventasModal #cantidad").val() > cantidad && monto > suma) {
-						$("#ventasModal #msg").html("El monto no puede ser mayor a la venta");
-			        	$("#ventasModal #error").show();
-					} else {
-						tabla.row.add({
-							id: $("#ventasModal #selectVenta :selected").val(), 
-							fecha: moment().format('l'), 
-							orden: $("#ventasModal #selectVenta :selected").text(),
-							monto: $("#ventasModal #cantidad").val(),
-							montoF: "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ","),
-							isNew: true
-						}).draw();
-						tabla.columns.adjust().draw();
-						$("#ventasModal").modal('hide');
-
-						$('#guardarReferencias').show();
-					}  
-				}
-		        //$("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);
-	        });
-
-			$("#referenciasForm").submit( function(e){
-		    	var currentForm = this;
-		    	e.preventDefault();
-		    	var data = [];
-		    	$.each(tabla.rows().data(), function(k, v){
-		    		data.push(v);
-		    	});
-		    	$("#referencias").val(JSON.stringify(data));
-		    	currentForm.submit();
-		    });
-		    
-			$('#guardarReferencias').on("click", function(){
-				$("#referenciasForm").submit();
-			});
+		//boton guardar
+		$('#guardarReferencias').on("click", function(){
+			$("#referenciasForm").submit();
 		});
+		
+	    $("#referenciasForm").submit( function(e){
+	    	var currentForm = this;
+	    	e.preventDefault();
+	    	var data = [];
+	    	$.each(tabla.rows().data(), function(k, v){
+	    		data.push(v);
+	    	});
+	    	$("#referencias").val(JSON.stringify(data));
+	    	currentForm.submit();
+	    });
+	  
+	   	$("#agregarReferencia").on('click', function(){
+		   abreModal(true, null);
+		});
+
+	   	$(document).on('click','[data-toggle="edit"]', function(){
+	    	abreModal(false, tabla.row( $(this).parents('tr') ));
+	    });
+		
 	});
 	</script>
 @endsection
