@@ -36,9 +36,18 @@ class SalesController extends Controller {
 	
 	public function obtenerVentasPendientes() 
 	{
+		$usuario = User::find($this->user_auth->id);
+		$oficinas = array();
+		foreach ($usuario->plazas as $plazas){
+			array_push($oficinas, $plazas->Oficina);
+		}
+		
 		$ventasPendientes = DB::table('sales')
 							->select('*',  DB::raw('SUM(ammount) as ammount'))
-							->whereRaw('ammount_applied < ammount and credit_debit =?', ['credit'])
+							->whereRaw('ammount_applied < ammount and credit_debit = ?', ['credit'])
+							->whereIn('op_location', $oficinas)->orWhere(function ($query) use ($oficinas) {
+								$query->whereIn('cl_location', $oficinas);
+							})
 							->groupBy('reference')
 							->get();
 		$items['items'] = $ventasPendientes; 

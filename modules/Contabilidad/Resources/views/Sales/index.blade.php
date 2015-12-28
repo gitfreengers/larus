@@ -17,15 +17,15 @@
             <div class="box-body">
                 <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Fecha</th>
-                        <th>Archivo procesado</th>
-                        <th>Cantidad de registros</th>
-                        <th>Detalles</th>
-                        <th>Oficina de apertura</th>
-                        <th>Oficina de cierre</th>
-                    </tr>
+	                    <tr>
+	                        <th>#</th>
+	                        <th>Fecha</th>
+	                        <th>Archivo procesado</th>
+	                        <th>Cantidad de registros</th>
+	                        <th>Detalles</th>
+	                        <th>Oficina de apertura</th>
+	                        <th>Oficina de cierre</th>
+	                    </tr>
                     </thead>
                     <tbody>
                     @foreach($salesLogs as $sale)
@@ -51,7 +51,16 @@
     <script src="{{asset('bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
     <script src="{{asset('bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
     <!-- confirmation -->
-    <script src="{{asset('js/ajax.js')}}"></script>
     <script src="{{asset('bower_components/admin-lte/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js') }}" type="text/javascript"></script>
-
+	<script type="text/javascript">
+	<!--
+	$(document).ready(function(){
+		$("#datatable").DataTable({
+			"language": {
+	            "url": '{!! asset("bower_components/admin-lte/plugins/datatables/lang/spanish.json") !!}'
+	        }
+		});
+	});
+	//-->
+	</script>
 @endsection
