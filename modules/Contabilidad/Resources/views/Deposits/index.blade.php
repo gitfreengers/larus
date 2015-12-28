@@ -264,6 +264,7 @@
 
 	var abreModal = function(isNew, rowEdicion) {
 		var objEdicion = null;
+		var references = [];
 		if (!isNew){
 			objEdicion = rowEdicion.data();
 		}
@@ -276,10 +277,20 @@
 			$("#ventasModal #cantidad").val($("#selectVenta :selected").data('cantidad'));
 		});
 
+		tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+		    var data = this.data();
+			references.push(data.id);
+		} );	
+
 		$.get('{{route("contabilidad.ventas.obtenerVentas")}}', function(res){
 			$("#selectVenta").html("<option value=''>Seleccione...</option>");
 			$.each(res.items, function(i,v){
-				$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
+				if (references.indexOf(v.reference) < 0)
+					$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
+				else
+					if (!isNew){
+						$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
+					}
 			});
 			if (!isNew){
 				var objEdicion = rowEdicion.data();
@@ -294,18 +305,17 @@
 
 		$("#ventasModal #addBtn").off();
 		$("#ventasModal #addBtn").on("click", function() {
-			verificaReferencia(isNew, rowEdicion);
+			verificaReferencia(isNew, rowEdicion, references);
         });
 	    
 	}
 
-	var verificaReferencia = function(isNew, rowEdicion){
+	var verificaReferencia = function(isNew, rowEdicion, references){
 
 		var cantidadMax = $("#ventasModal #selectVenta :selected").data('cantidad');
 		var cantidad = $("#ventasModal #cantidad").val();
 		var total = $("th#total").data('suma');
 		var monto = $("#monto").val();
-		var references = [];
 		var id = -1;
 
 		if (!isNew){
@@ -321,10 +331,6 @@
         	$("#ventasModal #msg").html("Ingrese todos los datos");
         	$("#ventasModal #error").show();
 		}else{
-			tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
-			    var data = this.data();
-				references.push(data.id);
-			} );				
 			if (!$.isNumeric($("#ventasModal #cantidad").val())){
 				$("#ventasModal #msg").html("El monto solo puede ser numerico");
 	        	$("#ventasModal #error").show();
