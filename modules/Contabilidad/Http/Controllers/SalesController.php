@@ -41,12 +41,15 @@ class SalesController extends Controller {
 		foreach ($usuario->plazas as $plazas){
 			array_push($oficinas, $plazas->Oficina);
 		}
+		DB::enableQueryLog();
 		
 		$ventasPendientes = DB::table('sales')
 							->select('*',  DB::raw('SUM(ammount) as ammount'))
 							->whereRaw('ammount_applied < ammount and credit_debit = ?', ['credit'])
-							->whereIn('op_location', $oficinas)->orWhere(function ($query) use ($oficinas) {
-								$query->whereIn('cl_location', $oficinas);
+							->where(function ($query) use ($oficinas) {
+								$query->whereIn('op_location', $oficinas)->orWhere(function ($query) use ($oficinas) {
+									$query->whereIn('cl_location', $oficinas);
+								}); 
 							})
 							->groupBy('reference')
 							->get();

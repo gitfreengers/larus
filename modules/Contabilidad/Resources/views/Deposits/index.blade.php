@@ -289,10 +289,10 @@
 			$("#selectVenta").html("<option value=''>Seleccione...</option>");
 			$.each(res.items, function(i,v){
 				if (references.indexOf(v.reference) < 0)
-					$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
+					$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " Monto total: $" + $.number(v.ammount, 2, ".", ",")+" Monto aplicado: <b>$" + $.number(v.ammount_applied, 2, ".", ",")+"</b></option>");
 				else
 					if (!isNew){
-						$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+"</option>");
+						$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+v.ammount+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+" Monto aplicado: <b>$" + $.number(v.ammount_applied, 2, ".", ",")+"</b></option>");
 					}
 			});
 			if (!isNew){
