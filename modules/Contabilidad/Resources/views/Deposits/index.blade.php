@@ -13,7 +13,7 @@
         <div class="box">
         	<div class="box-header">
             	{!! Form::open(['route' => 'contabilidad.depositos.store','method'=>'POST','id'=>'DepositosForm','parsley-validate novalidate' ]) !!}
-        	    <div class="form-group col-md-3 col-xs-12" >
+            	<div class="form-group col-md-3 col-xs-12" >
 				    {!! Form::label('banco','Banco: ',['class' =>'col-xs-4 control-label']) !!}
 				    <div class="col-xs-12 @if ($errors->has('banco')) has-error @endif ">
 				        @if (!isset($deposito->id))
@@ -166,6 +166,9 @@
 					{!! Form::open(['route' => 'contabilidad.depositos.guardarReferencias','method'=>'POST','id'=>'referenciasForm','parsley-validate novalidate' ]) !!}
             			{!! Form::hidden('referencias', $deposito->depositosaplicados, ['id' => 'referencias']) !!}	
             			{!! Form::hidden('deposito_id', $deposito->id, ['id' => 'deposito_id']) !!}	
+            			@if (isset($deposito->id))
+            				{!! Form::hidden('deposito', $deposito) !!}
+            			@endif
             		{!! Form::close() !!}
 				
 				@endif	
@@ -318,6 +321,8 @@
 		var monto = $("#monto").val();
 		var id = -1;
 
+		errores = '';
+
 		if (!isNew){
 			var suma = 0;
 			tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
@@ -326,48 +331,56 @@
 			} );
 			total = suma - parseFloat(rowEdicion.data().monto);
 		}
-		
+
 		if ($("#ventasModal #selectVenta").val() == "" || $("#ventasModal #cantidad").val() == "" ){
-        	$("#ventasModal #msg").html("Ingrese todos los datos");
-        	$("#ventasModal #error").show();
+			errores = "Ingrese todos los datos";
 		}else{
 			if (!$.isNumeric($("#ventasModal #cantidad").val())){
-				$("#ventasModal #msg").html("El monto solo puede ser numerico");
-	        	$("#ventasModal #error").show();
-			} else if (cantidad > cantidadMax) {
-				$("#ventasModal #msg").html("El monto a aplicar no puede exceder a la cantidad de la venta");
-	        	$("#ventasModal #error").show();
-			} else if ((parseFloat(cantidad) + parseFloat(total)) > monto) {
-				$("#ventasModal #msg").html("El monto para aplicar no puede ser mayor al deposito");
-	        	$("#ventasModal #error").show();
-			} else if (references.indexOf($("#ventasModal #selectVenta :selected").val()) > 0 && isNew) {
-				$("#ventasModal #msg").html("La referencia de venta ya fue añadida");
-	        	$("#ventasModal #error").show();
-			} else {
-				if (isNew){
-					tabla.row.add({
-						id: $("#ventasModal #selectVenta :selected").val(), 
-						fecha: moment().format('YYYY-MM-DD'), 
-						orden: $("#ventasModal #selectVenta :selected").text(),
-						monto: cantidad,
-						montoF: "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ","),
-						isNew: true
-					}).draw();
-				}else{					
-					rowEdicion.data({
-						id: $("#ventasModal #selectVenta :selected").val(), 
-						fecha: moment().format('YYYY-MM-DD'), 
-						orden: $("#ventasModal #selectVenta :selected").text(),
-						monto: cantidad,
-						montoF: "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ","),
-						isNew: true
-					}).draw();
-				}
+				errores = "El monto solo puede ser numerico";
+	        }
 
-				tabla.columns.adjust().draw();
-				$("#ventasModal").modal('hide');				
+	        if ($("#ventasModal #cantidad").val() <= 0){
+	        	errores = "El monto debe ser mayor a 0"
+	        }
+					
+			if (errores == ''){
+				if (cantidad > cantidadMax) {
+					errores = "El monto a aplicar no puede exceder a la cantidad de la venta";
+				} else if ((parseFloat(cantidad) + parseFloat(total)) > monto) {
+					errores = "El monto para aplicar no puede ser mayor al deposito";
+				} else if (references.indexOf($("#ventasModal #selectVenta :selected").val()) > 0 && isNew) {
+					errores = "La referencia de venta ya fue añadida";
+				} else {
+					if (isNew){
+						tabla.row.add({
+							id: $("#ventasModal #selectVenta :selected").val(), 
+							fecha: moment().format('YYYY-MM-DD'), 
+							orden: $("#ventasModal #selectVenta :selected").text(),
+							monto: cantidad,
+							montoF: "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ","),
+							isNew: true
+						}).draw();
+					}else{					
+						rowEdicion.data({
+							id: $("#ventasModal #selectVenta :selected").val(), 
+							fecha: moment().format('YYYY-MM-DD'), 
+							orden: $("#ventasModal #selectVenta :selected").text(),
+							monto: cantidad,
+							montoF: "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ","),
+							isNew: true
+						}).draw();
+					}
+	
+					tabla.columns.adjust().draw();
+					$("#ventasModal").modal('hide');				
+				}
 			}  
 		}
+
+		if (errores != ''){
+			$("#ventasModal #msg").html(errores);
+	    	$("#ventasModal #error").show();
+	    }
 		
 	};
 	

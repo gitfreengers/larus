@@ -23,7 +23,7 @@ class DepositsController extends Controller {
 	{
 		if(Sentinel::hasAccess('depositos.view')){
 			$deposito = new Deposito();
-			
+
 			return view('contabilidad::Deposits.index', compact('deposito'));
 		}else{
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
@@ -60,8 +60,8 @@ class DepositsController extends Controller {
 		$deposito->fill($request->all());
 		$user = User::find($this->user_auth->id);
 		$deposito->usuario_id = $user->id;
-		$deposito->save();
-		$deposito->load('depositosaplicados', 'depositosaplicados.venta');
+		$deposito->id = 0;
+		
 		flash()->success('El deposito ha sido creado, ingrese referencias de venta.');
 		
 		return view('contabilidad::Deposits.index', compact('deposito'));
@@ -74,7 +74,18 @@ class DepositsController extends Controller {
 	 */
 	public function guardarReferencias(DepositoReferenciasRequest $request)
 	{
-		$deposito = Deposito::find($request->deposito_id);
+		$depositoRef = json_decode($request->deposito);
+		$deposito = new Deposito([
+			'banco' => $depositoRef->{'banco'},
+			'fecha' => $depositoRef->{'fecha'},
+			'referencia' => $depositoRef->{'referencia'},
+			'monto' => $depositoRef->{'monto'},
+			'moneda' => $depositoRef->{'moneda'},
+			'cuenta_contable' => $depositoRef->{'cuenta_contable'},
+			'complementaria' => $depositoRef->{'complementaria'},
+			'usuario_id' => $depositoRef->{'usuario_id'}
+		]);
+		$deposito->save();
 		$referencias = json_decode($request->referencias);
 		foreach($referencias as $key=>$value) {
 			if ($value->isNew){
@@ -115,7 +126,8 @@ class DepositsController extends Controller {
 			}
 		}
 		flash()->success('Las referencias de venta se han almacenado correctamente.');
-	
+		
+		$deposito = new Deposito();
 		return view('contabilidad::Deposits.index', compact('deposito'));
 	}
 	

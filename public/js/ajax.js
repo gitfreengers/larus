@@ -27,8 +27,16 @@ $(function () {
 
                     }
                 }
-            }).success(function () {
-                window.location.reload();
+            }).success(function (res) {
+            	swal({   title: "Oops!",
+                    text: res,
+                    type: "error",
+                    html: true,
+                    showCancelButton: false,
+                    closeOnConfirm: true,
+                    showLoaderOnConfirm: false, }
+                );
+                //window.location.reload();
             });
         },
         confirmation : function (selector) {
