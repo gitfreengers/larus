@@ -83,7 +83,8 @@ class DepositsController extends Controller {
 			'moneda' => $depositoRef->{'moneda'},
 			'cuenta_contable' => $depositoRef->{'cuenta_contable'},
 			'complementaria' => $depositoRef->{'complementaria'},
-			'usuario_id' => $depositoRef->{'usuario_id'}
+			'usuario_id' => $depositoRef->{'usuario_id'},
+			'estatus' => 0
 		]);
 		$deposito->save();
 		$referencias = json_decode($request->referencias);
