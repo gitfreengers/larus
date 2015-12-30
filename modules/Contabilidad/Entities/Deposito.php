@@ -24,4 +24,9 @@ class Deposito extends Model {
     {
     	return $this->hasMany('Modules\Contabilidad\Entities\DepositoAplicacion', 'deposito_id', 'id');
     }
+    
+    public function usuarioCancelacion(){
+    	return $this->hasOne('Modules\User\Entities\User', 'id', 'usuario_cancelacion_id');
+    }
+    
 }
