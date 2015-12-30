@@ -77,9 +77,9 @@ class UserController extends Controller {
 
 		//agregacion de permisos para plazas por usuario
 		$plazas = $request->plazas;
+		$user_ = User::find($user->id);
+		$user_->plazas()->detach();
 		if (count($plazas) > 0){
-			$user_ = User::find($user->id);
-			$user_->plazas()->detach();
 			foreach ($plazas as $plaza){
 				$plaza_e = Place::where('Clave', $plaza)->first();
 				$user_->plazas()->attach($plaza_e);
@@ -132,15 +132,15 @@ class UserController extends Controller {
 
 		//agregacion de permisos para plazas por usuario
 		$plazas = $request->plazas;
+		$user_ = User::find($id);
+		$user_->plazas()->detach();
 		if (count($plazas) > 0){
-			$user_ = User::find($id);
-			$user_->plazas()->detach();
 			foreach ($plazas as $plaza){
 				$plaza_e = Place::where('Clave', $plaza)->first();
 				$user_->plazas()->attach($plaza_e);
-			}
+			}			
 		}
-		
+
 		if(isset($image)){
 			$ext = $image->getClientOriginalExtension();
 			$name = 'user_'.$time. '.' .$ext;
