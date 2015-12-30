@@ -386,6 +386,12 @@
 	
 	$(document).ready(function(){
 
+		$(document).keypress(function(e) {
+	        if (e.which == 13) {
+	            return false;
+	        }
+	    });
+	    
 		$('#guardarReferencias').hide();
 	 	$("#fecha").datepicker({
 			language: 'es',
