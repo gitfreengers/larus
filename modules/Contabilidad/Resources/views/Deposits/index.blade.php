@@ -178,7 +178,7 @@
 </div><!-- /.row -->
 
 
-<!-- modal -->
+<!-- modal referencias-->
 <div class="modal fade" id="ventasModal" tabindex="-1" role="basic" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -211,6 +211,25 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Cerrar</button>
 				<button type="button" id="addBtn" class="btn btn-success">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- modal advertencia -->
+<div class="modal fade modal-danger" id="exitModal" tabindex="-1" role="basic" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title" id="modalTitle">Cancelar deposito</h4>
+			</div>
+			<div class="modal-body">
+				Aun no se ha guardado los datos del deposito, si sale se cancelara toda la información registrada <br>¿Esta seguro de salir?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Continuar en depositos</button>
+				<button type="button" id="exitBtn" class="btn btn-outline">Salir</button>
 			</div>
 		</div>
 	</div>
@@ -386,12 +405,29 @@
 	
 	$(document).ready(function(){
 
+		//desactivar enter
 		$(document).keypress(function(e) {
 	        if (e.which == 13) {
 	            return false;
 	        }
 	    });
-	    
+
+	    //preguntar si desea cancelar depositos
+	    var url = "";
+	    $("a:not(.content)").on("click", function (e) {
+			e.preventDefault(); 
+			url = $(this).attr('href');
+			if (url != '#'){
+				$("#exitModal").modal();
+				return false;
+			}
+	    });
+
+	    $("#exitBtn").on("click", function(){
+		    window.location = url;
+		});
+
+	    //eventos de depositos
 		$('#guardarReferencias').hide();
 	 	$("#fecha").datepicker({
 			language: 'es',
