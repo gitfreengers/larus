@@ -2,12 +2,12 @@
 
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Pingpong\Modules\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 use Modules\Contabilidad\Entities\Deposito;
 use Modules\Contabilidad\Entities\Place;
 use Modules\Contabilidad\Http\Requests\DepositoConsultaRequest;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class CancelController extends Controller {
 	
@@ -35,9 +35,15 @@ class CancelController extends Controller {
 				&& $request->referencia == ''){
 					$depositos = Deposito::all();
 		}else{
-			$query = DB::table('depositos');
+			$query = Deposito::select('depositos.*');
 			if ($request->plaza){
-				$query->leftJoin('place_user', 'place_user.user_id', '=', 'depositos.usuario_id')->where('tb_plazas_clave', $request->plaza);
+				$plazaF = Place::where('Clave', $request->plaza)->first();
+				$plaza = $plazaF->Oficina;
+				$query->join('deposito_aplicacion', 'depositos.id', '=', 'deposito_aplicacion.deposito_id')
+					->join('sales', 'sales.id', '=', 'deposito_aplicacion.venta_id')
+					->where(function ($query) use ($plaza) {
+						$query->where('cl_location', $plaza)->where('op_location', $plaza);
+					});
 			}
 			if ($request->fecha){
 				$query->orWhere('fecha', $request->fecha);
@@ -48,7 +54,13 @@ class CancelController extends Controller {
 			if ($request->referencia){
 				$query->orWhere('referencia', $request->referencia);
 			}
-			$depositos = $query->get();
+			$depositos = $query->distinct()->get();
+		}
+		
+		if(count($depositos) > 0){
+			foreach ($depositos as $deposito){
+				$deposito->load('depositosaplicados', 'depositosaplicados.venta', 'usuariocancelacion');			
+			}
 		}
 	
 		return response()->json($depositos);
