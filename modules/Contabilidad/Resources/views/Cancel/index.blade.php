@@ -51,11 +51,11 @@
 					    </div>
 					</div>   
 	                <div class="row ">
-						<div class="col-lg-12">
-			            	<div class="btn-group pull-right ">
+                		<div class="col-xs-12 ">
+                			<div class="btn-group pull-right" style="padding: 6px 29px">
 			                	<a href="#" class="btn btn-success btn-flat" id='buscarBtn'><i class="fa fa-search"></i> Buscar</a>
 							</div>
-						</div>
+	                	</div>
 					</div>
 				</form>	
            	</div><!-- /.box-header -->
@@ -131,7 +131,7 @@
                     'render': function (data, type, full, meta){
                         if (full.estatus==0){
                             url = "{{route('contabilidad.cancelaciones.destroy', 0)}}";
-                            return "<button class='btn btn-danger' data-toggle='confirmation' data-singleton='true' data-btn-type='delete' data-url='" + url.replace('/0', '/'+full.id) + "'> <i class='fa fa-trash'></i> Eliminar</button>";
+                            return "<button class='btn btn-danger' data-toggle='cancelacion' data-singleton='true' data-btn-type='delete' data-url='" + url.replace('/0', '/'+full.id) + "'> <i class='fa fa-trash'></i> Cancelar</button>";
                         }else{
                             return '<div class="form-group has-error"><label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> Cancelado</label></div>';
                         }
@@ -139,6 +139,8 @@
 				},   	
 			],
 	    });
+
+		
 
 	    $("#buscarBtn").on("click", function(){
 			tabla.rows().remove().draw();
@@ -156,7 +158,22 @@
 					}).draw();
 					tabla.columns.adjust().draw();
 				});
-				apps.setup();
+				$( '[data-toggle="cancelacion"]').confirmation({
+		            title:'¿Esta seguro que desea cancelar este registro.?',
+		            popout:true,
+		            singleton:true,
+		            btnOkClass: 'btn-xs btn-success ',
+		            btnOkIcon: 'fa fa-check',
+		            btnOkLabel: 'Si',
+		            btnCancelClass: 'btn-xs btn-danger',
+		            btnCancelIcon: 'fa fa-times',
+		            btnCancelLabel: 'No',
+		            onConfirm: function () {
+		                if( $(this).data('btn-type') && $(this).data('btn-type') === 'delete' ) {
+		                    apps.delete($(this).data('url'));
+		                }
+		            }
+		        });
 			});		    
 		});
 	});

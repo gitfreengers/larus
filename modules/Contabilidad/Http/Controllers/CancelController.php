@@ -7,6 +7,7 @@ use Modules\Contabilidad\Entities\Deposito;
 use Modules\Contabilidad\Entities\Place;
 use Modules\Contabilidad\Http\Requests\DepositoConsultaRequest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CancelController extends Controller {
 	
