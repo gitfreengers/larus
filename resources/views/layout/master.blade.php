@@ -11,7 +11,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- Ionicons -->
     <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
-   @yield('css')
+       @yield('css')
     <!-- Theme style -->
     <link href="{{ asset("bower_components/admin-lte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
     <!-- all skings AdminLTE -->
@@ -61,6 +61,9 @@
 <script src="{{ asset ("bower_components/admin-lte/dist/js/app.min.js") }}" type="text/javascript"></script>
 <!-- sweetalert -->
 <script src="{{ asset ("bower_components/admin-lte/plugins/sweetalert/dist/sweetalert.min.js") }}" type="text/javascript"></script>
+
+<script src="{{ asset ("bower_components/admin-lte/plugins/moment/moment-with-locales.min.js") }}" type="text/javascript"></script>
+
 @include('sweet::alert')
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <!-- {!!Html::script('bower_components/admin-lte/dist/js/pages/dashboard.js')!!} -->
