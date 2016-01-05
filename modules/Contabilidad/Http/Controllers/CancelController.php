@@ -35,12 +35,12 @@ class CancelController extends Controller {
 				&& $request->referencia == ''){
 					$depositos = Deposito::all();
 		}else{
-			$query = Deposito::select('depositos.*');
+			$query = Deposito::select('contabilidad_depositos.*');
 			if ($request->plaza){
 				$plazaF = Place::where('Clave', $request->plaza)->first();
 				$plaza = $plazaF->Oficina;
-				$query->join('deposito_aplicacion', 'depositos.id', '=', 'deposito_aplicacion.deposito_id')
-					->join('sales', 'sales.id', '=', 'deposito_aplicacion.venta_id')
+				$query->join('contabilidad_deposito_aplicacion', 'contabilidad_depositos.id', '=', 'contabilidad_deposito_aplicacion.deposito_id')
+					->join('contabilidad_sales', 'contabilidad_sales.id', '=', 'contabilidad_deposito_aplicacion.venta_id')
 					->where(function ($query) use ($plaza) {
 						$query->where('cl_location', $plaza)->where('op_location', $plaza);
 					});

@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DepositoAplicacion extends Model {
 
-    protected $table = "deposito_aplicacion";
+    protected $table = "contabilidad_deposito_aplicacion";
 	
     protected $fillable = [
 		'deposito_id',

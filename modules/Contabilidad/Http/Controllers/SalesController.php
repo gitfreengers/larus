@@ -43,7 +43,7 @@ class SalesController extends Controller {
 		}
 		DB::enableQueryLog();
 		
-		$ventasPendientes = DB::table('sales')
+		$ventasPendientes = DB::table('contabilidad_sales')
 							->select('*',  DB::raw('SUM(ammount) as ammount'))
 							->whereRaw('ammount_applied < ammount and credit_debit = ?', ['credit'])
 							->where(function ($query) use ($oficinas) {

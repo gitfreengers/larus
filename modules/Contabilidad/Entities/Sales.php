@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sales extends Model {
 
-    protected $table = "sales";
+    protected $table = "contabilidad_sales";
 	
     protected $fillable = [
 		'transaction_id',

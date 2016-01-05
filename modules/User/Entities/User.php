@@ -81,7 +81,7 @@ class User extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function plazas(){
-    	return $this->belongsToMany(static::$placeModel, 'place_user', 'user_id', 'tb_plazas_clave');
+    	return $this->belongsToMany(static::$placeModel, 'contabilidad_place_user', 'user_id', 'tb_plazas_clave');
     }
 
 
