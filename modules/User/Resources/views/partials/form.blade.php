@@ -93,6 +93,21 @@
 
 </div>
 
+<div class="form-group @if ($errors->has('plaza_matriz')) has-error @endif">
+    {!! Form::label('plaza_matriz','Plaza matriz',['class' =>'col-xs-2 control-label']) !!}
+    <div class="col-xs-12 col-md-8">
+        @if ($errors->has('plaza_matriz')) <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>
+            {{ $errors->first('plaza_matriz') }}</label>
+        @endif
+            @if(isset($users->id))
+                {!! Form::select('plaza_matriz_id', $plazas_select, $users->plaza_matriz_id,['class' => 'form-control'] ) !!}
+            @else
+                {!! Form::select('plaza_matriz_id', $plazas_select, null,['class' => 'form-control'] ) !!}
+            @endif
+    </div>
+
+</div>
+
 <div class="form-group @if ($errors->has('plazas')) has-error @endif">
 	{!! Form::label('plazas','Plazas',['class' =>'col-xs-2 control-label']) !!}
 	<div class="col-xs-12 col-md-8">

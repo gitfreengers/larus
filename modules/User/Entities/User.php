@@ -25,6 +25,7 @@ class User extends Model {
         'permissions',
         'position',
         'image',
+    	'plaza_matriz_id'	
     ];
     /**
      * Get User Full Name
@@ -82,6 +83,15 @@ class User extends Model {
      */
     public function plazas(){
     	return $this->belongsToMany(static::$placeModel, 'contabilidad_place_user', 'user_id', 'tb_plazas_clave');
+    }
+    
+    /**
+     * One user can have one matriz place
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function plazaMatriz(){
+    	return $this->hasOne(static::$placeModel, 'tb_plazas_clave', 'plaza_matriz_id');
     }
 
 

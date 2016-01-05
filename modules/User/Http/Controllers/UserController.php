@@ -40,7 +40,10 @@ class UserController extends Controller {
 			$roles = Rol::all()->lists('name','slug');
 			$plazas = Place::all();
 			$place_user = array();
-			return view('user::create', compact('roles', 'plazas', 'place_user'));
+			
+			$plazas_select = Place::plazasArray(null);
+			
+			return view('user::create', compact('roles', 'plazas', 'place_user', 'plazas_select'));
 		}
 		alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
 
@@ -70,7 +73,7 @@ class UserController extends Controller {
 
 		$input = $request->except(['image']);
 		$input['image'] = (isset($image))? $name : 'avatar-larus.jpeg';
-
+		
 		// Register and actived usuer
 		$user = Sentinel::registerAndActivate($input);
 		$user->roles()->attach($role);
@@ -84,6 +87,11 @@ class UserController extends Controller {
 				$plaza_e = Place::where('Clave', $plaza)->first();
 				$user_->plazas()->attach($plaza_e);
 			}
+		}
+		
+		if (isset($input['plaza_matriz_id'])){
+			$user_->plaza_matriz_id = $input['plaza_matriz_id'];
+			$user_->update();
 		}
 		
 		flash()->success('El usuario ha sido añadido.');
@@ -109,7 +117,9 @@ class UserController extends Controller {
 			$place_user = $user->plazas()->get();
 			$plazas = $plazas->diff($place_user);
 			
-			return view('user::edit',compact('users','roles','rolUser','plazas', 'place_user'));
+			$plazas_select = Place::plazasArray(null);
+			
+			return view('user::edit',compact('users','roles','rolUser','plazas', 'place_user', 'plazas_select'));
 		}
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
 			return back();
@@ -163,13 +173,17 @@ class UserController extends Controller {
 		$rolUser = $user->roles()->get();
 		$role = Sentinel::findRoleBySlug($rolUser[0]->slug);
 		$role->users()->detach($user);
+		
+		if (isset($input['plaza_matriz_id'])){
+			$user->plaza_matriz_id = $input['plaza_matriz_id']; 
+		}
+		
 		if(Sentinel::update($user, $input)) {
 			$slug = $request->input('roles');
 			// find a role
 			$role = Sentinel::findRoleBySlug($slug);
 			//add an user to role
 			$role->users()->attach($user);
-
 			flash()->success('El usuario ha sido actualizado.');
 			return redirect()->to('users');
 		}

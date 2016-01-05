@@ -26,14 +26,19 @@ class Place extends Model {
     
     public static function plazasArray($usuario_id) {
     	
-    	$usuario = User::find($usuario_id);
-    	$oficinas = array();
-    	foreach ($usuario->plazas as $plazas){
-    		array_push($oficinas, $plazas->Oficina);
-    	}
     	$plazas = array();
-    	$items = Place::whereIn('oficina', $oficinas)->get()->lists('Nombre', 'Clave');
     	$plazas[''] = "Seleccione...";
+    	
+    	if($usuario_id != null){
+	    	$oficinas = array();
+	    	$usuario = User::find($usuario_id);
+	    	foreach ($usuario->plazas as $plazas){
+	    		array_push($oficinas, $plazas->Oficina);
+	    	}
+	    	$items = Place::whereIn('oficina', $oficinas)->get()->lists('Nombre', 'Clave');
+    	}else{
+    		$items = Place::all()->lists('Nombre', 'Clave');
+    	}
     	
     	foreach ($items as $key=>$value)
     	{
