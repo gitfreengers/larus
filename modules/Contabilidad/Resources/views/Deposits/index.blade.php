@@ -90,7 +90,7 @@
 						    {!! Form::label('complementaria','Complementaria: ',['class' =>'col-xs-6 control-label']) !!}
 						    <div class="col-xs-12 @if ($errors->has('complementaria')) has-error @endif ">
 						        @if (!isset($deposito->id))
-						        	{!! Form::text('complementaria', $deposito->complementaria,['class' => 'form-control','placeholder' => 'Ingrese complemantaria']) !!}
+						        	{!! Form::text('complementaria', $deposito->complementaria,['class' => 'form-control','placeholder' => 'Ingrese complementaria', 'id'=>'complementaria']) !!}
 						        @else	
 						        	{!! Form::label('complementaria', $deposito->complementaria,['class' => 'control-label','placeholder']) !!}
 						        @endif
@@ -434,21 +434,25 @@
 		$("#bancoSel").on("change", function(){
 			var data = $(this).val().split("|");
 			$("#cuentacontable").val(data[1]);
+			$("#complementaria").val(" ");
 		});
 		
 		$("#bancoSelDls").on("change", function(){
 			var data = $(this).val().split("|");
 			$("#cuentacontable").val(data[1]);
+			$("#complementaria").val(data[2]);
 		});
 
 		$("#monedaSel").on("change", function(){
 			if ($(this).val() == 1){//MXN
 			    $("#bancoSelDls").hide().attr("name", "");
 			    $("#bancoSel").show().trigger("change").attr("name", "banco");
+			    $("#complementaria").val("").attr("readonly", "readonly");
 				
 			}else{
 			    $("#bancoSelDls").show().trigger("change").attr("name", "banco");
 			    $("#bancoSel").hide().attr("name", "");
+			    $("#complementaria").removeAttr("readonly");
 			}
 		});
 	    $("#monedaSel").trigger("change");

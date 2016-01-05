@@ -28,7 +28,7 @@ class DepositoRequest extends Request {
             'monto'				=> 'required',
             'moneda'			=> 'required',
             'cuenta_contable'	=> 'required',
-            'complementaria'	=> 'required',
+            'complementaria'	=> 'required_if:moneda,2',
         ];
 	}
 	
@@ -39,7 +39,7 @@ class DepositoRequest extends Request {
             	'monto.required' => 'La cantidad es requerida',
             	'moneda.required' => 'La moneda es requerida',
             	'cuenta_contable.required' => 'La cuenta es requerida',
-            	'complementaria.required'=> 'El complementaria es requerida',
+            	'complementaria.required_if'=> 'El complementaria es requerida',
 		];
 	}
 

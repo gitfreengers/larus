@@ -39,11 +39,10 @@ class Cuentas extends Model {
     	
     	$cuentas = array();
     	
-    	$items = Cuentas::where('TIPO', 'Cheque-USD')->get()->lists('NUMERO', 'CC_CUENTA');
-    	
-    	foreach ($items as $key=>$value)
+    	$items = Cuentas::where('TIPO', 'Cheque-USD')->select('NUMERO', 'CC_CUENTA', 'CUENTACOMPLEMENTARIA')->get();
+    	foreach ($items as $item)
     	{
-    		$cuentas[$value.'|'.$key] = $value;
+    		$cuentas[$item->NUMERO.'|'.$item->CC_CUENTA.'|'.$item->CUENTACOMPLEMENTARIA] = $item->NUMERO;
     	}
     	
     	return $cuentas;
