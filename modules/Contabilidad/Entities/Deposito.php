@@ -9,7 +9,6 @@ class Deposito extends Model {
     protected $fillable = [
 	    'banco', 
     	'fecha', 
-    	'referencia', 
     	'monto', 
     	'moneda', 
     	'cuenta_contable',

@@ -40,19 +40,6 @@
 				    </div>
 				</div>
 				<div class="form-group col-md-3 col-xs-12" >
-				    {!! Form::label('referencia','Referencia: ',['class' =>'col-xs-4 control-label']) !!}
-				    <div class="col-xs-12 @if ($errors->has('referencia')) has-error @endif ">
-				        @if (!isset($deposito->id))
-					        {!! Form::text('referencia', $deposito->referencia,['class' => 'form-control','placeholder' => 'Ingrese un referenciae']) !!}
-				        @else	
-				        	{!! Form::label('referencia', $deposito->referencia,['class' => 'control-label','placeholder']) !!}
-				        @endif				        
-				        @if ($errors->has('referencia')) 
-				        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('referencia') }}</label>
-				        @endif
-				    </div>
-				</div>
-				<div class="form-group col-md-3 col-xs-12" >
 				    {!! Form::label('monto','Monto: ',['class' =>'col-xs-4 control-label']) !!}
 				    <div class="col-xs-12 @if ($errors->has('monto')) has-error @endif ">
 				        @if (!isset($deposito->id))
@@ -70,7 +57,7 @@
 				    {!! Form::label('moneda','Moneda: ',['class' =>'col-xs-4 control-label']) !!}
 				    <div class="col-xs-12 @if ($errors->has('moneda')) has-error @endif ">
 				        @if (!isset($deposito->id))
-					        {!! Form::select('moneda', array('1'=>'DOLAR', 2=>'MXN'), $deposito->moneda,['class' => 'form-control','placeholder' => 'Ingrese una moneda']) !!}
+					        {!! Form::select('moneda', array('1'=>'MXN', 2=>'DOLAR'), $deposito->moneda,['class' => 'form-control','placeholder' => 'Ingrese una moneda']) !!}
 				        @else	
 				        	{!! Form::label('moneda', $deposito->moneda,['class' => 'control-label','placeholder']) !!}
 				        @endif

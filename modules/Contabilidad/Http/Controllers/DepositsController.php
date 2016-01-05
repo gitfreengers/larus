@@ -78,7 +78,6 @@ class DepositsController extends Controller {
 		$deposito = new Deposito([
 			'banco' => $depositoRef->{'banco'},
 			'fecha' => $depositoRef->{'fecha'},
-			'referencia' => $depositoRef->{'referencia'},
 			'monto' => $depositoRef->{'monto'},
 			'moneda' => $depositoRef->{'moneda'},
 			'cuenta_contable' => $depositoRef->{'cuenta_contable'},

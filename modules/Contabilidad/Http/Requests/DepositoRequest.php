@@ -25,7 +25,6 @@ class DepositoRequest extends Request {
         return [
             'banco' 			=> 'required',
             'fecha'				=> 'required',
-            'referencia'		=> 'required',
             'monto'				=> 'required',
             'moneda'			=> 'required',
             'cuenta_contable'	=> 'required',
@@ -37,7 +36,6 @@ class DepositoRequest extends Request {
 		return [
 				'banco.required' => 'El banco es requerido',
 				'fecha.required' => 'La fecha es requerida',
-				'referencia.required'=> 'La referencia es requerida',
             	'monto.required' => 'La cantidad es requerida',
             	'moneda.required' => 'La moneda es requerida',
             	'cuenta_contable.required' => 'La cuenta es requerida',
