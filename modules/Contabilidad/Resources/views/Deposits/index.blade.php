@@ -20,6 +20,7 @@
 						    <div class="col-xs-12 @if ($errors->has('banco')) has-error @endif ">
 						        @if (!isset($deposito->id))
 						        	{!! Form::select('banco', $cuentas, null,['class' => 'form-control','placeholder' => 'Seleccione la cuenta','id'=>'bancoSel']) !!}
+						        	{!! Form::select('banco', $cuentasDls, null,['class' => 'form-control','placeholder' => 'Seleccione la cuenta','id'=>'bancoSelDls', 'style'=>'display:none']) !!}
 						        @else	
 						        	{!! Form::label('banco', $deposito->banco,['class' => 'control-label','placeholder']) !!}
 						        @endif
@@ -59,7 +60,7 @@
 						    {!! Form::label('moneda','Moneda: ',['class' =>'col-xs-4 control-label']) !!}
 						    <div class="col-xs-12 @if ($errors->has('moneda')) has-error @endif ">
 						        @if (!isset($deposito->id))
-							        {!! Form::select('moneda', array('1'=>'MXN', 2=>'DOLAR'), $deposito->moneda,['class' => 'form-control','placeholder' => 'Ingrese una moneda']) !!}
+							        {!! Form::select('moneda', array('1'=>'MXN', 2=>'DOLAR'), $deposito->moneda,['class' => 'form-control','placeholder' => 'Ingrese una moneda', 'id'=>'monedaSel']) !!}
 						        @else	
 						        	{!! Form::label('moneda', $deposito->moneda,['class' => 'control-label','placeholder']) !!}
 						        @endif
@@ -423,7 +424,7 @@
 		});
 
 	    //eventos de depositos
-		$('#guardarReferencias').hide();
+	    $('#guardarReferencias').hide();
 	 	$("#fecha").datepicker({
 			language: 'es',
 			format:'yyyy-mm-dd',
@@ -434,6 +435,23 @@
 			var data = $(this).val().split("|");
 			$("#cuentacontable").val(data[1]);
 		});
+		
+		$("#bancoSelDls").on("change", function(){
+			var data = $(this).val().split("|");
+			$("#cuentacontable").val(data[1]);
+		});
+
+		$("#monedaSel").on("change", function(){
+			if ($(this).val() == 1){//MXN
+			    $("#bancoSelDls").hide().attr("name", "");
+			    $("#bancoSel").show().trigger("change").attr("name", "banco");
+				
+			}else{
+			    $("#bancoSelDls").show().trigger("change").attr("name", "banco");
+			    $("#bancoSel").hide().attr("name", "");
+			}
+		});
+	    $("#monedaSel").trigger("change");
 		
 		// data tables
 	    tabla = $("#depositosTable").DataTable({

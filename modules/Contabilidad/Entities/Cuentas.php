@@ -11,7 +11,8 @@ class Cuentas extends Model {
     protected $fillable = [
 		'NUMERO',
     	'BANCO',
-    	'CC_CUENTA'
+    	'CC_CUENTA',
+    	'TIPO'
     ];
 
     public static function cuentasArray($usuario_id) {
@@ -25,6 +26,20 @@ class Cuentas extends Model {
     	}else{
     		$items = Cuentas::all()->lists('NUMERO', 'CC_CUENTA');
     	}
+    	
+    	foreach ($items as $key=>$value)
+    	{
+    		$cuentas[$value.'|'.$key] = $value;
+    	}
+    	
+    	return $cuentas;
+    }
+    
+    public static function cuentasDolaresArray() {
+    	
+    	$cuentas = array();
+    	
+    	$items = Cuentas::where('TIPO', 'Cheque-USD')->get()->lists('NUMERO', 'CC_CUENTA');
     	
     	foreach ($items as $key=>$value)
     	{

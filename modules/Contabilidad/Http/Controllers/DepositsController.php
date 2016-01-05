@@ -25,7 +25,8 @@ class DepositsController extends Controller {
 		if(Sentinel::hasAccess('depositos.view')){
 			$deposito = new Deposito();
 			$cuentas = Cuentas::cuentasArray($this->user_auth->id);
-			return view('contabilidad::Deposits.index', compact('deposito', 'cuentas'));
+			$cuentasDls = Cuentas::cuentasDolaresArray();
+			return view('contabilidad::Deposits.index', compact('deposito', 'cuentas', 'cuentasDls'));
 		}else{
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
 			return back();
