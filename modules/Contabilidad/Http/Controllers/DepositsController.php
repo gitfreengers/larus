@@ -10,6 +10,7 @@ use Modules\Contabilidad\Entities\DepositoAplicacion;
 use Modules\Contabilidad\Entities\Sales;
 use Modules\Contabilidad\Http\Requests\DepositoReferenciasRequest;
 use Modules\Contabilidad\Http\Requests\DepositoRequest;
+use Modules\Contabilidad\Entities\Cuentas;
 
 class DepositsController extends Controller {
 	
@@ -23,8 +24,8 @@ class DepositsController extends Controller {
 	{
 		if(Sentinel::hasAccess('depositos.view')){
 			$deposito = new Deposito();
-
-			return view('contabilidad::Deposits.index', compact('deposito'));
+			$cuentas = Cuentas::cuentasArray($this->user_auth->id);
+			return view('contabilidad::Deposits.index', compact('deposito', 'cuentas'));
 		}else{
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
 			return back();
