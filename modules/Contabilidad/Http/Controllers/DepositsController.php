@@ -59,6 +59,7 @@ class DepositsController extends Controller {
 	{
 		$deposito = new Deposito();
 		$deposito->fill($request->all());
+		$deposito->banco = explode("|", $deposito->banco)[0];
 		$user = User::find($this->user_auth->id);
 		$deposito->usuario_id = $user->id;
 		$deposito->id = 0;

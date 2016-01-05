@@ -19,7 +19,7 @@
 						    {!! Form::label('banco','Banco: ',['class' =>'col-xs-4 control-label']) !!}
 						    <div class="col-xs-12 @if ($errors->has('banco')) has-error @endif ">
 						        @if (!isset($deposito->id))
-						        	{!! Form::select('banco', $cuentas, null,['class' => 'form-control','placeholder' => 'Seleccione la cuenta']) !!}
+						        	{!! Form::select('banco', $cuentas, null,['class' => 'form-control','placeholder' => 'Seleccione la cuenta','id'=>'bancoSel']) !!}
 						        @else	
 						        	{!! Form::label('banco', $deposito->banco,['class' => 'control-label','placeholder']) !!}
 						        @endif
@@ -76,7 +76,7 @@
 		        		    {!! Form::label('cuenta_contable','Cuenta contable: ',['class' =>'col-xs-12 control-label']) !!}
 						    <div class="col-xs-12 @if ($errors->has('cuenta_contable')) has-error @endif ">
 						        @if (!isset($deposito->id))
-						        	{!! Form::text('cuenta_contable', $deposito->cuenta_contable,['class' => 'form-control','placeholder' => 'Ingrese la cuenta contable']) !!}
+						        	{!! Form::text('cuenta_contable', $deposito->cuenta_contable,['readonly'=>'readonly','class' => 'form-control','placeholder' => 'Ingrese la cuenta contable','id'=>'cuentacontable']) !!}
 						        @else	
 						        	{!! Form::label('cuenta_contable', $deposito->cuenta_contable,['class' => 'control-label','placeholder']) !!}
 						        @endif	
@@ -429,6 +429,12 @@
 			format:'yyyy-mm-dd',
 			todayHighlight: true
 		});
+
+		$("#bancoSel").on("change", function(){
+			var data = $(this).val().split("|");
+			$("#cuentacontable").val(data[1]);
+		});
+		
 		// data tables
 	    tabla = $("#depositosTable").DataTable({
 	        "language": {

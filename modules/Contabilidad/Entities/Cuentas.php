@@ -10,7 +10,8 @@ class Cuentas extends Model {
     
     protected $fillable = [
 		'NUMERO',
-    	'BANCO'
+    	'BANCO',
+    	'CC_CUENTA'
     ];
 
     public static function cuentasArray($usuario_id) {
@@ -20,14 +21,14 @@ class Cuentas extends Model {
     	
     	if($usuario_id != null){
 	    	$usuario = User::find($usuario_id);
-	    	$items = Cuentas::where('BANCO', $usuario->plaza_matriz_id)->get()->lists('NUMERO', 'NUMERO');
+	    	$items = Cuentas::where('BANCO', $usuario->plaza_matriz_id)->get()->lists('NUMERO', 'CC_CUENTA');
     	}else{
-    		$items = Cuentas::all()->lists('NUMERO', 'NUMERO');
+    		$items = Cuentas::all()->lists('NUMERO', 'CC_CUENTA');
     	}
     	
     	foreach ($items as $key=>$value)
     	{
-    		$cuentas[$key] = $value;
+    		$cuentas[$value.'|'.$key] = $value;
     	}
     	
     	return $cuentas;
