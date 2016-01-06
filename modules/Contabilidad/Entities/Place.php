@@ -26,8 +26,6 @@ class Place extends Model {
     
     public static function plazasArray($usuario_id) {
     	
-    	$plazas = array();
-    	$plazas[''] = "Seleccione...";
     	
     	if($usuario_id != null){
 	    	$oficinas = array();
@@ -39,6 +37,9 @@ class Place extends Model {
     	}else{
     		$items = Place::all()->lists('Nombre', 'Clave');
     	}
+    	
+    	$plazas = array();
+    	$plazas[''] = "Seleccione...";
     	
     	foreach ($items as $key=>$value)
     	{

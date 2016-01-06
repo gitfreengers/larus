@@ -6,6 +6,7 @@ use Modules\Contabilidad\Entities\SalesLog;
 use Modules\User\Entities\User;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Modules\Contabilidad\Http\Requests\VentasPendientesRequest;
 
 class SalesController extends Controller {
 	
@@ -34,7 +35,7 @@ class SalesController extends Controller {
 		
 	}
 	
-	public function obtenerVentasPendientes() 
+	public function obtenerVentasPendientes(VentasPendientesRequest $request) 
 	{
 		$usuario = User::find($this->user_auth->id);
 		$oficinas = array();
@@ -44,13 +45,14 @@ class SalesController extends Controller {
 		DB::enableQueryLog();
 		
 		$ventasPendientes = DB::table('contabilidad_sales')
-							->select('*',  DB::raw('SUM(ammount) as ammount'))
-							->whereRaw('ammount_applied < ammount and credit_debit = ?', ['credit'])
-							->where(function ($query) use ($oficinas) {
-								$query->whereIn('op_location', $oficinas)->orWhere(function ($query) use ($oficinas) {
-									$query->whereIn('cl_location', $oficinas);
-								}); 
-							})
+							->select('*',  DB::raw('SUM(ammount) as ammount, SUM(ammount_applied) as ammount_applied '))
+							->whereRaw('credit_debit = ? and reference = ? ', ['credit', $request->get('referencia')])
+							//->whereRaw('ammount_applied < ammount and credit_debit = ? and reference = ? ', ['credit', $request->get('referencia')])
+							//->where(function ($query) use ($oficinas) {
+							//	$query->whereIn('op_location', $oficinas)->orWhere(function ($query) use ($oficinas) {
+							//		$query->whereIn('cl_location', $oficinas);
+							//	}); 
+							//})
 							->groupBy('reference')
 							->get();
 		$items['items'] = $ventasPendientes; 

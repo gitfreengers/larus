@@ -122,39 +122,60 @@
 					<div class="row ">
 						<div class="col-lg-12">
 			            	<div class="btn-group pull-right ">
+			            		{!! Form::text('referencia', null,['class' => 'form-control', 'placeholder' => 'Ingrese referencia', 'id'=>'buscarReferencia']) !!}
+			            		<!-- 
 			                	<a href="#" id="agregarReferencia" class="btn btn-success btn-flat"><i class="fa fa-money"></i> Agregar referencia de venta</a>
+			            		 -->
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-lg-12" >
+							<span id="errorReferencia" style="display:none">
+								<div class="alert alert-danger" >
+			            			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						            <span id="msg"></span>
+			        			</div>
+							</span>
+						</div>
+		            </div>	
 					<br>
 	                <table id="depositosTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
 	                    <thead>
 		                    <tr>
-		                    	<th>Id</th>
+		                    	<th rowspan="2">Id</th>
+		                        <th rowspan="2">Fecha</th>
+				                <th rowspan="2">MontoO</th>
+				                <th colspan="6" align="center">Orden</th>
+				                <th rowspan="2">Monto a aplicar <br>(<span id='montoTotal' data-monto='{{$deposito->monto}}'>$ {{number_format ($deposito->monto, 2)}}</span>)</th>
+		                        <th rowspan="2"></th>
+				            </tr>
+		                    <tr>
+		                        <th>Referencia</th>
+		                        <th>Plaza Origen</th>
+		                        <th>Plaza Destino</th>
+		                        <th>Factura</th>
 		                        <th>Fecha</th>
-		                        <th>Orden</th>
-		                        <th>MontoO</th>
-		                        <th>Monto</th>
-		                        <th></th>
+		                        <th>Cantidad</th>
 		                    </tr>
 	                    </thead>
 	                    <tbody></tbody>
+	                     
 	                    <tfoot>
-		                    <tr>
-		                    	<th></th>
-		                        <th></th>
-		                        <th style='text-align:right !important'>Suma aplicada</th>
-		                        <th></th>
-		                        <th id='total' data-suma='0'></th>
-		                        <th></th>
+	                    	<tr>
+		                    	<th colspan='9' style='text-align:right !important'>Suma aplicada</th>
+		                        <th id='total' data-suma='0' style='text-align:right !important'></th>
+				                <th ></th>		                        
 		                    </tr>
 	                    </tfoot>
+	                    
+	                    
 	                </table>
 					<br>
 	                <div class="row ">
 						<div class="col-lg-12">
 			            	<div class="btn-group pull-right ">
-			                	<a href="#" id="guardarReferencias" class="btn btn-success btn-flat"><i class="fa fa-save"></i> Guardar referencias</a>
+			                	<a href="#" id="guardarReferencias" disabled='disabled' class="btn btn-success btn-flat"><i class="fa fa-save"></i> Guardar referencias</a>
 							</div>
 						</div>
 					</div>
@@ -184,19 +205,13 @@
 			</div>
 			<div class="modal-body">
 				<span id="error">
-					<div class="alert alert-danger }}" >
+					<div class="alert alert-danger" >
             			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 			            <span id="msg"></span>
         			</div>
 				</span>
 				<span id="content">
 					<form>
-						<div class="form-group">
-							<label>Venta</label>
-							<select class="form-control select2" name="ventas_id" id="selectVenta" >
-								<option value="" disabled="disabled" >- Seleccione una venta -</option>
-                            </select>
-						</div>
 						<div class="form-group">
 							<label>Cantidad</label>
 							<input id="cantidad" class="form-control">
@@ -268,15 +283,19 @@
 		suma = 0;
 		tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
 		    var data = this.data();
-			suma += parseFloat(data.monto);
+			if (parseFloat(data.monto) >= 0){
+				suma += parseFloat(data.monto);
+			}
 		} );
+
+		$("span#montoTotal").html("$ " + $.number(($("#monto").val() - suma), 2, ".", ",")).data('monto', ($("#monto").val() - suma));
 		
 		$("th#total").html("$ " + $.number(suma, 2, ".", ",")).data('suma', suma);
 
 		if (suma == $("#monto").val()){
-			$('#guardarReferencias').show();
+			$('#guardarReferencias').removeAttr('disabled');
 		} else {
-			$('#guardarReferencias').hide();
+			$('#guardarReferencias').attr('disabled', true);
 		}
 	};
 
@@ -290,32 +309,11 @@
 		$("#ventasModal").modal();
 		$("#ventasModal #error").hide();
 		$("#ventasModal #cantidad").val('');
-
-		$("#selectVenta").on("change", function(){
-			$("#ventasModal #cantidad").val($("#selectVenta :selected").data('cantidad'));
-		});
-
+		
 		tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
 		    var data = this.data();
 			references.push(data.id);
 		} );	
-
-		$.get('{{route("contabilidad.ventas.obtenerVentas")}}', function(res){
-			$("#selectVenta").html("<option value=''>Seleccione...</option>");
-			$.each(res.items, function(i,v){
-				if (references.indexOf(v.reference) < 0)
-					$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+(parseFloat(v.ammount) - parseFloat(v.ammount_applied))+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " Monto total: $" + $.number(v.ammount, 2, ".", ",")+" Monto aplicado: <b>$" + $.number(v.ammount_applied, 2, ".", ",")+"</b></option>");
-				else
-					if (!isNew){
-						$("#selectVenta").append("<option value='"+v.reference+"' data-cantidad='"+(parseFloat(v.ammount) - parseFloat(v.ammount_applied))+"'>"+"Referencia: "+v.reference + " Factura: " + v.factura_number + " Fecha: " + v.date + " $" + $.number(v.ammount, 2, ".", ",")+" Monto aplicado: <b>$" + $.number(v.ammount_applied, 2, ".", ",")+"</b></option>");
-					}
-			});
-			if (!isNew){
-				var objEdicion = rowEdicion.data();
-				$("#selectVenta").val(objEdicion.id);
-			}
-			$(".select2").select2();
-		});
 
 		if (!isNew){
 			$("#ventasModal #cantidad").val(objEdicion.monto);
@@ -330,10 +328,11 @@
 
 	var verificaReferencia = function(isNew, rowEdicion, references){
 
-		var cantidadMax = $("#ventasModal #selectVenta :selected").data('cantidad');
-		var cantidad = $("#ventasModal #cantidad").val();
-		var total = $("th#total").data('suma');
-		var monto = $("#monto").val();
+		var cantidadMax = parseFloat((rowEdicion.data().cantidad == "---")? $("#monto").val() : rowEdicion.data().monto);
+		console.log(cantidadMax);
+		var cantidad = parseFloat($("#ventasModal #cantidad").val());
+		var total = parseFloat($("th#total").data('suma'));
+		var monto = parseFloat($("#monto").val());
 		var id = -1;
 
 		errores = '';
@@ -347,9 +346,10 @@
 			total = suma - parseFloat(rowEdicion.data().monto);
 		}
 
-		if ($("#ventasModal #selectVenta").val() == "" || $("#ventasModal #cantidad").val() == "" ){
+		if ($("#ventasModal #cantidad").val() == "" ){
 			errores = "Ingrese todos los datos";
 		}else{
+			
 			if (!$.isNumeric($("#ventasModal #cantidad").val())){
 				errores = "El monto solo puede ser numerico";
 	        }
@@ -363,29 +363,12 @@
 					errores = "El monto a aplicar no puede exceder a la cantidad de la venta";
 				} else if ((parseFloat(cantidad) + parseFloat(total)) > monto) {
 					errores = "El monto para aplicar no puede ser mayor al deposito";
-				} else if (references.indexOf($("#ventasModal #selectVenta :selected").val()) > 0 && isNew) {
-					errores = "La referencia de venta ya fue añadida";
 				} else {
-					if (isNew){
-						tabla.row.add({
-							id: $("#ventasModal #selectVenta :selected").val(), 
-							fecha: moment().format('YYYY-MM-DD'), 
-							orden: $("#ventasModal #selectVenta :selected").text(),
-							monto: cantidad,
-							montoF: "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ","),
-							isNew: true
-						}).draw();
-					}else{					
-						rowEdicion.data({
-							id: $("#ventasModal #selectVenta :selected").val(), 
-							fecha: moment().format('YYYY-MM-DD'), 
-							orden: $("#ventasModal #selectVenta :selected").text(),
-							monto: cantidad,
-							montoF: "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ","),
-							isNew: true
-						}).draw();
-					}
-	
+					var data = rowEdicion.data(); 
+					data.monto = cantidad;
+					data.montoF = "$ " + $.number($("#ventasModal #cantidad").val(), 2, ".", ",");
+					rowEdicion.data(data).draw();
+					
 					tabla.columns.adjust().draw();
 					$("#ventasModal").modal('hide');				
 				}
@@ -424,8 +407,7 @@
 		});
 
 	    //eventos de depositos
-	    $('#guardarReferencias').hide();
-	 	$("#fecha").datepicker({
+	    $("#fecha").datepicker({
 			language: 'es',
 			format:'yyyy-mm-dd',
 			todayHighlight: true
@@ -456,6 +438,63 @@
 			}
 		});
 	    $("#monedaSel").trigger("change");
+
+	    $("#buscarReferencia").on("keypress", function(e){
+		    if (e.which == 13) {
+		    	var valor = $("#buscarReferencia").val();
+    			$("#errorReferencia").hide();
+	    		var references = [];
+	    		var salesReference = [];
+	    		tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+	    		    var data = this.data();
+	    			references.push(data.id);
+	    			references.push(data.referencia);
+	    		} );
+	    		
+	    		if (references.indexOf(valor) >= 0){
+	    			$("#errorReferencia").show();
+	    			$("#errorReferencia #msg").html("Esta referencia ya ha sido ingresada en la tabla ");
+	    		}else{
+	    			$.get('{{route("contabilidad.ventas.obtenerVentas")}}', {'referencia': $("#buscarReferencia").val()}, function(res){
+		    			if (res.items.length == 0){
+		    				salesReference = {
+									id: valor, 
+									fecha: moment().format('YYYY-MM-DD'), 
+									referencia: "Nueva referencia: " + valor,
+						        	plazaOrigen: "---",
+						        	plazaDestino: "---",
+						        	factura: "---",
+						        	fechaO: "----",
+						        	cantidad: "---",
+									monto: 0,
+									montoF: "$ " + $.number('0', 2, ".", ","),
+									isNew: true
+							};
+				    	} else {
+			    			$.each(res.items, function(i, v1){
+				    			salesReference = {
+									id: v1.reference, 
+									fecha: moment().format('YYYY-MM-DD'),
+									referencia: v1.reference,
+						        	plazaOrigen: v1.op_location,
+						        	plazaDestino: v1.cl_location ,
+						        	factura: v1.factura_number,
+						        	fechaO: v1.date,
+						        	cantidad: "$ " + $.number(v1.ammount, 2, ".", ","),
+									monto: (v1.ammount - v1.ammount_applied),
+									montoF: "$ " + $.number((v1.ammount - v1.ammount_applied), 2, ".", ","),
+									isNew: true
+								};
+			    			});					    	
+					    }
+			    		
+		    			tabla.row.add(salesReference).draw();
+		    		});	
+		    	}
+		    	
+	    		$("#buscarReferencia").val("");	
+	        }
+		});
 		
 		// data tables
 	    tabla = $("#depositosTable").DataTable({
@@ -472,25 +511,30 @@
 	        "columns": [
 				{"data": "id"},
 	           	{"data": "fecha"},
-	        	{"data": "orden"},
 	        	{"data": "monto"},
+	        	{"data": "referencia"},
+	        	{"data": "plazaOrigen"},
+	        	{"data": "plazaDestino"},
+	        	{"data": "factura"},
+	        	{"data": "fechaO"},
+	        	{"data": "cantidad"},
 	        	{"data": "montoF"},
 	        	{"data": "isNew"},
 	        ],
 	        'columnDefs': [
 				{
-					'targets': [0, 3],
+					'targets': [0, 2],
 					"visible": false,
 				}, {
 					'targets': 1,
 					'render': function (data, type, full, meta){
-						return moment(data, 'YYYY-MM-DD').format('l');
+						return moment(data, 'YYYY-MM-DD').format('L');
 					}
+				}, {
+					'targets': 9,
+					'className': 'text-right'
 				}, {	
-                	'targets': 5,
-                    'searchable':false,
-                    'orderable':false,
-                    'className': 'dt-body-center',
+                	'targets': 10,
                     'render': function (data, type, full, meta){
                             return 	'<div class="pull-right btn-group">'+
                             			'<a href="#" class="btn btn-info btn-flat" title="Editar" data-toggle="edit" data-id="'+ full.id +'"><i class="fa fa-check-square-o "></i> Editar</a>'+
@@ -498,8 +542,7 @@
 									'</div>';                        
 					}
             	},   	
-          	],
-          	
+          	],          	
 	    });
 	    
 		referenciasVal = $("#referencias").val() == null ? null : JSON.parse($("#referencias").val());
@@ -524,7 +567,8 @@
 
 		//boton guardar
 		$('#guardarReferencias').on("click", function(){
-			$("#referenciasForm").submit();
+			if ($('#guardarReferencias').attr('disabled') == undefined) // si esta activo
+				$("#referenciasForm").submit();
 		});
 		
 	    $("#referenciasForm").submit( function(e){
@@ -537,11 +581,7 @@
 	    	$("#referencias").val(JSON.stringify(data));
 	    	currentForm.submit();
 	    });
-	  
-	   	$("#agregarReferencia").on('click', function(){
-		   abreModal(true, null);
-		});
-
+	    
 	   	$(document).on('click','[data-toggle="edit"]', function(){
 	    	abreModal(false, tabla.row( $(this).parents('tr') ));
 	    });

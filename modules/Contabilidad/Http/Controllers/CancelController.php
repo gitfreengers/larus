@@ -2,12 +2,11 @@
 
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Pingpong\Modules\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 
+use Carbon\Carbon;
 use Modules\Contabilidad\Entities\Deposito;
 use Modules\Contabilidad\Entities\Place;
 use Modules\Contabilidad\Http\Requests\DepositoConsultaRequest;
-use Carbon\Carbon;
 
 class CancelController extends Controller {
 	

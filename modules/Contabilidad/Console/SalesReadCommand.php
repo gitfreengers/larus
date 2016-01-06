@@ -1,15 +1,11 @@
 <?php namespace Modules\Contabilidad\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Model;
+use Modules\Contabilidad\Entities\PaymentMethod;
 use Modules\Contabilidad\Entities\Sales;
 use Modules\Contabilidad\Entities\SalesLog;
-use Modules\Contabilidad\Entities\PaymentMethod;
-use Carbon\Carbon;
 
 class SalesReadCommand extends Command {
 

@@ -11,6 +11,7 @@ use Modules\Contabilidad\Entities\Sales;
 use Modules\Contabilidad\Http\Requests\DepositoReferenciasRequest;
 use Modules\Contabilidad\Http\Requests\DepositoRequest;
 use Modules\Contabilidad\Entities\Cuentas;
+use Carbon\Carbon;
 
 class DepositsController extends Controller {
 	
@@ -94,44 +95,76 @@ class DepositsController extends Controller {
 			if ($value->isNew){
 				$ventas = Sales::where('reference', $value->id)->where('credit_debit','credit')->get();
 				$montoAplicar = $value->monto;
-				
-				foreach ($ventas as $venta){
-					
-					//si el monto de la venta es mayor al monto aplicado 
-					//entonces aplicamos
-					if ($venta->ammount > $venta->ammount_applied){
-						
-						$montoRestante = ($venta->ammount - $venta->ammount_applied);
-						
-						// si el monto a aplicar es mayor al monto aplicado descontamos del monto a aplicar
-						if ($montoAplicar > $montoRestante ){
-							$monto = $montoRestante;
-							$montoAplicar = $montoAplicar - $montoRestante;
-						} else {
-							$monto = $montoAplicar;
-							$montoAplicar = 0;
-						}
-						
-						if ($monto > 0){
-							$depositoAplicacion = new DepositoAplicacion([
-								'venta_id' => $venta->id,
-								'deposito_id' => $deposito->id,
-								'usuario_id' => $this->user_auth->id,
-								'cantidad' => $monto,
-							]);
-							$venta->ammount_applied = $venta->ammount_applied + $monto;
+				if (count($ventas) > 0){ // si se encontraron ventas con referencia ingresada 
+					foreach ($ventas as $venta){
 							
-							$depositoAplicacion->save();
+						//si el monto de la venta es mayor al monto aplicado
+						//entonces aplicamos
+						if ($venta->ammount > $venta->ammount_applied){
+					
+							$montoRestante = ($venta->ammount - $venta->ammount_applied);
+					
+							// si el monto a aplicar es mayor al monto aplicado descontamos del monto a aplicar
+							if ($montoAplicar > $montoRestante ){
+								$monto = $montoRestante;
+								$montoAplicar = $montoAplicar - $montoRestante;
+							} else {
+								$monto = $montoAplicar;
+								$montoAplicar = 0;
+							}
+					
+							if ($monto > 0){
+								$depositoAplicacion = new DepositoAplicacion([
+										'venta_id' => $venta->id,
+										'deposito_id' => $deposito->id,
+										'usuario_id' => $this->user_auth->id,
+										'cantidad' => $monto,
+								]);
+								$venta->ammount_applied = $venta->ammount_applied + $monto;
+									
+								$depositoAplicacion->save();
+							}
+							$venta->update();
 						}
-						$venta->update();
-					}					
+					}	
+				} else {
+					$ventaNueva = new Sales([
+							'transaction_id'=>'-1',
+							'reference'=>$value->id,
+							'ra_start_date'=>Carbon::now(),
+							'ra_end_date'=>Carbon::now(),
+							'factura_uuid'=>"",
+							'ammount'=>0,
+							'ammount_applied'=> $montoAplicar,
+							'credit_debit'=>'credit',
+							'payment_method'=>'',
+							'ra_total'=>0,
+							'customer_number'=>'',
+							'op_location'=>'',
+							'cl_location'=>'',
+							'gl_account'=>'',
+							'concept'=>'',
+							'description'=>'',
+							'date'=>Carbon::now(),
+							'factura_number'=>''
+						]);
+					$ventaNueva->save();
+					$depositoAplicacion = new DepositoAplicacion([
+							'venta_id' => $ventaNueva->id,
+							'deposito_id' => $deposito->id,
+							'usuario_id' => $this->user_auth->id,
+							'cantidad' => $montoAplicar,
+					]);
+					$depositoAplicacion->save();
 				}
 			}
 		}
 		flash()->success('Las referencias de venta se han almacenado correctamente.');
 		
 		$deposito = new Deposito();
-		return view('contabilidad::Deposits.index', compact('deposito'));
+		$cuentas = Cuentas::cuentasArray($this->user_auth->id);
+		$cuentasDls = Cuentas::cuentasDolaresArray();
+		return view('contabilidad::Deposits.index', compact('deposito', 'cuentas', 'cuentasDls'));
 	}
 	
 }
