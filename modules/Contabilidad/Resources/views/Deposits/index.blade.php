@@ -148,7 +148,7 @@
 				                <th rowspan="2">MontoO</th>
 				                <th colspan="6" align="center">Orden</th>
 				                <th rowspan="2">Saldo pendiente por aplicar <br>(<span id='montoTotal' data-monto='{{$deposito->monto}}'>$ {{number_format ($deposito->monto, 2)}}</span>)</th>
-		                        <th rowspan="2"></th>
+		                        <th rowspan="2" width='10%'></th>
 				            </tr>
 		                    <tr>
 		                        <th>Referencia</th>
@@ -309,6 +309,7 @@
 		$("#ventasModal").modal();
 		$("#ventasModal #error").hide();
 		$("#ventasModal #cantidad").val('');
+		$("#ventasModal #cantidad").focus();
 		
 		tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
 		    var data = this.data();
@@ -538,8 +539,8 @@
                 	'targets': 10,
                     'render': function (data, type, full, meta){
                             return 	'<div class="pull-right btn-group">'+
-                            			'<a href="#" class="btn btn-info btn-flat" title="Editar" data-toggle="edit" data-id="'+ full.id +'"><i class="fa fa-check-square-o "></i> Editar</a>'+
-                            			"<button class='btn btn-danger' data-toggle='confirmation' data-singleton='true' data-btn-type='delete' data-url='" + full.id + "'> <i class='fa fa-trash'></i> Eliminar</button>"
+                            			'<a href="#" class="btn btn-info btn-flat" title="Editar" data-toggle="edit" data-id="'+ full.id +'"><i class="fa fa-check-square-o "></i> </a>'+
+                            			"<button class='btn btn-danger' data-toggle='confirmation' data-singleton='true' data-btn-type='delete' data-url='" + full.id + "'> <i class='fa fa-trash'></i> </button>"
 									'</div>';                        
 					}
             	},   	
