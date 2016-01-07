@@ -22,7 +22,7 @@
 						        	{!! Form::select('banco', $cuentas, null,['class' => 'form-control','placeholder' => 'Seleccione la cuenta','id'=>'bancoSel']) !!}
 						        	{!! Form::select('banco', $cuentasDls, null,['class' => 'form-control','placeholder' => 'Seleccione la cuenta','id'=>'bancoSelDls', 'style'=>'display:none']) !!}
 						        @else	
-						        	{!! Form::label('banco', $deposito->banco,['class' => 'control-label','placeholder']) !!}
+						        	{!! $deposito->banco !!}
 						        @endif
 						        @if ($errors->has('banco'))
 						            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('banco') }}</label>
@@ -35,7 +35,7 @@
 						        @if (!isset($deposito->id))
 							        {!! Form::text('fecha', $deposito->fecha,['class' => 'form-control','placeholder' => 'Ingrese la fecha', 'id'=>'fecha']) !!}
 						        @else	
-						        	{!! Form::label('fecha', $deposito->fecha,['class' => 'control-label','placeholder']) !!}
+						        	{!! $deposito->fecha !!}
 						        @endif
 						        @if ($errors->has('fecha'))
 						            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('fecha') }}</label>
@@ -48,7 +48,7 @@
 						        @if (!isset($deposito->id))
 							        {!! Form::text('monto', $deposito->monto,['class' => 'form-control','placeholder' => 'Ingrese una cantidad']) !!}
 						        @else	
-						        	{!! Form::label('monto', $deposito->monto,['class' => 'control-label','placeholder']) !!}
+						        	{!! '$ '.number_format($deposito->monto, 2) !!}
 						        	{!! Form::hidden('monto', $deposito->monto,['class' => 'form-control','placeholder' => 'Ingrese una cantidad']) !!}
 						        @endif
 						        @if ($errors->has('monto')) 
@@ -62,7 +62,7 @@
 						        @if (!isset($deposito->id))
 							        {!! Form::select('moneda', array('1'=>'MXN', 2=>'DOLAR'), $deposito->moneda,['class' => 'form-control','placeholder' => 'Ingrese una moneda', 'id'=>'monedaSel']) !!}
 						        @else	
-						        	{!! Form::label('moneda', $deposito->moneda,['class' => 'control-label','placeholder']) !!}
+						        	{!! $deposito->moneda == 1? 'MXN' : 'DOLAR' !!}
 						        @endif
 						        @if ($errors->has('moneda')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('moneda') }}</label>
@@ -79,7 +79,7 @@
 						        @if (!isset($deposito->id))
 						        	{!! Form::text('cuenta_contable', $deposito->cuenta_contable,['readonly'=>'readonly','class' => 'form-control','placeholder' => 'Ingrese la cuenta contable','id'=>'cuentacontable']) !!}
 						        @else	
-						        	{!! Form::label('cuenta_contable', $deposito->cuenta_contable,['class' => 'control-label','placeholder']) !!}
+						        	{!! $deposito->cuenta_contable!!}
 						        @endif	
 						        @if ($errors->has('cuenta_contable')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('cuenta_contable') }}</label>
@@ -92,7 +92,7 @@
 						        @if (!isset($deposito->id))
 						        	{!! Form::text('complementaria', $deposito->complementaria,['class' => 'form-control','placeholder' => 'Ingrese complementaria', 'id'=>'complementaria']) !!}
 						        @else	
-						        	{!! Form::label('complementaria', $deposito->complementaria,['class' => 'control-label','placeholder']) !!}
+						        	{!! $deposito->complementaria!!}
 						        @endif
 						        @if ($errors->has('complementaria')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('complementaria') }}</label>
@@ -147,7 +147,7 @@
 		                        <th rowspan="2">Fecha</th>
 				                <th rowspan="2">MontoO</th>
 				                <th colspan="6" align="center">Orden</th>
-				                <th rowspan="2">Monto a aplicar <br>(<span id='montoTotal' data-monto='{{$deposito->monto}}'>$ {{number_format ($deposito->monto, 2)}}</span>)</th>
+				                <th rowspan="2">Saldo pendiente por aplicar <br>(<span id='montoTotal' data-monto='{{$deposito->monto}}'>$ {{number_format ($deposito->monto, 2)}}</span>)</th>
 		                        <th rowspan="2"></th>
 				            </tr>
 		                    <tr>
@@ -156,7 +156,7 @@
 		                        <th>Plaza Destino</th>
 		                        <th>Factura</th>
 		                        <th>Fecha</th>
-		                        <th>Cantidad</th>
+		                        <th>Saldo Original</th>
 		                    </tr>
 	                    </thead>
 	                    <tbody></tbody>
@@ -492,7 +492,8 @@
 		    		});	
 		    	}
 		    	
-	    		$("#buscarReferencia").val("");	
+	    		$("#buscarReferencia").val("");
+	    		$("#buscarReferencia").focus();	
 	        }
 		});
 		
