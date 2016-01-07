@@ -307,9 +307,12 @@
 		}
 		
 		$("#ventasModal").modal();
+		$('#ventasModal').on('shown.bs.modal', function (e) {
+			document.getElementById("cantidad").focus();
+		});
+			
 		$("#ventasModal #error").hide();
 		$("#ventasModal #cantidad").val('');
-		$("#ventasModal #cantidad").focus();
 		
 		tabla.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
 		    var data = this.data();
@@ -324,7 +327,6 @@
 		$("#ventasModal #addBtn").on("click", function() {
 			verificaReferencia(isNew, rowEdicion, references);
         });
-	    
 	}
 
 	var verificaReferencia = function(isNew, rowEdicion, references){
