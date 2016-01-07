@@ -1,6 +1,7 @@
 <?php namespace Modules\User\Entities;
    
 use Illuminate\Database\Eloquent\Model;
+use Modules\Contabilidad\Entities\Place;
 
 class User extends Model {
 
@@ -91,7 +92,7 @@ class User extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function plazaMatriz(){
-    	return $this->hasOne(static::$placeModel, 'tb_plazas_clave', 'plaza_matriz_id');
+    	return Place::find($this->plaza_matriz_id);
     }
 
 

@@ -13,6 +13,9 @@
         <div class="box">
         	<div class="box-header">
             	{!! Form::open(['route' => 'contabilidad.depositos.store','method'=>'POST','id'=>'DepositosForm','parsley-validate novalidate' ]) !!}
+            	@if (isset($plazaMatriz))
+            		{!! Form::hidden('matriz', $plazaMatriz, ['class' => 'form-control', 'id'=>'plazaMatriz']) !!}
+            	@endif	            	
             	<div class="row">
     				<div class="col-md-12">
 		            	<div class="form-group col-md-3 col-xs-12" >
@@ -96,6 +99,50 @@
 						        @endif
 						        @if ($errors->has('complementaria')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('complementaria') }}</label>
+						        @endif
+						    </div>
+						</div>
+						<div class="form-group col-md-3 col-xs-12" >
+						    {!! Form::label('tipo_pago','Tipo pago CxC ó Cupón: ',['class' =>'col-xs-12 control-label']) !!}
+						    <div class="col-xs-12 @if ($errors->has('tipo_pago')) has-error @endif ">
+						        @if (!isset($deposito->id))
+						        	{!! Form::select('tipo_pago', array('Efectivo'=>'Efectivo', 'Tarjeta'=>'Tarjeta', 'Amex'=>'Amex', 'Dolares'=>'Dolares', 'Otros'=>'Otros'),$deposito->tipo_pago,['class' => 'form-control','placeholder' => 'Ingrese complementaria', 'id'=>'tipo_pago']) !!}
+						        @else	
+						        	{!! $deposito->tipo_pago!!}
+						        @endif
+						        @if ($errors->has('tipo_pago')) 
+						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('tipo_pago') }}</label>
+						        @endif
+						    </div>
+						</div>
+						<div class="form-group col-md-3 col-xs-12" >
+						    {!! Form::label('folio','Folio: ',['class' =>'col-xs-6 control-label']) !!}
+						    <div class="col-xs-12 @if ($errors->has('folio')) has-error @endif ">
+						        @if (!isset($deposito->id))
+						        	{!! Form::text('folio', $deposito->folio, ['class' => 'form-control','placeholder' => 'Ingrese el folio', 'id'=>'folio']) !!}
+						        @else	
+						        	{!! $deposito->folio!!}
+						        @endif
+						        @if ($errors->has('folio')) 
+						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('folio') }}</label>
+						        @endif
+						    </div>
+						</div>
+					</div>
+				</div>	
+				<div class="row">
+    				<div class="col-md-12">
+						<div class="form-group col-md-3 col-xs-12" >
+						    {!! Form::label('Global','Global: ',['class' =>'col-xs-6 control-label']) !!}
+						    <div class="col-xs-12 @if ($errors->has('folio')) has-error @endif ">
+						        @if (!isset($deposito->id))
+						        	{!! Form::checkbox('global', '1') !!}
+						        @else	
+						        	{!! Form::hidden('global', $deposito->global? '1': '0', ['id' => 'globalH']) !!}
+						        	{!! $deposito->global ? 'Si' : 'No'!!}						        	
+						        @endif
+						        @if ($errors->has('global')) 
+						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('global') }}</label>
 						        @endif
 						    </div>
 						</div>
@@ -428,6 +475,10 @@
 			$("#complementaria").val(data[2]);
 		});
 
+		if ($("#bancoSel option").length == 2){
+			$("#bancoSel option").last().attr('selected', true);
+		}
+
 		$("#monedaSel").on("change", function(){
 			if ($(this).val() == 1){//MXN
 			    $("#bancoSelDls").hide().attr("name", "");
@@ -474,8 +525,22 @@
 									isNew: true
 							};
 				    	} else {
-			    			$.each(res.items, function(i, v1){
-				    			salesReference = {
+						    // verificar en caso de no ser global que plaza tiene el usuario para poder verificar si tiene permisos
+						    var agregar = false;
+						    var v1;
+						    $.each(res.items, function(i, item){
+							    v1 = item;
+				    		});
+					    	if ($("#globalH").val() == "0"){ 
+						    	console.log(v1);
+				    			if (v1.op_location == $("#plazaMatriz").val() || v1.cl_location == $("#plazaMatriz").val()){
+							    	agregar = true;
+								}
+						    }else{
+							    agregar = true;
+							}
+							if (agregar){
+			    				salesReference = {
 									id: v1.reference, 
 									fecha: moment().format('YYYY-MM-DD'),
 									referencia: v1.reference,
@@ -488,10 +553,13 @@
 									montoF: "$ " + $.number((v1.ammount - v1.ammount_applied), 2, ".", ","),
 									isNew: true
 								};
-			    			});					    	
+				    			tabla.row.add(salesReference).draw();
+							}else{
+								$("#errorReferencia").show();
+				    			$("#errorReferencia #msg").html("El deposito no es global y no puede agregar una referencia diferente a la matriz");
+							}
 					    }
 			    		
-		    			tabla.row.add(salesReference).draw();
 		    		});	
 		    	}
 		    	

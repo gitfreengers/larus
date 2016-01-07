@@ -12,6 +12,7 @@ use Modules\Contabilidad\Http\Requests\DepositoReferenciasRequest;
 use Modules\Contabilidad\Http\Requests\DepositoRequest;
 use Modules\Contabilidad\Entities\Cuentas;
 use Carbon\Carbon;
+use Modules\Contabilidad\Entities\Place;
 
 class DepositsController extends Controller {
 	
@@ -27,6 +28,7 @@ class DepositsController extends Controller {
 			$deposito = new Deposito();
 			$cuentas = Cuentas::cuentasArray($this->user_auth->id);
 			$cuentasDls = Cuentas::cuentasDolaresArray();
+			
 			return view('contabilidad::Deposits.index', compact('deposito', 'cuentas', 'cuentasDls'));
 		}else{
 			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
@@ -67,8 +69,8 @@ class DepositsController extends Controller {
 		$deposito->id = 0;
 		
 		flash()->success('El deposito ha sido creado, ingrese referencias de venta.');
-		
-		return view('contabilidad::Deposits.index', compact('deposito'));
+		$plazaMatriz = $user->plazaMatriz()->Oficina;
+		return view('contabilidad::Deposits.index', compact('deposito', 'plazaMatriz'));		
 	}	
 	
 	/**
@@ -86,6 +88,8 @@ class DepositsController extends Controller {
 			'moneda' => $depositoRef->{'moneda'},
 			'cuenta_contable' => $depositoRef->{'cuenta_contable'},
 			'complementaria' => $depositoRef->{'complementaria'},
+			'tipo_pago' => $depositoRef->{'tipo_pago'},
+			'folio' => $depositoRef->{'folio'},
 			'usuario_id' => $depositoRef->{'usuario_id'},
 			'estatus' => 0
 		]);

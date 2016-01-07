@@ -16,7 +16,10 @@ class Deposito extends Model {
     	'usuario_id',
     	'estatus',
     	'usuario_cancelacion_id',
-    	'fecha_cancelacion_id'    		
+    	'fecha_cancelacion_id',
+    	'tipo_pago',
+    	'folio',
+    	'global'    		
     ];
 
     public function depositosAplicados()
