@@ -19,4 +19,5 @@ Route::group(['prefix' => 'contabilidad', 'namespace' => 'Modules\Contabilidad\H
 	Route::resource('depositos', 'DepositsController'); 
 	Route::post('guardarReferencias',['as'=>'contabilidad.depositos.guardarReferencias', 'uses'=>'DepositsController@guardarReferencias']);
 	
+	Route::resource('cuentas', 'CuentasController');
 });

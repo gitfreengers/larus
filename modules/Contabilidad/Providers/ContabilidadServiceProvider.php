@@ -111,7 +111,8 @@ class ContabilidadServiceProvider extends ServiceProvider {
 			Sentinel::hasAccess('polizas.view') ||
 			Sentinel::hasAccess('antiguedad.view') || 
 			Sentinel::hasAccess('auxmovimientos.view') ||
-		  	Sentinel::hasAccess('estadocuenta.view') ) {
+		  	Sentinel::hasAccess('estadocuenta.view') || 
+			Sentinel::hasAccess('cuentas.view')) {
 			
 			$menu->dropdown('Contabilidad', function ($sub) {
 				if(Sentinel::hasAccess('ventas.view')) {
@@ -145,6 +146,10 @@ class ContabilidadServiceProvider extends ServiceProvider {
 					$sub->dropdown('Importar', 2, function ($sub2) {
 							$sub2->route('contabilidad.antiguedad.index', 'Estado de cuenta',[],1,['icon' => 'fa fa-circle-o']);
 					}, ['icon' => 'fa fa-cloud-upload']);
+				}
+				
+				if(Sentinel::hasAccess('cuentas.view')) {
+					$sub->route('contabilidad.cuentas.index', 'Cuentas',[],1,['icon' => 'fa fa-circle-o']);				
 				}
 						
 			}, 2, ['icon' => 'fa fa-balance-scale']);

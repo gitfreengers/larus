@@ -7,13 +7,23 @@ class Cuentas extends Model {
 	
     protected $table = "Tb_Cuentas";
     protected $primaryKey = 'NUMERO';
+    public $timestamps = false;
     
     protected $fillable = [
 		'NUMERO',
     	'BANCO',
+    	'SUCURSAL',
+    	'EJECUTIVO',
+    	'TIPO',
+    	'DESCRIPCION',	
     	'CC_CUENTA',
-    	'TIPO'
+    	'TIPOCHEQUE',
+    	'CUENTACOMPLEMENTARIA'
     ];
+    
+    public function bancoM(){
+    	return $this->hasOne('Modules\Contabilidad\Entities\Place', 'Clave', 'BANCO');
+    }
 
     public static function cuentasArray($usuario_id) {
     	
