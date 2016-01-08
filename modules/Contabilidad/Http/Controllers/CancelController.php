@@ -42,7 +42,7 @@ class CancelController extends Controller {
 					->join('contabilidad_sales', 'contabilidad_sales.id', '=', 'contabilidad_deposito_aplicacion.venta_id')
 					->where(function ($query) use ($plaza) {
 						$query->where('cl_location', $plaza)->where('op_location', $plaza);
-					});
+				});
 			}
 			if ($request->fecha){
 				$query->orWhere('fecha', $request->fecha);
@@ -51,7 +51,20 @@ class CancelController extends Controller {
 				$query->orWhere('monto', $request->monto);
 			}
 			if ($request->referencia){
-				$query->orWhere('referencia', $request->referencia);
+				
+				$referencia = $request->referencia;
+				if ($request->plaza){
+					$query->where(function ($query) use ($referencia) {
+							$query->where('reference', $referencia);
+					});
+				}else{
+					$query->join('contabilidad_deposito_aplicacion', 'contabilidad_depositos.id', '=', 'contabilidad_deposito_aplicacion.deposito_id')
+						->join('contabilidad_sales', 'contabilidad_sales.id', '=', 'contabilidad_deposito_aplicacion.venta_id')
+						->orWhere(function ($query) use ($referencia) {
+							$query->where('reference', $referencia);
+					});
+					
+				}
 			}
 			$depositos = $query->distinct()->get();
 		}

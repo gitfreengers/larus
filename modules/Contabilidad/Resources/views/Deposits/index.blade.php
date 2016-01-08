@@ -524,6 +524,7 @@
 									montoF: "$ " + $.number('0', 2, ".", ","),
 									isNew: true
 							};
+		    				tabla.row.add(salesReference).draw();
 				    	} else {
 						    // verificar en caso de no ser global que plaza tiene el usuario para poder verificar si tiene permisos
 						    var agregar = false;

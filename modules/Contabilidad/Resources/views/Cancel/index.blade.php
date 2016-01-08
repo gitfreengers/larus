@@ -72,7 +72,6 @@
 		                    	<th>Id</th>
 		                    	<th>Referencias de venta</th>
 		                        <th>Banco</th>
-		                        <th>Referencia</th>
 		                        <th>Monto</th>
 		                        <th>Moneda</th>
 		                        <th>Cuenta contable</th>
@@ -121,7 +120,6 @@
 				{"data": "id"},
 				{"data": "ventas"},
 	           	{"data": "banco"},
-	        	{"data": "referencia"},
 	        	{"data": "monto"},
 	        	{"data": "moneda"},
 	        	{"data": "cuenta_contable"},
@@ -137,7 +135,7 @@
 				        
 					}
 				}, {	
-                	'targets': 9,
+                	'targets': 8,
                 	'searchable':false,
                     'orderable':false,
                     'render': function (data, type, full, meta){
@@ -179,7 +177,6 @@
 						id: v.id, 
 						ventas : referencias,
 						banco: v.banco, 
-						referencia: v.referencia,
 						monto: v.monto,
 						moneda: v.moneda,
 						cuenta_contable: v.cuenta_contable,
