@@ -129,9 +129,15 @@
 	        ],
 	        'columnDefs': [
 				{	
-					'targets': 4,
+					'targets': 3,
 				    'render': function (data, type, full, meta){
 				        return "$ " + $.number(data, 2, ".", ",");
+				        
+					}
+				}, {	
+					'targets': 4,
+				    'render': function (data, type, full, meta){
+				        return data== 1? 'MXN': 'DOLAR';
 				        
 					}
 				}, {	
