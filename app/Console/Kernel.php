@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [ 
 		'App\Console\Commands\Inspire',
-		'Modules\Contabilidad\Console\SalesReadCommand' 
+		'Modules\Contabilidad\Console\SalesReadCommand',
+		'Modules\Contabilidad\Console\UpdateSalesCommand'
 	];
 
 	/**
@@ -26,6 +27,9 @@ class Kernel extends ConsoleKernel {
 		
 		//@todo solo cambio para pruebas debe de quedarse en hourly()
 		$schedule->command('larus:salesRead')->cron('*/1 * * * *');
+		
+		//@todo solo cambio para pruebas debe de quedarse en cada 2 horas()
+		$schedule->command('larus:salesRead')->cron('*/30 * * * *');
 	}
 
 }
