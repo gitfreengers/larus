@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use Modules\Contabilidad\Entities\Deposito;
 use Modules\Contabilidad\Entities\Place;
 use Modules\Contabilidad\Http\Requests\DepositoConsultaRequest;
+use Illuminate\Support\Facades\DB;
+
 
 class CancelController extends Controller {
 	
@@ -45,7 +47,10 @@ class CancelController extends Controller {
 				});
 			}
 			if ($request->fecha){
-				$query->orWhere('fecha', $request->fecha);
+				$fecha = Carbon::createFromFormat('m/d/Y', $request->fecha);
+				$query->orWhere(function($query) use ($fecha){
+					$query->whereDate('fecha', '=', $fecha->toDateString());	
+				});
 			}
 			if ($request->monto){
 				$query->orWhere('monto', $request->monto);
@@ -68,7 +73,6 @@ class CancelController extends Controller {
 			}
 			$depositos = $query->distinct()->get();
 		}
-		
 		if(count($depositos) > 0){
 			foreach ($depositos as $deposito){
 				$deposito->load('depositosaplicados', 'depositosaplicados.venta', 'usuariocancelacion');			
