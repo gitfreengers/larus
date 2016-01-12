@@ -10,9 +10,11 @@ use Modules\Contabilidad\Entities\DepositoAplicacion;
 use Modules\Contabilidad\Entities\Sales;
 use Modules\Contabilidad\Http\Requests\DepositoReferenciasRequest;
 use Modules\Contabilidad\Http\Requests\DepositoRequest;
+use Modules\Contabilidad\Http\Requests\CombanRequest;
 use Modules\Contabilidad\Entities\Cuentas;
 use Carbon\Carbon;
 use Modules\Contabilidad\Entities\Place;
+use Modules\Contabilidad\Entities\Comban;
 
 class DepositsController extends Controller {
 	
@@ -63,6 +65,7 @@ class DepositsController extends Controller {
 	{
 		$deposito = new Deposito();
 		$deposito->fill($request->all());
+		dd($request);
 		$deposito->banco = explode("|", $deposito->banco)[0];
 		$user = User::find($this->user_auth->id);
 		$deposito->usuario_id = $user->id;
@@ -81,6 +84,7 @@ class DepositsController extends Controller {
 	public function guardarReferencias(DepositoReferenciasRequest $request)
 	{
 		$depositoRef = json_decode($request->deposito);
+		dd($depositoRef);
 		$deposito = new Deposito([
 			'banco' => $depositoRef->{'banco'},
 			'fecha' => $depositoRef->{'fecha'},
@@ -90,7 +94,9 @@ class DepositsController extends Controller {
 			'complementaria' => $depositoRef->{'complementaria'},
 			'tipo_pago' => $depositoRef->{'tipo_pago'},
 			'folio' => $depositoRef->{'folio'},
+			'global' => isset($depositoRef->{'global'})? true : false,
 			'usuario_id' => $depositoRef->{'usuario_id'},
+			'comban' => isset($depositoRef->{'comban'})? $depositoRef->{'comban'}: "",
 			'estatus' => 0
 		]);
 		$deposito->save();
@@ -171,4 +177,7 @@ class DepositsController extends Controller {
 		return view('contabilidad::Deposits.index', compact('deposito', 'cuentas', 'cuentasDls'));
 	}
 	
+	public function obtenerComban(CombanRequest $request){
+		return response()->json(Comban::combanArray($request->plaza));
+	}
 }

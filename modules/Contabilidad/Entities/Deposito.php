@@ -19,7 +19,8 @@ class Deposito extends Model {
     	'fecha_cancelacion_id',
     	'tipo_pago',
     	'folio',
-    	'global'    		
+    	'global',
+    	'comban'
     ];
 
     public function depositosAplicados()

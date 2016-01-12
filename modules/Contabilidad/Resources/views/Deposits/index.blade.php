@@ -136,13 +136,26 @@
 						    {!! Form::label('Global','Global: ',['class' =>'col-xs-6 control-label']) !!}
 						    <div class="col-xs-12 @if ($errors->has('folio')) has-error @endif ">
 						        @if (!isset($deposito->id))
-						        	{!! Form::checkbox('global', '1') !!}
+						        	{!! Form::checkbox('global', '1', null, ['id' => 'globalC']) !!}
 						        @else	
 						        	{!! Form::hidden('global', $deposito->global? '1': '0', ['id' => 'globalH']) !!}
 						        	{!! $deposito->global ? 'Si' : 'No'!!}						        	
 						        @endif
 						        @if ($errors->has('global')) 
 						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('global') }}</label>
+						        @endif
+						    </div>
+						</div>
+						<div class="form-group col-md-3 col-xs-12" >
+						    {!! Form::label('comban','Comban: ',['class' =>'col-xs-12 control-label']) !!}
+						    <div class="col-xs-12 @if ($errors->has('comban')) has-error @endif ">
+						        @if (!isset($deposito->id))
+						        	{!! Form::select('comban', [], $deposito->comban,['class' => 'form-control', 'id'=>'comban', 'readonly'=>'readonly']) !!}
+						        @else	
+						        	{!! $deposito->comban!!}
+						        @endif
+						        @if ($errors->has('comban')) 
+						        	<label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{ $errors->first('comban') }}</label>
 						        @endif
 						    </div>
 						</div>
@@ -467,6 +480,14 @@
 			var data = $(this).val().split("|");
 			$("#cuentacontable").val(data[1]);
 			$("#complementaria").val(" ");
+ 			$("#comban").html("");
+			if ($("#globalC").is(":checked")){
+				$.get('{{route("contabilidad.depositos.obtenerComban")}}', {'plaza': data[2]}, function(res){
+	    			$.each(res, function(k, v){
+	    				$("#comban").append("<option val='"+v.CUENTABANCARIA+"'>" + v.DESCRIPCION + "-" + v.CUENTABANCARIA + "</option>");
+		    		});
+				});
+			}
 		});
 		
 		$("#bancoSelDls").on("change", function(){
@@ -492,6 +513,15 @@
 			}
 		});
 	    $("#monedaSel").trigger("change");
+
+	    $("#globalC").on("click", function(){
+	    	$("#monedaSel").trigger("change");
+		    if ($("#globalC").is(":checked")){
+		    	$("#comban").removeAttr("readonly");
+			}else{
+				$("#comban").attr("readonly", "readonly");
+			}
+		});
 
 	    $("#buscarReferencia").on("keypress", function(e){
 		    if (e.which == 13) {

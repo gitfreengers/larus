@@ -32,14 +32,14 @@ class Cuentas extends Model {
     	
     	if($usuario_id != null){
 	    	$usuario = User::find($usuario_id);
-	    	$items = Cuentas::where('BANCO', $usuario->plaza_matriz_id)->get()->lists('NUMERO', 'CC_CUENTA');
+	    	$items = Cuentas::where('BANCO', $usuario->plaza_matriz_id)->select('NUMERO', 'CC_CUENTA', 'BANCO')->get();
     	}else{
-    		$items = Cuentas::all()->lists('NUMERO', 'CC_CUENTA');
+    		$items = Cuentas::select('NUMERO', 'CC_CUENTA', 'BANCO')->get();
     	}
     	
-    	foreach ($items as $key=>$value)
+    	foreach ($items as $item)
     	{
-    		$cuentas[$value.'|'.$key] = $value;
+    		$cuentas[$item->NUMERO.'|'.$item->CC_CUENTA.'|'.$item->BANCO] = $item->NUMERO;
     	}
     	
     	return $cuentas;
@@ -49,10 +49,10 @@ class Cuentas extends Model {
     	
     	$cuentas = array();
     	
-    	$items = Cuentas::where('TIPO', 'Cheque-USD')->select('NUMERO', 'CC_CUENTA', 'CUENTACOMPLEMENTARIA')->get();
+    	$items = Cuentas::where('TIPO', 'Cheque-USD')->select('NUMERO', 'CC_CUENTA', 'CUENTACOMPLEMENTARIA', 'BANCO')->get();
     	foreach ($items as $item)
     	{
-    		$cuentas[$item->NUMERO.'|'.$item->CC_CUENTA.'|'.$item->CUENTACOMPLEMENTARIA] = $item->NUMERO;
+    		$cuentas[$item->NUMERO.'|'.$item->CC_CUENTA.'|'.$item->CUENTACOMPLEMENTARIA.'|'.$item->BANCO] = $item->NUMERO;
     	}
     	
     	return $cuentas;

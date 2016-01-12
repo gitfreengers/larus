@@ -159,56 +159,63 @@
 		
 
 	    $("#buscarBtn").on("click", function(){
-			tabla.rows().remove().draw();
-			$.get('{{route("contabilidad.cancelaciones.obtenerDepositos")}}', $("#depositosForm").serializeArray(), function(res){
-				$.each(res, function(i,v){
-					var referencias = '<ul class="list-unstyled">';
-					if (v.depositosaplicados.length > 0){
-						$.each(v.depositosaplicados, function(k, v1){
-							if (v.estatus == 1 && v1.cantidad < 0){
-								referencias += "<li><b>Ref.:</b> " + v1.venta.reference +  
+
+	    	if ($("#buscarBtn").attr('disabled') == undefined){ // si esta activo
+		    	$("#buscarBtn").attr("disabled", true);
+
+		    	$.get('{{route("contabilidad.cancelaciones.obtenerDepositos")}}', $("#depositosForm").serializeArray(), function(res){
+					tabla.rows().remove().draw();
+					$.each(res, function(i,v){
+						var referencias = '<ul class="list-unstyled">';
+						if (v.depositosaplicados.length > 0){
+							$.each(v.depositosaplicados, function(k, v1){
+								if (v.estatus == 1 && v1.cantidad < 0){
+									referencias += "<li><b>Ref.:</b> " + v1.venta.reference +  
+										", <b>Plz. Ori:</b> " + v1.venta.op_location +
+										", <b>Plz. Dest:</b> "+ v1.venta.cl_location +
+										", <b>Monto:</b> $" + $.number(v1.cantidad, 2, ".", ",");
+								}else if (v.estatus == 0 && v1.cantidad > 0){
+									referencias += "<li><b>Ref.:</b> " + v1.venta.reference +  
 									", <b>Plz. Ori:</b> " + v1.venta.op_location +
 									", <b>Plz. Dest:</b> "+ v1.venta.cl_location +
 									", <b>Monto:</b> $" + $.number(v1.cantidad, 2, ".", ",");
-							}else if (v.estatus == 0 && v1.cantidad > 0){
-								referencias += "<li><b>Ref.:</b> " + v1.venta.reference +  
-								", <b>Plz. Ori:</b> " + v1.venta.op_location +
-								", <b>Plz. Dest:</b> "+ v1.venta.cl_location +
-								", <b>Monto:</b> $" + $.number(v1.cantidad, 2, ".", ",");
-							}
-						});
-					}
-					referencias += '</ul>'	
-					tabla.row.add({
-						id: v.id, 
-						ventas : referencias,
-						banco: v.banco, 
-						monto: v.monto,
-						moneda: v.moneda,
-						cuenta_contable: v.cuenta_contable,
-						complementaria: v.complementaria,
-						usuarioC: v.usuario_cancelacion_id == 0 ? '' : v.usuariocancelacion.first_name + " " + v.usuariocancelacion.last_name,
-						estatus: v.estatus
-					}).draw();
-					tabla.columns.adjust().draw();
+								}
+							});
+						}
+						referencias += '</ul>'	
+						tabla.row.add({
+							id: v.id, 
+							ventas : referencias,
+							banco: v.banco, 
+							monto: v.monto,
+							moneda: v.moneda,
+							cuenta_contable: v.cuenta_contable,
+							complementaria: v.complementaria,
+							usuarioC: v.usuario_cancelacion_id == 0 ? '' : v.usuariocancelacion.first_name + " " + v.usuariocancelacion.last_name,
+							estatus: v.estatus
+						}).draw();
+						tabla.columns.adjust().draw();
+					});
+					$( '[data-toggle="cancelacion"]').confirmation({
+			            title:'¿Esta seguro que desea cancelar este registro.?',
+			            popout:true,
+			            singleton:true,
+			            btnOkClass: 'btn-xs btn-success ',
+			            btnOkIcon: 'fa fa-check',
+			            btnOkLabel: 'Si',
+			            btnCancelClass: 'btn-xs btn-danger',
+			            btnCancelIcon: 'fa fa-times',
+			            btnCancelLabel: 'No',
+			            onConfirm: function () {
+			                if( $(this).data('btn-type') && $(this).data('btn-type') === 'delete' ) {
+			                    apps.delete($(this).data('url'));
+			                }
+			            }
+			        });
+					$("#buscarBtn").removeAttr("disabled");
 				});
-				$( '[data-toggle="cancelacion"]').confirmation({
-		            title:'¿Esta seguro que desea cancelar este registro.?',
-		            popout:true,
-		            singleton:true,
-		            btnOkClass: 'btn-xs btn-success ',
-		            btnOkIcon: 'fa fa-check',
-		            btnOkLabel: 'Si',
-		            btnCancelClass: 'btn-xs btn-danger',
-		            btnCancelIcon: 'fa fa-times',
-		            btnCancelLabel: 'No',
-		            onConfirm: function () {
-		                if( $(this).data('btn-type') && $(this).data('btn-type') === 'delete' ) {
-		                    apps.delete($(this).data('url'));
-		                }
-		            }
-		        });
-			});		    
+	    	}
+			
 		});
 	});
 	</script>
