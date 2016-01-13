@@ -130,6 +130,9 @@ class ContabilidadServiceProvider extends ServiceProvider {
 				if(Sentinel::hasAccess('polizas.view')) {
 					$sub->route('contabilidad.polizas.index', 'Pólizas',[],1,['icon' => 'fa fa-circle-o']);				
 				}
+				if(Sentinel::hasAccess('cuentas.view')) {
+					$sub->route('contabilidad.cuentas.index', 'Cuentas',[],1,['icon' => 'fa fa-circle-o']);				
+				}
 				if(Sentinel::hasAccess('antiguedad.view') || Sentinel::hasAccess('auxmovimientos.view')) {
 					$sub->dropdown('Reportes', 2, function ($sub2) {
 						if(Sentinel::hasAccess('antiguedad.view')) {
@@ -148,9 +151,6 @@ class ContabilidadServiceProvider extends ServiceProvider {
 					}, ['icon' => 'fa fa-cloud-upload']);
 				}
 				
-				if(Sentinel::hasAccess('cuentas.view')) {
-					$sub->route('contabilidad.cuentas.index', 'Cuentas',[],1,['icon' => 'fa fa-circle-o']);				
-				}
 						
 			}, 2, ['icon' => 'fa fa-balance-scale']);
 		}
