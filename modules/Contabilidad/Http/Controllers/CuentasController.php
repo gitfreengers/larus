@@ -18,14 +18,18 @@ class CuentasController extends Controller
      */
     public function index()
     {
-    	if(Sentinel::hasAccess('cuentas.view')){
-	        $cuentas = Cuentas::all();
-	        $cuentas->load('bancom');
-	        return view('contabilidad::Cuentas.index', compact('cuentas'));    		
+    	if(Sentinel::check()){
+	    	if(Sentinel::hasAccess('cuentas.view')){
+		        $cuentas = Cuentas::all();
+		        $cuentas->load('bancom');
+		        return view('contabilidad::Cuentas.index', compact('cuentas'));    		
+	    	}
+	        
+	        alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
+	        return back();    	
+    	}else{
+    		return redirect('login');
     	}
-        
-        alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
-        return back();
     }
 
     /**

@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Modules\Contabilidad\Entities\Deposito;
 use Modules\Contabilidad\Entities\Place;
 use Modules\Contabilidad\Http\Requests\DepositoConsultaRequest;
-use Illuminate\Support\Facades\DB;
 
 
 class CancelController extends Controller {
@@ -19,12 +18,17 @@ class CancelController extends Controller {
 	}
 	
 	public function index() {
-		if (Sentinel::hasAccess ( 'cancelaciones.view' )) {
-			$plazas = Place::plazasArray($this->user_auth->id);
-			return view ( 'contabilidad::Cancel.index', compact ( "plazas" ) );
-		} else {
-			alert ()->error ( 'No tiene permisos para acceder a esta area.', 'Oops!' )->persistent ( 'Cerrar' );
-			return back ();
+		if(Sentinel::check()){
+			if (Sentinel::hasAccess ( 'cancelaciones.view' )) {
+				$plazas = Place::plazasArray($this->user_auth->id);
+				return view ( 'contabilidad::Cancel.index', compact ( "plazas" ) );
+			} else {
+				alert ()->error ( 'No tiene permisos para acceder a esta area.', 'Oops!' )->persistent ( 'Cerrar' );
+				return back ();
+			}
+		
+		}else{
+			return redirect('login');
 		}
 	}
 	

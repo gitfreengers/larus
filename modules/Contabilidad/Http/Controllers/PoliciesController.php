@@ -15,15 +15,18 @@ class PoliciesController extends Controller {
 	
 	public function index()
 	{
-		
-		if(Sentinel::hasAccess('polizas.view')){
-			$fechaAyer = Carbon::now()->subDay()->format('Y/m/d');
-			
-			$plazas = Place::plazasArray($this->user_auth->id);
-			return view('contabilidad::Policies.form', compact('plazas', 'fechaAyer'));
+		if(Sentinel::check()){
+			if(Sentinel::hasAccess('polizas.view')){
+				$fechaAyer = Carbon::now()->subDay()->format('Y/m/d');
+				
+				$plazas = Place::plazasArray($this->user_auth->id);
+				return view('contabilidad::Policies.form', compact('plazas', 'fechaAyer'));
+			}else{
+				alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
+				return back();
+			}		
 		}else{
-			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
-			return back();
+			return redirect('login');
 		}
 		
 	}

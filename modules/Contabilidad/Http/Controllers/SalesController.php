@@ -18,19 +18,24 @@ class SalesController extends Controller {
 	
 	public function index()
 	{
-		if(Sentinel::hasAccess('ventas.view')) {
-			$usuario = User::find($this->user_auth->id);
-			$oficinas = array();
-			foreach ($usuario->plazas as $plazas){
-				array_push($oficinas, $plazas->Oficina);
+		if(Sentinel::check()){
+			if(Sentinel::hasAccess('ventas.view')) {
+				$usuario = User::find($this->user_auth->id);
+				$oficinas = array();
+				foreach ($usuario->plazas as $plazas){
+					array_push($oficinas, $plazas->Oficina);
+				}
+				$salesLogs = SalesLog::whereIn('op_location', $oficinas)->orWhere(function ($query) use ($oficinas) {
+					$query->whereIn('cl_location', $oficinas);
+				})->get();
+				return view('contabilidad::Sales.index', compact('salesLogs'));
+			}else{
+				alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
+				return back();
 			}
-			$salesLogs = SalesLog::whereIn('op_location', $oficinas)->orWhere(function ($query) use ($oficinas) {
-				$query->whereIn('cl_location', $oficinas);
-			})->get();
-			return view('contabilidad::Sales.index', compact('salesLogs'));
+		
 		}else{
-			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
-			return back();
+			return redirect('login');
 		}
 		
 	}

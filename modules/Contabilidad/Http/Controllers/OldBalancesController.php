@@ -18,14 +18,18 @@ class OldBalancesController extends Controller {
 	
 	public function index()
 	{
-		if(Sentinel::hasAccess('antiguedad.view')){
-			$fechaActual = Carbon::now()->format('Y/m/d');
-			$payment_methods = PaymentMethod::all();
-			$plazas = Place::plazasArray($this->user_auth->id);
-			return view('contabilidad::OldBalance.form', compact("payment_methods", "plazas", "fechaActual"));
+		if(Sentinel::check()){
+			if(Sentinel::hasAccess('antiguedad.view')){
+				$fechaActual = Carbon::now()->format('Y/m/d');
+				$payment_methods = PaymentMethod::all();
+				$plazas = Place::plazasArray($this->user_auth->id);
+				return view('contabilidad::OldBalance.form', compact("payment_methods", "plazas", "fechaActual"));
+			}else{
+				alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
+				return back();
+			}		
 		}else{
-			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
-			return back();
+			return redirect('login');
 		}
 	}
 	

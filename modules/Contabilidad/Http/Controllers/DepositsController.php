@@ -5,36 +5,39 @@ use Pingpong\Modules\Routing\Controller;
 
 use Modules\User\Entities\User;
 
+use Carbon\Carbon;
+use Modules\Contabilidad\Entities\Comban;
+use Modules\Contabilidad\Entities\Cuentas;
 use Modules\Contabilidad\Entities\Deposito;
 use Modules\Contabilidad\Entities\DepositoAplicacion;
 use Modules\Contabilidad\Entities\Sales;
+use Modules\Contabilidad\Http\Requests\CombanRequest;
 use Modules\Contabilidad\Http\Requests\DepositoReferenciasRequest;
 use Modules\Contabilidad\Http\Requests\DepositoRequest;
-use Modules\Contabilidad\Http\Requests\CombanRequest;
-use Modules\Contabilidad\Entities\Cuentas;
-use Carbon\Carbon;
-use Modules\Contabilidad\Entities\Place;
-use Modules\Contabilidad\Entities\Comban;
 
 class DepositsController extends Controller {
 	
 	protected $user_auth;
 	
 	public function __construct(){
-		$this->user_auth = Sentinel::getUser();
+			$this->user_auth = Sentinel::getUser();
 	}
 	
 	public function index()
 	{
-		if(Sentinel::hasAccess('depositos.view')){
-			$deposito = new Deposito();
-			$cuentas = Cuentas::cuentasArray($this->user_auth->id);
-			$cuentasDls = Cuentas::cuentasDolaresArray();
-			
-			return view('contabilidad::Deposits.index', compact('deposito', 'cuentas', 'cuentasDls'));
+		if(Sentinel::check()){
+			if(Sentinel::hasAccess('depositos.view')){
+				$deposito = new Deposito();
+				$cuentas = Cuentas::cuentasArray($this->user_auth->id);
+				$cuentasDls = Cuentas::cuentasDolaresArray();
+				
+				return view('contabilidad::Deposits.index', compact('deposito', 'cuentas', 'cuentasDls'));
+			}else{
+				alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
+				return back();
+			}
 		}else{
-			alert()->error('No tiene permisos para acceder a esta area.', 'Oops!')->persistent('Cerrar');
-			return back();
+			return redirect('login');
 		}
 	}
 	
