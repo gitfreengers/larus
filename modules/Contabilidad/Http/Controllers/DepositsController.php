@@ -68,7 +68,6 @@ class DepositsController extends Controller {
 	{
 		$deposito = new Deposito();
 		$deposito->fill($request->all());
-		dd($request);
 		$deposito->banco = explode("|", $deposito->banco)[0];
 		$user = User::find($this->user_auth->id);
 		$deposito->usuario_id = $user->id;
@@ -87,7 +86,6 @@ class DepositsController extends Controller {
 	public function guardarReferencias(DepositoReferenciasRequest $request)
 	{
 		$depositoRef = json_decode($request->deposito);
-		dd($depositoRef);
 		$deposito = new Deposito([
 			'banco' => $depositoRef->{'banco'},
 			'fecha' => $depositoRef->{'fecha'},
